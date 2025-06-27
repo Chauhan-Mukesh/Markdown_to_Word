@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Favicon as inline SVG emoji (no external link) -->
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='0.9em' font-size='90'%3E🚀%3C/text%3E%3C/svg%3E" />
+  <title>🚀 Advanced Markdown → Word Exporter 🤖</title>
+  
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="css/style.css">
+  
+  <!-- Markdown & Export Libraries -->
+  <script src="https://cdn.jsdelivr.net/npm/showdown@1.9.1/dist/showdown.min.js" defer></script>
+  <script src="https://unpkg.com/html-docx-js/dist/html-docx.js" defer></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/github.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js" defer></script>
+  <!-- Core Script -->
+  <script src="js/script.js" defer></script>
+</head>
+<body>
+  <div id="app">
+    <section id="editor-panel" class="panel">
+      <div id="toolbar" class="toolbar">
+        <button id="clear-btn" class="btn" title="Clear editor">🗑️ Clear</button>
+        <button id="theme-btn" class="btn" title="Toggle theme">🎨 Theme</button>
+
+        <!-- Metadata Inputs -->
+        <input id="doc-title" class="input-field" placeholder="Document Title" value="My Document" />
+        <input id="doc-author" class="input-field" placeholder="Author Name" />
+        <input id="doc-date" type="date" class="input-field" />
+
+        <button id="preview-btn" class="btn primary-btn" disabled>🔍 Preview</button>
+        <button id="download-btn" class="btn primary-btn" disabled>📥 Download</button>
+        <div id="spinner" class="spinner"></div>
+      </div>
+      <textarea id="markdown-input" class="editor" placeholder="Type or paste your Markdown..."></textarea>
+    </section>
+
+    <section id="preview-panel" class="panel">
+      <header id="preview-header" class="darkable">
+        <h2>Live Preview 👀</h2>
+        <button id="refresh-btn" class="btn">↻ Refresh</button>
+      </header>
+      <div id="preview-pane" class="preview darkable"><em>Enter Markdown and click Preview...</em></div>
+    </section>
+  </div>
+</body>
+</html>

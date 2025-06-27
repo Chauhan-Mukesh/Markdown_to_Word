@@ -1,0 +1,131 @@
+/* Global & Layout */
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body, #app { height: 100%; width: 100%; }
+body { font-family: 'Segoe UI', sans-serif; background: #f0f4f8; color: #333; }
+#app { display: flex; flex-wrap: wrap; }
+.panel { flex: 1 1 50%; display: flex; flex-direction: column; padding: 1rem; overflow: hidden; background: #fff; transition: background 0.3s; }
+
+/* Editor Panel */
+#editor-panel { box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+.toolbar { display: flex; flex-wrap: wrap; gap: 0.75rem; align-items: center; margin-bottom: 0.75rem; padding-bottom: 0.5rem; border-bottom: 1px solid #ddd; }
+.editor { flex: 1; padding: 1rem; font-family: monospace; font-size: 0.95rem; border: 1px solid #ddd; border-radius: 4px; resize: none; height: calc(100% - 4.5rem); transition: border-color 0.3s, background 0.3s; }
+.editor:focus { border-color: #1976d2; }
+
+/* Buttons & Inputs */
+.input-field {
+  flex: 1 1 150px;
+  min-width: 120px;
+  padding: 0.5rem;
+  margin-right: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  transition: border-color 0.3s, background 0.3s;
+}
+.input-field:focus { border-color: #1976d2; }
+.btn {
+  display: inline-flex; align-items: center; gap: 0.25rem;
+  padding: 0.5rem 0.75rem;
+  border: none;
+  border-radius: 4px;
+  background: #90a4ae;
+  color: #fff;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.1s;
+}
+.btn:disabled { opacity: 0.6; cursor: not-allowed; }
+.btn:not(:disabled):hover { background: #78909c; transform: translateY(-1px); }
+.primary-btn { background: #1976d2; }
+.primary-btn:hover { background: #115293; }
+
+/* Spinner Animation */
+.spinner {
+  width: 24px;
+  height: 24px;
+  margin-left: 0.5rem;
+  border: 3px solid rgba(0,0,0,0.1);
+  border-top-color: #1976d2;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  display: none;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* Preview Panel */
+#preview-panel {
+  background: #fff;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  transition: background 0.3s;
+}
+#preview-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem 1rem;
+  margin-bottom: 0.5rem;
+  background: #f7f9fa;
+  border-bottom: 1px solid #ddd;
+  transition: background 0.3s, color 0.3s;
+}
+}
+#preview-header h2 {
+  margin: 0;
+  font-size: 1.25rem;
+}
+#preview-header .btn {
+  margin: 0;
+}
+.preview {
+  flex: 1;
+  overflow-y: auto;
+  padding: 1rem;
+  border-top: none;
+  background: #fafafa;
+  transition: background 0.3s, color 0.3s;
+}
+
+/* Preview Content Styling */ */ */ */
+.preview h1 { color: #1976d2; margin-top: 0; }
+.preview h2 { color: #1565c0; }
+.preview p { line-height: 1.6; margin: 0.75em 0; }
+.preview blockquote { border-left: 4px solid #90a4ae; padding-left: 1rem; color: #546e7a; font-style: italic; }
+.preview pre { background: #263238; color: #eceff1; padding: 0.75rem; border-radius: 4px; overflow-x: auto; }
+.preview code { background: #eceff1; padding: 0.2em 0.4em; border-radius: 3px; }
+.preview table { width: 100%; border-collapse: collapse; margin: 1em 0; }
+.preview th, .preview td { border: 1px solid #b0bec5; padding: 0.4em 0.6em; }
+
+/* Dark Theme Toggle */
+body.dark-mode { background: #263238; color: #eceff1; }
+body.dark-mode .panel { background: #37474f; }
+body.dark-mode .editor { background: #455a64; color: #eceff1; border-color: #546e7a; }
+body.dark-mode .toolbar { background: #37474f; border-color: #546e7a; }
+body.dark-mode .input-field { background: #546e7a; color: #eceff1; border-color: #708090; }
+body.dark-mode .btn { background: #546e7a; color: #eceff1; }
+body.dark-mode .btn:not(:disabled):hover { background: #455a64; }
+body.dark-mode .primary-btn { background: #1e88e5; }
+body.dark-mode .primary-btn:hover { background: #1565c0; }
+body.dark-mode .spinner { border-top-color: #1e88e5; }
+body.dark-mode .darkable { background: #455a64; color: #eceff1; }
+body.dark-mode .darkable h2 { color: #eceff1; }
+body.dark-mode .preview { background: #455a64; border-color: #546e7a; }
+body.dark-mode #preview-panel { background: #37474f; }
+body.dark-mode #preview-header {
+  background: #455a64;
+  border-color: #546e7a;
+  color: #eceff1;
+}
+
+/* Responsive Adjustments */
+/* Small devices: stack vertically */
+@media (max-width: 600px) {
+  #app { flex-direction: column; }
+  .panel { flex: 1 1 100%; height: 50vh; }
+}
+
+/* Tablets landscape & larger: side by side */
+@media (min-width: 601px) {
+  #app { flex-direction: row; }
+  .panel { flex: 1 1 50%; height: 100vh; }
+}
