@@ -149,10 +149,15 @@ class EditorToolbar {
   }
 
   /**
-   * Setup keyboard shortcuts
+   * Setup keyboard shortcuts and auto-complete
    */
   setupKeyboardShortcuts() {
     this.textarea.addEventListener('keydown', (e) => {
+      // Handle auto-complete features
+      if (this.handleAutoComplete(e)) {
+        return;
+      }
+      
       if (e.ctrlKey || e.metaKey) {
         switch (e.key) {
           case 'b':
@@ -174,6 +179,102 @@ class EditorToolbar {
         }
       }
     });
+
+    // Auto-format on input
+    this.textarea.addEventListener('input', (e) => {
+      this.handleAutoFormatting(e);
+    });
+  }
+
+  /**
+   * Handle auto-complete features
+   */
+  handleAutoComplete(e) {
+    const cursor = this.textarea.selectionStart;
+    const text = this.textarea.value;
+    const currentLine = this.getCurrentLine(cursor);
+    
+    if (e.key === 'Tab') {
+      e.preventDefault();
+      
+      // Auto-complete list items
+      if (currentLine.match(/^(\s*)-\s/)) {
+        this.insertText('- ', '', '');
+        return true;
+      }
+      
+      // Auto-complete numbered lists
+      if (currentLine.match(/^(\s*)\d+\.\s/)) {
+        const indent = currentLine.match(/^(\s*)/)[1];
+        const nextNum = parseInt(currentLine.match(/\d+/)[0]) + 1;
+        this.insertText(`${indent}${nextNum}. `, '', '');
+        return true;
+      }
+      
+      return true;
+    }
+    
+    if (e.key === 'Enter') {
+      // Auto-continue lists
+      if (currentLine.match(/^(\s*)-\s(.*)$/)) {
+        e.preventDefault();
+        const indent = currentLine.match(/^(\s*)/)[1];
+        this.insertText(`\n${indent}- `, '', '');
+        return true;
+      }
+      
+      if (currentLine.match(/^(\s*)\d+\.\s(.*)$/)) {
+        e.preventDefault();
+        const indent = currentLine.match(/^(\s*)/)[1];
+        const nextNum = parseInt(currentLine.match(/\d+/)[0]) + 1;
+        this.insertText(`\n${indent}${nextNum}. `, '', '');
+        return true;
+      }
+    }
+    
+    return false;
+  }
+
+  /**
+   * Handle auto-formatting
+   */
+  handleAutoFormatting(e) {
+    const cursor = this.textarea.selectionStart;
+    const text = this.textarea.value;
+    
+    // Auto-close parentheses, brackets, etc.
+    if (e.inputType === 'insertText') {
+      const char = e.data;
+      const pairs = {
+        '(': ')',
+        '[': ']',
+        '{': '}',
+        '"': '"',
+        "'": "'",
+        '`': '`'
+      };
+      
+      if (pairs[char]) {
+        const before = text.substring(0, cursor);
+        const after = text.substring(cursor);
+        
+        // Don't auto-close if next character is the same
+        if (after[0] !== pairs[char]) {
+          this.textarea.value = before + pairs[char] + after;
+          this.textarea.setSelectionRange(cursor, cursor);
+        }
+      }
+    }
+  }
+
+  /**
+   * Get current line at cursor position
+   */
+  getCurrentLine(cursor) {
+    const text = this.textarea.value;
+    const lineStart = text.lastIndexOf('\n', cursor - 1) + 1;
+    const lineEnd = text.indexOf('\n', cursor);
+    return text.substring(lineStart, lineEnd === -1 ? text.length : lineEnd);
   }
 }
 
