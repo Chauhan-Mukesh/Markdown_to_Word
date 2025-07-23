@@ -1,9 +1,24 @@
 /**
  * @file script.js
  * @description Enhanced core logic for Markdown to Word exporter with advanced features
- * @version 2.0.0
+ * @version 2.1.0
  * @author Markdown to Word Exporter Team
  * @license MIT
+ * 
+ * @overview
+ * This is the main application script that handles the core functionality of the 
+ * Markdown to Word converter. It provides:
+ * - Real-time markdown conversion
+ * - Multi-format export capabilities (Word, HTML, PDF, Text)
+ * - Advanced editor features with toolbar
+ * - Auto-save functionality
+ * - Custom modal system
+ * - Theme management
+ * - Document templates
+ * 
+ * @requires showdown - For markdown parsing
+ * @requires htmlDocx - For Word document generation
+ * @requires hljs - For syntax highlighting
  */
 
 // DOM element references for the main application components
@@ -148,12 +163,12 @@ function initializeNewFeatures() {
   // Statistics functionality
   document.getElementById('stats-btn').onclick = () => {
     updateStats();
-    document.getElementById('stats-modal').style.display = 'block';
+    showModal(document.getElementById('stats-modal'));
   };
   
   // Help functionality
   document.getElementById('help-btn').onclick = () => {
-    document.getElementById('help-modal').style.display = 'block';
+    showModal(document.getElementById('help-modal'));
   };
   
   // Additional export options
@@ -162,6 +177,9 @@ function initializeNewFeatures() {
   
   // Initialize custom confirmation
   initializeCustomConfirmation();
+  
+  // Initialize modal close buttons
+  initializeModalCloseButtons();
   
   // Add smooth scrolling and animations
   addSmoothScrolling();
@@ -1508,33 +1526,59 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 /**
- * Initialize custom confirmation modal
+ * Initialize custom confirmation modal with improved centering and animations
+ * @description Sets up event handlers for the custom confirmation modal system
+ * @since 2.1.0
+ * @returns {void}
  */
 function initializeCustomConfirmation() {
   const modal = document.getElementById('confirmation-modal');
   const cancelBtn = document.getElementById('confirmation-cancel');
   const confirmBtn = document.getElementById('confirmation-confirm');
   
-  if (!modal || !cancelBtn || !confirmBtn) return;
+  if (!modal || !cancelBtn || !confirmBtn) {
+    console.warn('Confirmation modal elements not found');
+    return;
+  }
   
+  /**
+   * Handle cancel button click
+   */
   cancelBtn.addEventListener('click', () => {
-    modal.style.display = 'none';
+    hideModal(modal);
     if (window.currentConfirmCallback) {
       window.currentConfirmCallback(false);
     }
   });
   
+  /**
+   * Handle confirm button click
+   */
   confirmBtn.addEventListener('click', () => {
-    modal.style.display = 'none';
+    hideModal(modal);
     if (window.currentConfirmCallback) {
       window.currentConfirmCallback(true);
     }
   });
   
-  // Close on background click
+  /**
+   * Handle background click to close modal
+   */
   modal.addEventListener('click', (e) => {
     if (e.target === modal) {
-      modal.style.display = 'none';
+      hideModal(modal);
+      if (window.currentConfirmCallback) {
+        window.currentConfirmCallback(false);
+      }
+    }
+  });
+  
+  /**
+   * Handle ESC key to close modal
+   */
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && modal.classList.contains('show')) {
+      hideModal(modal);
       if (window.currentConfirmCallback) {
         window.currentConfirmCallback(false);
       }
@@ -1543,24 +1587,127 @@ function initializeCustomConfirmation() {
 }
 
 /**
- * Custom confirmation dialog
+ * Custom confirmation dialog with improved UX
+ * @description Shows a custom confirmation modal instead of browser's confirm()
+ * @param {string} title - The title of the confirmation dialog
+ * @param {string} message - The message to display in the dialog
+ * @param {Function} callback - Function to call with true/false result
+ * @since 2.1.0
+ * @returns {void}
+ * @example
+ * showCustomConfirm('Delete Document', 'Are you sure?', (confirmed) => {
+ *   if (confirmed) {
+ *     // User confirmed
+ *   }
+ * });
  */
 function showCustomConfirm(title, message, callback) {
   const modal = document.getElementById('confirmation-modal');
   const titleEl = document.getElementById('confirmation-title');
   const messageEl = document.getElementById('confirmation-message');
   
-  if (!modal || !titleEl || !messageEl) return;
+  if (!modal || !titleEl || !messageEl) {
+    console.error('Confirmation modal elements not found');
+    // Fallback to browser confirm
+    const result = confirm(`${title}\n\n${message}`);
+    if (callback) callback(result);
+    return;
+  }
   
   titleEl.textContent = title;
   messageEl.textContent = message;
   window.currentConfirmCallback = callback;
   
-  modal.style.display = 'block';
+  showModal(modal);
 }
 
 /**
- * Add smooth scrolling
+ * Show modal with improved centering and animation
+ * @description Shows a modal using flexbox centering for better positioning
+ * @param {HTMLElement} modal - The modal element to show
+ * @since 2.1.0
+ * @returns {void}
+ */
+function showModal(modal) {
+  if (!modal) return;
+  
+  // Use display flex for better centering
+  modal.style.display = 'flex';
+  modal.classList.add('show');
+  
+  // Prevent body scroll when modal is open
+  document.body.style.overflow = 'hidden';
+  
+  // Focus trap for accessibility
+  const focusableElements = modal.querySelectorAll(
+    'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+  );
+  if (focusableElements.length > 0) {
+    focusableElements[0].focus();
+  }
+}
+
+/**
+ * Hide modal with proper cleanup
+ * @description Hides a modal and restores normal page behavior
+ * @param {HTMLElement} modal - The modal element to hide
+ * @since 2.1.0
+ * @returns {void}
+ */
+function hideModal(modal) {
+  if (!modal) return;
+  
+  modal.style.display = 'none';
+  modal.classList.remove('show');
+  
+  // Restore body scroll
+  document.body.style.overflow = '';
+  
+  // Clear any callback
+  window.currentConfirmCallback = null;
+}
+
+/**
+ * Initialize modal close buttons for all modals
+ * @description Sets up event handlers for modal close buttons and ESC key
+ * @since 2.1.0
+ * @returns {void}
+ */
+function initializeModalCloseButtons() {
+  // Get all modals
+  const modals = document.querySelectorAll('.modal');
+  
+  modals.forEach(modal => {
+    // Close button in modal
+    const closeBtn = modal.querySelector('.close');
+    if (closeBtn) {
+      closeBtn.addEventListener('click', () => hideModal(modal));
+    }
+    
+    // Background click
+    modal.addEventListener('click', (e) => {
+      if (e.target === modal) {
+        hideModal(modal);
+      }
+    });
+  });
+  
+  // ESC key handler for all modals
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      const openModal = document.querySelector('.modal.show');
+      if (openModal) {
+        hideModal(openModal);
+      }
+    }
+  });
+}
+
+/**
+ * Add smooth scrolling behavior to anchor links
+ * @description Implements smooth scrolling for internal navigation links
+ * @since 2.1.0
+ * @returns {void}
  */
 function addSmoothScrolling() {
   // Smooth scroll to sections
