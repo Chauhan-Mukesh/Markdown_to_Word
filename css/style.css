@@ -220,7 +220,12 @@ body {
   color: white;
   padding: 1rem 0;
   margin-top: auto;
-  margin-bottom: 90px; /* Increased to account for taller mobile formatting toolbar */
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  z-index: 1000;
   box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
 }
 
@@ -413,7 +418,7 @@ body {
   }
   
   .footer {
-    margin-bottom: 110px; /* Extra margin for mobile due to taller formatting toolbar (85px + padding) */
+    /* Footer is now fixed, no margin needed */
   }
   
   .footer-left p {
@@ -429,7 +434,7 @@ body {
   flex-wrap: wrap; 
   flex: 1;
   min-height: 0;
-  padding-bottom: 70px; /* Add padding for fixed bottom toolbar */
+  padding-bottom: 90px; /* Add padding for fixed bottom footer */
 }
 
 .panel { 
@@ -448,7 +453,7 @@ body {
   padding-top: 0.5rem; /* Reduced padding since no toolbar */
 }
 
-/* Enhanced Formatting Toolbar - Fixed to Bottom */
+/* Enhanced Formatting Toolbar - Regular positioning */
 .formatting-toolbar {
   display: flex;
   flex-wrap: wrap;
@@ -456,13 +461,6 @@ body {
   padding: 0.75rem;
   background: #f8f9fa;
   border-top: 1px solid #ddd;
-  /* Fixed positioning to bottom */
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  width: 100%;
-  z-index: 999;
   box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
 }
 
@@ -1103,24 +1101,6 @@ body.dark-mode .tools-toggle:hover {
 .btn:not(:disabled):hover { background: #78909c; transform: translateY(-1px); }
 .primary-btn { background: #1976d2; }
 .primary-btn:hover { background: #115293; }
-
-/* Enhanced Formatting Toolbar - Fixed to Bottom */
-.formatting-toolbar {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.25rem;
-  padding: 0.75rem;
-  background: #f8f9fa;
-  border-top: 1px solid #ddd;
-  /* Fixed positioning to bottom */
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  width: 100%;
-  z-index: 999;
-  box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
-}
 
 .format-btn {
   padding: 0.4rem 0.6rem;
