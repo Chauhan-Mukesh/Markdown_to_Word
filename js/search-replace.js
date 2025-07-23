@@ -19,8 +19,8 @@ class SearchReplace {
     // Create modal HTML
     const modalHTML = `
       <div id="search-modal" class="search-modal" style="display: none;">
-        <div class="search-modal-content">
-          <div class="search-modal-header">
+        <div class="search-modal-content draggable">
+          <div class="search-modal-header drag-handle">
             <h3>🔍 Find & Replace</h3>
             <button class="search-close" onclick="searchReplace.closeModal()">&times;</button>
           </div>
@@ -53,6 +53,9 @@ class SearchReplace {
     // Add modal to document
     document.body.insertAdjacentHTML('beforeend', modalHTML);
     this.searchModal = document.getElementById('search-modal');
+
+    // Setup draggable functionality
+    this.setupDraggable();
 
     // Setup event listeners
     document.getElementById('search-input').addEventListener('input', () => {
@@ -249,6 +252,52 @@ class SearchReplace {
       countElement.textContent = `${this.currentSearchIndex + 1} of ${this.searchMatches.length}`;
     }
   }
+
+  /**
+   * Setup draggable functionality for the search modal
+   */
+  setupDraggable() {
+    const modal = this.searchModal.querySelector('.search-modal-content');
+    const header = this.searchModal.querySelector('.drag-handle');
+    let isDragging = false;
+    let startX, startY, initialX, initialY;
+
+    header.style.cursor = 'move';
+
+    header.addEventListener('mousedown', (e) => {
+      isDragging = true;
+      startX = e.clientX;
+      startY = e.clientY;
+      
+      const rect = modal.getBoundingClientRect();
+      initialX = rect.left;
+      initialY = rect.top;
+      
+      modal.style.position = 'fixed';
+      modal.style.left = initialX + 'px';
+      modal.style.top = initialY + 'px';
+      modal.style.transform = 'none';
+      
+      e.preventDefault();
+    });
+
+    document.addEventListener('mousemove', (e) => {
+      if (!isDragging) return;
+      
+      const deltaX = e.clientX - startX;
+      const deltaY = e.clientY - startY;
+      
+      const newX = Math.max(0, Math.min(window.innerWidth - modal.offsetWidth, initialX + deltaX));
+      const newY = Math.max(0, Math.min(window.innerHeight - modal.offsetHeight, initialY + deltaY));
+      
+      modal.style.left = newX + 'px';
+      modal.style.top = newY + 'px';
+    });
+
+    document.addEventListener('mouseup', () => {
+      isDragging = false;
+    });
+  }
 }
 
 // CSS styles for search modal
@@ -259,7 +308,8 @@ const searchModalCSS = `
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.5);
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(5px);
   z-index: 1000;
   display: flex;
   align-items: center;
@@ -268,43 +318,53 @@ const searchModalCSS = `
 
 .search-modal-content {
   background: white;
-  border-radius: 8px;
-  padding: 20px;
-  min-width: 400px;
-  max-width: 500px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  border-radius: 12px;
+  padding: 0;
+  min-width: 500px;
+  max-width: 90vw;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  animation: modalSlideIn 0.3s ease;
 }
 
 .search-modal-header {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 1rem 1.5rem;
+  border-radius: 12px 12px 0 0;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 15px;
-  border-bottom: 1px solid #eee;
-  padding-bottom: 10px;
+  user-select: none;
 }
 
 .search-modal-header h3 {
   margin: 0;
-  color: #333;
+  color: white;
+}
+
+.search-inputs {
+  padding: 1.5rem;
 }
 
 .search-close {
-  background: none;
+  background: rgba(255, 255, 255, 0.2);
   border: none;
-  font-size: 24px;
+  font-size: 20px;
   cursor: pointer;
-  color: #999;
-  padding: 0;
-  width: 30px;
-  height: 30px;
+  color: white;
+  padding: 0.5rem;
+  width: 35px;
+  height: 35px;
   display: flex;
   align-items: center;
   justify-content: center;
+  border-radius: 50%;
+  transition: all 0.3s ease;
 }
 
 .search-close:hover {
-  color: #333;
+  background: rgba(255, 255, 255, 0.3);
+  transform: scale(1.1);
 }
 
 .search-row {

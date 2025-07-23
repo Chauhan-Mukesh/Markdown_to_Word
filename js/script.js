@@ -50,9 +50,22 @@ window.addEventListener('DOMContentLoaded', () => {
 function initializeTemplates() {
   const templateContainer = document.getElementById('template-container');
   templates.createTemplateSelector(templateContainer, (content) => {
-    if (input.value.trim() === '' || confirm('Replace current content with template?')) {
+    if (input.value.trim() === '') {
       input.value = content;
       input.dispatchEvent(new Event('input'));
+      showNotification('Template loaded successfully! 📋', 'success', 3000);
+    } else {
+      showCustomConfirm(
+        '📋 Replace Content',
+        'Replace current content with template?',
+        (confirmed) => {
+          if (confirmed) {
+            input.value = content;
+            input.dispatchEvent(new Event('input'));
+            showNotification('Template loaded successfully! 📋', 'success', 3000);
+          }
+        }
+      );
     }
   });
 }
@@ -65,8 +78,6 @@ function initializeFormattingToolbar() {
   document.getElementById('italic-btn').onclick = () => editorToolbar.makeItalic();
   document.getElementById('code-btn').onclick = () => editorToolbar.makeCode();
   document.getElementById('link-btn').onclick = () => editorToolbar.insertLink();
-  document.getElementById('image-btn').onclick = () => editorToolbar.insertImage();
-  document.getElementById('upload-image-btn').onclick = () => handleImageUpload();
   document.getElementById('header-btn').onclick = () => editorToolbar.insertHeader();
   document.getElementById('list-btn').onclick = () => editorToolbar.insertList();
   document.getElementById('quote-btn').onclick = () => editorToolbar.insertBlockquote();
@@ -121,9 +132,30 @@ function initializeNewFeatures() {
     printExport.printDocument(title);
   };
   
+  // Statistics functionality
+  document.getElementById('stats-btn').onclick = () => {
+    updateStats();
+    document.getElementById('stats-modal').style.display = 'block';
+  };
+  
+  // Help functionality
+  document.getElementById('help-btn').onclick = () => {
+    document.getElementById('help-modal').style.display = 'block';
+  };
+  
   // Additional export options
   document.getElementById('download-standalone-btn').onclick = () => exportDocument('standalone');
   document.getElementById('download-pdf-btn').onclick = () => exportDocument('pdf');
+  
+  // Initialize collapsible tools
+  initializeToolsToggle();
+  
+  // Initialize custom confirmation
+  initializeCustomConfirmation();
+  
+  // Add smooth scrolling and animations
+  addSmoothScrolling();
+  enhanceButtonAnimations();
 }
 
 // Make renderPreview globally available
@@ -235,14 +267,24 @@ saveMdBtn.addEventListener('click', () => {
  * Clears editor and resets preview
  */
 clearBtn.addEventListener('click', () => {
-  if (input.value.trim() && !confirm('Clear all content? This cannot be undone.')) {
-    return;
+  if (input.value.trim()) {
+    showCustomConfirm(
+      '🗑️ Clear Document',
+      'Clear all content? This cannot be undone.',
+      (confirmed) => {
+        if (confirmed) {
+          input.value = '';
+          previewPane.innerHTML = '<em>Enter Markdown and click Preview...</em>';
+          previewBtn.disabled = true;
+          exportBtn.disabled = true;
+          fileManager.clearAutosaved();
+          showNotification('Document cleared successfully! 🗑️', 'success', 3000);
+        }
+      }
+    );
+  } else {
+    showNotification('Document is already empty! 📄', 'info', 2000);
   }
-  input.value = '';
-  previewPane.innerHTML = '<em>Enter Markdown and click Preview...</em>';
-  previewBtn.disabled = true;
-  exportBtn.disabled = true;
-  fileManager.clearAutosaved();
 });
 
 /**
@@ -1479,4 +1521,169 @@ function initializeMobileToolbar() {
       toolbar.classList.remove('expanded');
     }
   });
+}
+
+/**
+ * Initialize collapsible tools section
+ */
+function initializeToolsToggle() {
+  const toolsToggle = document.getElementById('tools-toggle');
+  const toolsButtons = document.getElementById('tools-buttons');
+  
+  if (!toolsToggle || !toolsButtons) return;
+  
+  // Load saved state
+  const isCollapsed = localStorage.getItem('toolsCollapsed') === 'true';
+  if (isCollapsed) {
+    toolsButtons.classList.add('collapsed');
+    toolsToggle.textContent = '▶';
+    toolsToggle.classList.add('collapsed');
+  }
+  
+  toolsToggle.addEventListener('click', () => {
+    const isCurrentlyCollapsed = toolsButtons.classList.contains('collapsed');
+    
+    if (isCurrentlyCollapsed) {
+      toolsButtons.classList.remove('collapsed');
+      toolsToggle.textContent = '▼';
+      toolsToggle.classList.remove('collapsed');
+      localStorage.setItem('toolsCollapsed', 'false');
+      showNotification('Tools section expanded 📖', 'info', 2000);
+    } else {
+      toolsButtons.classList.add('collapsed');
+      toolsToggle.textContent = '▶';
+      toolsToggle.classList.add('collapsed');
+      localStorage.setItem('toolsCollapsed', 'true');
+      showNotification('Tools section collapsed 📁', 'info', 2000);
+    }
+  });
+}
+
+/**
+ * Initialize custom confirmation modal
+ */
+function initializeCustomConfirmation() {
+  const modal = document.getElementById('confirmation-modal');
+  const cancelBtn = document.getElementById('confirmation-cancel');
+  const confirmBtn = document.getElementById('confirmation-confirm');
+  
+  if (!modal || !cancelBtn || !confirmBtn) return;
+  
+  cancelBtn.addEventListener('click', () => {
+    modal.style.display = 'none';
+    if (window.currentConfirmCallback) {
+      window.currentConfirmCallback(false);
+    }
+  });
+  
+  confirmBtn.addEventListener('click', () => {
+    modal.style.display = 'none';
+    if (window.currentConfirmCallback) {
+      window.currentConfirmCallback(true);
+    }
+  });
+  
+  // Close on background click
+  modal.addEventListener('click', (e) => {
+    if (e.target === modal) {
+      modal.style.display = 'none';
+      if (window.currentConfirmCallback) {
+        window.currentConfirmCallback(false);
+      }
+    }
+  });
+}
+
+/**
+ * Custom confirmation dialog
+ */
+function showCustomConfirm(title, message, callback) {
+  const modal = document.getElementById('confirmation-modal');
+  const titleEl = document.getElementById('confirmation-title');
+  const messageEl = document.getElementById('confirmation-message');
+  
+  if (!modal || !titleEl || !messageEl) return;
+  
+  titleEl.textContent = title;
+  messageEl.textContent = message;
+  window.currentConfirmCallback = callback;
+  
+  modal.style.display = 'block';
+}
+
+/**
+ * Add smooth scrolling
+ */
+function addSmoothScrolling() {
+  // Smooth scroll to sections
+  document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function (e) {
+      e.preventDefault();
+      const target = document.querySelector(this.getAttribute('href'));
+      if (target) {
+        target.scrollIntoView({
+          behavior: 'smooth',
+          block: 'start'
+        });
+      }
+    });
+  });
+}
+
+/**
+ * Enhance button animations
+ */
+function enhanceButtonAnimations() {
+  // Add ripple effect to buttons
+  document.querySelectorAll('.btn, .format-btn').forEach(button => {
+    button.addEventListener('click', function(e) {
+      // Don't add ripple if already exists
+      if (this.querySelector('.ripple')) return;
+      
+      const ripple = document.createElement('span');
+      const rect = this.getBoundingClientRect();
+      const size = Math.max(rect.width, rect.height);
+      const x = e.clientX - rect.left - size / 2;
+      const y = e.clientY - rect.top - size / 2;
+      
+      ripple.style.cssText = `
+        position: absolute;
+        width: ${size}px;
+        height: ${size}px;
+        left: ${x}px;
+        top: ${y}px;
+        background: rgba(255, 255, 255, 0.4);
+        border-radius: 50%;
+        transform: scale(0);
+        animation: ripple 0.6s linear;
+        pointer-events: none;
+      `;
+      ripple.classList.add('ripple');
+      
+      this.style.position = 'relative';
+      this.style.overflow = 'hidden';
+      this.appendChild(ripple);
+      
+      setTimeout(() => {
+        if (ripple.parentNode) {
+          ripple.remove();
+        }
+      }, 600);
+    });
+  });
+}
+
+// Add CSS for ripple animation if not already present
+if (!document.querySelector('#ripple-style')) {
+  const style = document.createElement('style');
+  style.id = 'ripple-style';
+  style.textContent = `
+    @keyframes ripple {
+      to {
+        transform: scale(4);
+        opacity: 0;
+      }
+    }
+  `;
+  document.head.appendChild(style);
 }
