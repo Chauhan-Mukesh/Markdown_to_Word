@@ -74,10 +74,21 @@ function initializeFormattingToolbar() {
 }
 
 /**
- * Initialize auto-save functionality
+ * Initialize auto-save functionality with validation
  */
 function initializeAutosave() {
-  fileManager.enableAutosave(() => input.value);
+  try {
+    fileManager.enableAutosave(() => {
+      const content = input.value;
+      // Basic content validation
+      if (content.length > 1000000) { // 1MB limit
+        throw new Error('Document too large for auto-save');
+      }
+      return content;
+    });
+  } catch (error) {
+    console.error('Auto-save initialization failed:', error);
+  }
 }
 
 /**
@@ -117,13 +128,88 @@ function initializeNewFeatures() {
 window.renderPreview = renderPreview;
 
 /**
- * Toggle button states based on input
+ * Toggle button states based on input with validation and debounced updates
  */
+let debounceTimer;
 input.addEventListener('input', () => {
-  const hasContent = input.value.trim().length > 0;
-  previewBtn.disabled = !hasContent;
-  exportBtn.disabled = !hasContent;
+  const content = input.value.trim();
+  const hasContent = content.length > 0;
+  const isValidContent = content.length <= 1000000; // 1MB limit
+  
+  previewBtn.disabled = !hasContent || !isValidContent;
+  exportBtn.disabled = !hasContent || !isValidContent;
+  
+  // Debounced auto-formatting to improve performance
+  clearTimeout(debounceTimer);
+  debounceTimer = setTimeout(() => {
+    autoFormatTables();
+    
+    // Auto-preview for small documents
+    if (content.length < 10000 && hasContent) {
+      renderPreview();
+    }
+  }, 300);
+  
+  // Show warning for large documents
+  if (content.length > 500000) { // 500KB warning
+    showContentWarning('Large document detected. Performance may be affected.');
+  }
 });
+
+/**
+ * Debounced auto-format markdown tables
+ */
+function autoFormatTables() {
+  const content = input.value;
+  if (content.length > 50000) return; // Skip for very large documents
+  
+  const lines = content.split('\n');
+  let formatted = false;
+  
+  for (let i = 0; i < lines.length && i < 1000; i++) { // Limit processing
+    if (lines[i].includes('|') && lines[i].trim().startsWith('|')) {
+      // Basic table formatting - ensure proper spacing
+      const cells = lines[i].split('|').map(cell => cell.trim());
+      if (cells.length > 2) { // Valid table row
+        const formattedLine = '| ' + cells.slice(1, -1).join(' | ') + ' |';
+        if (lines[i] !== formattedLine) {
+          lines[i] = formattedLine;
+          formatted = true;
+        }
+      }
+    }
+  }
+  
+  if (formatted) {
+    const cursorPos = input.selectionStart;
+    input.value = lines.join('\n');
+    input.setSelectionRange(cursorPos, cursorPos);
+  }
+}
+
+/**
+ * Show content warning
+ */
+function showContentWarning(message) {
+  const existing = document.querySelector('.content-warning');
+  if (existing) return;
+  
+  const warning = document.createElement('div');
+  warning.className = 'content-warning';
+  warning.innerHTML = `
+    <div style="background: #ff9800; color: white; padding: 0.5rem; border-radius: 4px; margin: 0.5rem; font-size: 0.85rem; display: flex; align-items: center; justify-content: space-between;">
+      <span>⚠️ ${message}</span>
+      <button onclick="this.parentElement.parentElement.remove()" style="background: none; border: none; color: white; cursor: pointer; font-size: 1.2rem;">×</button>
+    </div>
+  `;
+  document.querySelector('#editor-panel').insertBefore(warning, input);
+  
+  setTimeout(() => {
+    if (warning.parentNode) {
+      warning.parentNode.removeChild(warning);
+    }
+  }, 10000);
+}
 
 /**
  * File management handlers
@@ -171,11 +257,132 @@ if (localStorage.getItem('dark-mode') === 'true') {
 }
 
 /**
- * Render Markdown to HTML in preview pane
+ * Render Markdown to HTML in preview pane with security and performance optimization
  */
 function renderPreview() {
-  const html = converter.makeHtml(input.value);
-  previewPane.innerHTML = html;
+  try {
+    const content = input.value;
+    
+    // Show loading state for large documents
+    if (content.length > 10000) {
+      previewPane.innerHTML = '<div style="text-align: center; padding: 2rem; color: #666;"><div class="spinner" style="display: inline-block;"></div><br>Rendering preview...</div>';
+    }
+    
+    // Use setTimeout for non-blocking processing
+    setTimeout(() => {
+      try {
+        // Basic security validation
+        if (content.length > 1000000) {
+          throw new Error('Content too large to preview (max 1MB)');
+        }
+        
+        // Sanitize content - remove potentially dangerous elements
+        const sanitizedContent = sanitizeMarkdown(content);
+        const html = converter.makeHtml(sanitizedContent);
+        
+        // Additional HTML sanitization
+        const sanitizedHtml = sanitizeHtml(html);
+        previewPane.innerHTML = sanitizedHtml;
+        
+        // Add copy-to-clipboard for code blocks
+        addCodeBlockFeatures();
+        
+      } catch (error) {
+        previewPane.innerHTML = `<div style="color: #d32f2f; padding: 1rem; border: 1px solid #d32f2f; border-radius: 4px; background: #ffebee;">
+          <strong>❌ Preview Error</strong><br>
+          ${error.message}
+        </div>`;
+      }
+    }, content.length > 10000 ? 100 : 0);
+    
+  } catch (error) {
+    previewPane.innerHTML = `<div style="color: #d32f2f; padding: 1rem; border: 1px solid #d32f2f; border-radius: 4px; background: #ffebee;">
+      <strong>❌ Preview Error</strong><br>
+      ${error.message}
+    </div>`;
+  }
+}
+
+/**
+ * Add interactive features to code blocks
+ */
+function addCodeBlockFeatures() {
+  const codeBlocks = previewPane.querySelectorAll('pre');
+  codeBlocks.forEach(block => {
+    // Add copy button
+    const copyBtn = document.createElement('button');
+    copyBtn.textContent = '📋 Copy';
+    copyBtn.style.cssText = `
+      position: absolute;
+      top: 0.5rem;
+      right: 0.5rem;
+      background: rgba(0,0,0,0.7);
+      color: white;
+      border: none;
+      padding: 0.25rem 0.5rem;
+      border-radius: 3px;
+      font-size: 0.8rem;
+      cursor: pointer;
+      opacity: 0;
+      transition: opacity 0.2s;
+    `;
+    
+    block.style.position = 'relative';
+    block.appendChild(copyBtn);
+    
+    // Show/hide copy button on hover
+    block.addEventListener('mouseenter', () => copyBtn.style.opacity = '1');
+    block.addEventListener('mouseleave', () => copyBtn.style.opacity = '0');
+    
+    // Copy functionality
+    copyBtn.addEventListener('click', () => {
+      const code = block.querySelector('code').textContent;
+      navigator.clipboard.writeText(code).then(() => {
+        copyBtn.textContent = '✅ Copied!';
+        setTimeout(() => copyBtn.textContent = '📋 Copy', 2000);
+      }).catch(() => {
+        copyBtn.textContent = '❌ Failed';
+        setTimeout(() => copyBtn.textContent = '📋 Copy', 2000);
+      });
+    });
+  });
+}
+
+/**
+ * Basic markdown sanitization
+ */
+function sanitizeMarkdown(content) {
+  // Remove script tags and event handlers
+  return content
+    .replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '')
+    .replace(/on\w+\s*=\s*["'][^"']*["']/gi, '')
+    .replace(/javascript:/gi, '')
+    .replace(/data:text\/html/gi, '');
+}
+
+/**
+ * Basic HTML sanitization
+ */
+function sanitizeHtml(html) {
+  // Create a temporary div to parse HTML
+  const temp = document.createElement('div');
+  temp.innerHTML = html;
+  
+  // Remove script tags and dangerous attributes
+  const scripts = temp.querySelectorAll('script');
+  scripts.forEach(script => script.remove());
+  
+  const elements = temp.querySelectorAll('*');
+  elements.forEach(el => {
+    // Remove event handlers
+    Array.from(el.attributes).forEach(attr => {
+      if (attr.name.startsWith('on') || attr.value.includes('javascript:')) {
+        el.removeAttribute(attr.name);
+      }
+    });
+  });
+  
+  return temp.innerHTML;
 }
 previewBtn.addEventListener('click', renderPreview);
 refreshBtn.addEventListener('click', renderPreview);
@@ -196,13 +403,27 @@ downloadTxtBtn.addEventListener('click', async () => {
 });
 
 /**
- * Enhanced document export with multiple formats
+ * Enhanced document export with multiple formats and security
  */
 async function exportDocument(format) {
+  // Validate input before processing
+  const content = input.value.trim();
+  if (!content) {
+    showUserNotification('⚠️ Cannot export empty document', 'warning');
+    return;
+  }
+  
+  if (content.length > 2000000) { // 2MB limit
+    showUserNotification('❌ Document too large to export (max 2MB)', 'error');
+    return;
+  }
+
   spinner.style.display = 'inline-block';
   exportBtn.disabled = true;
 
-  const filename = (titleInput.value || 'document').replace(/\s+/g, '_');
+  // Sanitize filename
+  const rawFilename = titleInput.value || 'document';
+  const filename = sanitizeFilename(rawFilename);
   
   try {
     switch (format) {
@@ -221,14 +442,85 @@ async function exportDocument(format) {
       case 'pdf':
         await exportToPDF(filename);
         break;
+      default:
+        throw new Error('Unknown export format');
     }
+    
+    showUserNotification(`✅ Successfully exported as ${format.toUpperCase()}`, 'success');
+    
   } catch (err) {
-    console.error(err);
-    alert(`Export failed: ${err.message}`);
+    console.error('Export error:', err);
+    
+    // Show user-friendly error message
+    const errorMsg = err.message || 'An unknown error occurred';
+    showUserNotification(`❌ Export Failed: ${errorMsg}`, 'error');
+    
   } finally {
     spinner.style.display = 'none';
     exportBtn.disabled = false;
   }
+}
+
+/**
+ * Sanitize filename for security
+ */
+function sanitizeFilename(filename) {
+  return filename
+    .replace(/[^a-zA-Z0-9\-_\s]/g, '') // Remove special characters
+    .replace(/\s+/g, '_') // Replace spaces with underscores
+    .substring(0, 100) // Limit length
+    || 'document'; // Fallback name
+}
+
+/**
+ * Show user notification with different types
+ */
+function showUserNotification(message, type = 'info') {
+  const colors = {
+    success: '#4caf50',
+    warning: '#ff9800', 
+    error: '#f44336',
+    info: '#2196f3'
+  };
+  
+  const notification = document.createElement('div');
+  notification.style.cssText = `
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: ${colors[type]};
+    color: white;
+    padding: 1rem 1.5rem;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    z-index: 1000;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    animation: slideInRight 0.3s ease;
+    max-width: 300px;
+    word-wrap: break-word;
+  `;
+  notification.innerHTML = `
+    <div style="display: flex; align-items: center; justify-content: space-between;">
+      <span>${message}</span>
+      <button onclick="this.parentElement.parentElement.remove()" 
+              style="background: none; border: none; color: white; cursor: pointer; font-size: 1.2rem; margin-left: 0.5rem;">×</button>
+    </div>
+  `;
+  
+  document.body.appendChild(notification);
+  
+  // Auto-remove after 5 seconds
+  setTimeout(() => {
+    if (notification.parentNode) {
+      notification.style.animation = 'slideOutRight 0.3s ease';
+      setTimeout(() => {
+        if (notification.parentNode) {
+          notification.parentNode.removeChild(notification);
+        }
+      }, 300);
+    }
+  }, 5000);
 }
 
 /**

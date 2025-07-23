@@ -232,6 +232,187 @@ Sincerely,
 [Your Name]
 [Your Title]
 [Your Contact Information]`
+      },
+
+      resume: {
+        name: '📋 Professional Resume',
+        content: `# [Your Name]
+
+**Email:** [your.email@example.com] | **Phone:** [Your Phone] | **Location:** [Your City, State]  
+**LinkedIn:** [linkedin.com/in/yourprofile] | **GitHub:** [github.com/yourusername]
+
+---
+
+## Professional Summary
+Brief 2-3 sentence summary highlighting your key skills and experience.
+
+## Experience
+
+### **Job Title** | *Company Name* | *Location*
+**Duration:** *Start Date - End Date*
+- Achievement or responsibility with measurable impact
+- Key project or initiative you led
+- Technical skills or tools used
+
+### **Previous Job Title** | *Previous Company* | *Location*
+**Duration:** *Start Date - End Date*
+- Notable accomplishment with quantified results
+- Problem you solved or process you improved
+- Technologies or methodologies used
+
+## Education
+
+### **Degree Name** | *University Name* | *Location*
+**Duration:** *Start Year - End Year*
+- GPA: *X.X/4.0* (if 3.5+)
+- Relevant coursework: *Course 1, Course 2, Course 3*
+
+## Skills
+
+**Technical:** *Language 1, Language 2, Framework 1, Tool 1, Tool 2*  
+**Tools:** *Software 1, Software 2, Platform 1, Platform 2*  
+**Soft Skills:** *Communication, Leadership, Project Management*
+
+## Projects
+
+### **Project Name** | *Technology Stack*
+- Brief description of the project and your role
+- Key features you implemented
+- Results or impact achieved
+
+## Certifications
+- *Certification Name* - *Issuing Organization* (*Date*)
+- *Another Certification* - *Issuing Organization* (*Date*)`
+      },
+
+      changelog: {
+        name: '📝 Change Log',
+        content: `# Changelog
+
+All notable changes to this project will be documented in this file.
+
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
+and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
+## [Unreleased]
+
+### Added
+- New features that have been added
+
+### Changed
+- Changes in existing functionality
+
+### Deprecated
+- Soon-to-be removed features
+
+### Removed
+- Features that have been removed
+
+### Fixed
+- Bug fixes
+
+### Security
+- Security improvements
+
+## [1.0.0] - ${new Date().toISOString().split('T')[0]}
+
+### Added
+- Initial release
+- Core functionality implemented
+- Basic user interface
+- Documentation
+
+### Security
+- Input validation added
+- Security headers implemented`
+      },
+
+      apiDoc: {
+        name: '🔌 API Documentation',
+        content: `# API Documentation
+
+## Overview
+Brief description of your API and its purpose.
+
+**Base URL:** \`https://api.example.com/v1\`  
+**Authentication:** Bearer Token  
+**Response Format:** JSON
+
+## Authentication
+
+All API requests require authentication using a Bearer token:
+
+\`\`\`bash
+curl -H "Authorization: Bearer YOUR_TOKEN" https://api.example.com/v1/endpoint
+\`\`\`
+
+## Endpoints
+
+### GET /users
+Retrieve a list of users.
+
+**Parameters:**
+- \`page\` (optional): Page number (default: 1)
+- \`limit\` (optional): Number of results per page (default: 20)
+
+**Response:**
+\`\`\`json
+{
+  "data": [
+    {
+      "id": 1,
+      "name": "John Doe",
+      "email": "john@example.com"
+    }
+  ],
+  "pagination": {
+    "current_page": 1,
+    "total_pages": 5,
+    "total_count": 100
+  }
+}
+\`\`\`
+
+### POST /users
+Create a new user.
+
+**Request Body:**
+\`\`\`json
+{
+  "name": "Jane Doe",
+  "email": "jane@example.com",
+  "password": "securepassword"
+}
+\`\`\`
+
+**Response:**
+\`\`\`json
+{
+  "id": 2,
+  "name": "Jane Doe",
+  "email": "jane@example.com",
+  "created_at": "2024-01-01T00:00:00Z"
+}
+\`\`\`
+
+## Error Codes
+
+| Code | Description |
+|------|-------------|
+| 400  | Bad Request - Invalid parameters |
+| 401  | Unauthorized - Invalid token |
+| 403  | Forbidden - Insufficient permissions |
+| 404  | Not Found - Resource doesn't exist |
+| 500  | Internal Server Error |
+
+## Rate Limiting
+- **Limit:** 1000 requests per hour
+- **Headers:** \`X-RateLimit-Remaining\`, \`X-RateLimit-Reset\`
+
+## SDKs and Libraries
+- [JavaScript SDK](https://github.com/example/js-sdk)
+- [Python Library](https://github.com/example/python-lib)
+- [PHP Package](https://github.com/example/php-package)`
       }
     };
   }
@@ -251,7 +432,7 @@ Sincerely,
   }
 
   /**
-   * Create template selector dropdown
+   * Create template selector dropdown with improved styling
    */
   createTemplateSelector(container, onSelect) {
     const select = document.createElement('select');
@@ -261,8 +442,12 @@ Sincerely,
       border: 1px solid #ccc;
       border-radius: 4px;
       background: white;
+      color: #333;
       margin-right: 0.5rem;
       min-width: 150px;
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
     `;
 
     // Add default option
@@ -282,13 +467,58 @@ Sincerely,
     select.addEventListener('change', (e) => {
       if (e.target.value) {
         const template = this.getTemplate(e.target.value);
+        
+        // Add confirmation for non-empty editor
+        const currentContent = document.getElementById('markdown-input')?.value?.trim();
+        if (currentContent && currentContent.length > 50) {
+          if (!confirm('Replace current content with template? This action cannot be undone.')) {
+            e.target.value = ''; // Reset selector
+            return;
+          }
+        }
+        
         onSelect(template.content);
         e.target.value = ''; // Reset selector
+        
+        // Show success notification
+        this.showTemplateNotification(`✅ Applied ${template.name} template`);
       }
     });
 
     container.appendChild(select);
     return select;
+  }
+
+  /**
+   * Show template application notification
+   */
+  showTemplateNotification(message) {
+    const notification = document.createElement('div');
+    notification.style.cssText = `
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: #4caf50;
+      color: white;
+      padding: 0.75rem 1rem;
+      border-radius: 4px;
+      font-size: 0.9rem;
+      z-index: 1000;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+      animation: slideInRight 0.3s ease;
+    `;
+    notification.textContent = message;
+    
+    document.body.appendChild(notification);
+    
+    setTimeout(() => {
+      notification.style.animation = 'slideOutRight 0.3s ease';
+      setTimeout(() => {
+        if (notification.parentNode) {
+          notification.parentNode.removeChild(notification);
+        }
+      }, 300);
+    }, 3000);
   }
 }
 

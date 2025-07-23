@@ -238,5 +238,5 @@ if (typeof document !== 'undefined' && !document.getElementById('highlight-fallb
 // Make available globally
 if (typeof window !== 'undefined' && !window.hljs) {
   window.hljs = HighlightJsFallback;
-  console.log('Highlight.js fallback initialized');
+  // Initialize fallback highlighting if hljs is not available
 }

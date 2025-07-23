@@ -12,12 +12,11 @@
   
   <!-- Enhanced CDN Libraries with Robust Fallbacks -->
   <script>
-    // Enhanced fallback loader with better error handling
+  // Enhanced fallback loader with better error handling
     class LibraryLoader {
       static async loadLibraryWithFallback(urls, globalVarName, fallbackScript = null) {
         // Check if library is already loaded
         if (window[globalVarName]) {
-          console.log(`${globalVarName} already loaded`);
           return Promise.resolve();
         }
 
@@ -26,11 +25,9 @@
             const script = document.createElement('script');
             script.src = url;
             script.onload = () => {
-              console.log(`Loaded ${globalVarName} from ${url}`);
               resolve();
             };
             script.onerror = () => {
-              console.warn(`Failed to load ${globalVarName} from ${url}`);
               reject();
             };
             document.head.appendChild(script);
@@ -49,13 +46,12 @@
 
         // If all CDNs fail, load fallback
         if (fallbackScript) {
-          console.log(`Loading ${globalVarName} fallback`);
           await loadScript(fallbackScript);
         }
         
         // Final check
         if (!window[globalVarName]) {
-          console.warn(`${globalVarName} could not be loaded from any source`);
+          throw new Error(`${globalVarName} library failed to load`);
         }
       }
 
@@ -74,10 +70,8 @@
         for (const url of urls) {
           try {
             await loadStylesheet(url);
-            console.log(`Loaded CSS from ${url}`);
             return;
           } catch (e) {
-            console.warn(`Failed to load CSS from ${url}`);
             continue;
           }
         }
@@ -112,9 +106,16 @@
           'https://unpkg.com/@highlightjs/cdn-assets@11.7.0/highlight.min.js'
         ], 'hljs', 'js/highlight-fallback.js');
 
-        console.log('All libraries loaded successfully');
       } catch (error) {
-        console.error('Library loading error:', error);
+        console.error('Critical error loading libraries:', error);
+        // Show user-friendly error message
+        document.body.innerHTML = `
+          <div style="padding: 2rem; text-align: center; color: #d32f2f;">
+            <h2>⚠️ Loading Error</h2>
+            <p>Failed to load required libraries. Please refresh the page or check your internet connection.</p>
+            <button onclick="location.reload()" style="padding: 0.5rem 1rem; margin-top: 1rem; background: #1976d2; color: white; border: none; border-radius: 4px; cursor: pointer;">Retry</button>
+          </div>
+        `;
       }
     })();
   </script>

@@ -153,5 +153,5 @@ if (typeof window !== 'undefined' && !window.showdown) {
     Converter: ShowdownFallback,
     extension: () => {} // Stub for compatibility
   };
-  console.log('Showdown fallback initialized');
+  // Initialize fallback Showdown converter
 }
