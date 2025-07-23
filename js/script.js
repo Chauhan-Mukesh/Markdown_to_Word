@@ -286,6 +286,9 @@ function renderPreview() {
         const sanitizedHtml = sanitizeHtml(html);
         previewPane.innerHTML = sanitizedHtml;
         
+        // Process image placeholders for preview
+        processImagePlaceholders();
+        
         // Add copy-to-clipboard for code blocks
         addCodeBlockFeatures();
         
@@ -347,6 +350,71 @@ function addCodeBlockFeatures() {
         setTimeout(() => copyBtn.textContent = '📋 Copy', 2000);
       });
     });
+  });
+}
+
+/**
+ * Process image placeholders in preview
+ */
+function processImagePlaceholders() {
+  if (!window.imageManager || !previewPane) return;
+  
+  // Find all image links with # references (our placeholders)
+  const imageLinks = previewPane.querySelectorAll('img[src^="#"]');
+  
+  imageLinks.forEach(img => {
+    const imageId = img.src.substring(1); // Remove the # prefix
+    const imageData = window.imageManager.images.get(imageId);
+    
+    if (imageData) {
+      // Create a placeholder div to replace the broken image
+      const placeholder = document.createElement('div');
+      placeholder.className = 'image-placeholder';
+      placeholder.style.cssText = `
+        display: inline-block;
+        background: linear-gradient(135deg, #e3f2fd, #bbdefb);
+        border: 2px dashed #2196f3;
+        border-radius: 8px;
+        padding: 12px 16px;
+        margin: 8px;
+        font-size: 0.9rem;
+        color: #1976d2;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        max-width: 300px;
+        vertical-align: top;
+      `;
+      
+      placeholder.innerHTML = `
+        🖼️ ${imageData.name}
+        <div style="font-size: 0.75rem; color: #666; margin-top: 4px;">
+          ${imageData.type} • ${window.imageManager.formatFileSize(imageData.size)}
+          ${imageData.width ? `• ${imageData.width}×${imageData.height}px` : ''}
+          <br><span style="color: #1976d2;">Click to preview</span>
+        </div>
+      `;
+      
+      // Add click handler to show image preview
+      placeholder.addEventListener('click', () => {
+        window.imageManager.createImagePreview(imageId);
+      });
+      
+      // Add hover effect
+      placeholder.addEventListener('mouseenter', () => {
+        placeholder.style.background = 'linear-gradient(135deg, #bbdefb, #90caf9)';
+        placeholder.style.transform = 'translateY(-2px)';
+        placeholder.style.boxShadow = '0 4px 12px rgba(33, 150, 243, 0.3)';
+      });
+      
+      placeholder.addEventListener('mouseleave', () => {
+        placeholder.style.background = 'linear-gradient(135deg, #e3f2fd, #bbdefb)';
+        placeholder.style.transform = 'translateY(0)';
+        placeholder.style.boxShadow = 'none';
+      });
+      
+      // Replace the broken image with our placeholder
+      img.parentNode.replaceChild(placeholder, img);
+    }
   });
 }
 
@@ -415,8 +483,11 @@ async function exportDocument(format) {
     return;
   }
   
+  // Expand image placeholders for export
+  const expandedContent = window.imageManager ? window.imageManager.expandImagesForExport(content) : content;
+  
   // Removed size restriction for export - allow any size
-  if (content.length > 50000000) { // 50MB warning only
+  if (expandedContent.length > 50000000) { // 50MB warning only
     showUserNotification('⚠️ Very large document - export may take some time', 'warning');
   }
 
@@ -430,16 +501,16 @@ async function exportDocument(format) {
   try {
     switch (format) {
       case 'word':
-        await exportToWord(filename);
+        await exportToWord(filename, expandedContent);
         break;
       case 'html':
-        await exportToHtml(filename);
+        await exportToHtml(filename, expandedContent);
         break;
       case 'text':
-        await exportToText(filename);
+        await exportToText(filename, expandedContent);
         break;
       case 'standalone':
-        await exportToStandalone(filename);
+        await exportToStandalone(filename, expandedContent);
         break;
       case 'pdf':
         await exportToPDF(filename);
@@ -528,8 +599,9 @@ function showUserNotification(message, type = 'info') {
 /**
  * Export to Word document
  */
-async function exportToWord(filename) {
-  const bodyHtml = converter.makeHtml(input.value);
+async function exportToWord(filename, content = null) {
+  const markdownContent = content || input.value;
+  const bodyHtml = converter.makeHtml(markdownContent);
   const headerHtml = `
     <h1 style="text-align:center;">${titleInput.value || 'Document'}</h1>
     <p style="text-align:right; font-size:0.9em;">By ${authorInput.value || 'Unknown'} | ${dateInput.value || new Date().toLocaleDateString()}</p>
@@ -545,6 +617,7 @@ async function exportToWord(filename) {
         table { border-collapse: collapse; width: 100%; margin: 20px 0; }
         th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
         th { background-color: #f2f2f2; }
+        img { max-width: 100%; height: auto; margin: 10px 0; }
       </style></head><body>
       ${headerHtml}
       ${bodyHtml}
@@ -557,24 +630,27 @@ async function exportToWord(filename) {
 /**
  * Export to HTML
  */
-async function exportToHtml(filename) {
-  const html = converter.makeHtml(input.value);
+async function exportToHtml(filename, content = null) {
+  const markdownContent = content || input.value;
+  const html = converter.makeHtml(markdownContent);
   fileManager.saveAsHtml(html, `${filename}.html`);
 }
 
 /**
  * Export to plain text
  */
-async function exportToText(filename) {
-  fileManager.saveAsText(input.value, `${filename}.txt`);
+async function exportToText(filename, content = null) {
+  const markdownContent = content || input.value;
+  fileManager.saveAsText(markdownContent, `${filename}.txt`);
 }
 
 /**
  * Export to standalone HTML
  */
-async function exportToStandalone(filename) {
+async function exportToStandalone(filename, content = null) {
+  const markdownContent = content || input.value;
   printExport.downloadStandaloneHTML(
-    input.value,
+    markdownContent,
     titleInput.value || 'Document',
     authorInput.value,
     dateInput.value
@@ -910,7 +986,15 @@ document.addEventListener('DOMContentLoaded', () => {
       showUserNotification('📁 Uploading images...', 'info');
       
       try {
-        const imagePromises = files.map(file => processImageFile(file));
+        let imagePromises;
+        if (window.imageManager && window.imageManager.processImageFile) {
+          // Use new image manager
+          imagePromises = files.map(file => window.imageManager.processImageFile(file));
+        } else {
+          // Fallback to old method (shouldn't happen, but just in case)
+          console.warn('ImageManager not available, using fallback');
+          imagePromises = files.map(file => processImageFileFallback(file));
+        }
         const imageResults = await Promise.all(imagePromises);
         
         // Insert images into markdown
@@ -940,9 +1024,9 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 /**
- * Process individual image file
+ * Fallback image processing function
  */
-async function processImageFile(file) {
+async function processImageFileFallback(file) {
   return new Promise((resolve, reject) => {
     // Validate file type
     if (!file.type.startsWith('image/')) {
@@ -950,34 +1034,13 @@ async function processImageFile(file) {
       return;
     }
     
-    // Validate file size (max 10MB per image to be more generous)
-    const maxSize = 10 * 1024 * 1024; // 10MB
-    if (file.size > maxSize) {
-      reject(new Error(`${file.name} is too large (max 10MB)`));
-      return;
-    }
-    
     const reader = new FileReader();
-    
     reader.onload = (e) => {
-      try {
-        const base64Data = e.target.result;
-        const fileName = sanitizeFilename(file.name.replace(/\.[^/.]+$/, "")); // Remove extension
-        
-        // Create markdown with default center alignment
-        const imageMarkdown = `![${fileName}](${base64Data}){.center width=80%}`;
-        
-        resolve(imageMarkdown);
-      } catch (error) {
-        reject(new Error(`Failed to process ${file.name}: ${error.message}`));
-      }
+      const base64Data = e.target.result;
+      const fileName = file.name.replace(/\.[^/.]+$/, "").replace(/[^a-zA-Z0-9._-]/g, '_').substring(0, 50);
+      resolve(`![${fileName}](${base64Data}){.center width=80%}`);
     };
-    
-    reader.onerror = () => {
-      reject(new Error(`Failed to read ${file.name}`));
-    };
-    
-    // Read as data URL (base64)
+    reader.onerror = () => reject(new Error(`Failed to read ${file.name}`));
     reader.readAsDataURL(file);
   });
 }
