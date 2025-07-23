@@ -15,6 +15,8 @@
   <script src="js/file-manager.js" defer></script>
   <script src="js/editor-toolbar.js" defer></script>
   <script src="js/document-templates.js" defer></script>
+  <script src="js/search-replace.js" defer></script>
+  <script src="js/print-export.js" defer></script>
   <!-- Core Script -->
   <script src="js/script.js" defer></script>
 </head>
@@ -40,12 +42,16 @@
 
         <!-- Actions -->
         <button id="preview-btn" class="btn primary-btn" disabled>🔍 Preview</button>
+        <button id="search-btn" class="btn" title="Find & Replace (Ctrl+F)">🔍 Find</button>
+        <button id="print-btn" class="btn" title="Print Document">🖨️ Print</button>
         <div class="export-dropdown">
           <button id="export-btn" class="btn primary-btn" disabled>📥 Export ▼</button>
           <div id="export-menu" class="export-menu">
             <button id="download-word-btn" class="export-option">📄 Word (.docx)</button>
             <button id="download-html-btn" class="export-option">🌐 HTML</button>
+            <button id="download-standalone-btn" class="export-option">🌐 Standalone HTML</button>
             <button id="download-txt-btn" class="export-option">📝 Text</button>
+            <button id="download-pdf-btn" class="export-option">📑 PDF</button>
           </div>
         </div>
         <div id="spinner" class="spinner"></div>

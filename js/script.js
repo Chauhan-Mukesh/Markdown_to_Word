@@ -22,7 +22,7 @@ const authorInput = document.getElementById('doc-author');
 const dateInput = document.getElementById('doc-date');
 
 // Initialize components
-let converter, fileManager, editorToolbar, templates;
+let converter, fileManager, editorToolbar, templates, searchReplace, printExport;
 
 // Wait for all scripts to load
 window.addEventListener('DOMContentLoaded', () => {
@@ -30,12 +30,18 @@ window.addEventListener('DOMContentLoaded', () => {
   fileManager = new FileManager();
   editorToolbar = new EditorToolbar(input);
   templates = new DocumentTemplates();
+  searchReplace = new SearchReplace(input);
+  printExport = new PrintExport();
+  
+  // Make searchReplace globally available for modal
+  window.searchReplace = searchReplace;
   
   // Initialize features
   initializeTemplates();
   initializeFormattingToolbar();
   initializeAutosave();
   restoreAutosavedContent();
+  initializeNewFeatures();
 });
 
 /**
@@ -88,6 +94,27 @@ function restoreAutosavedContent() {
     }
   }
 }
+
+/**
+ * Initialize new advanced features
+ */
+function initializeNewFeatures() {
+  // Search functionality
+  document.getElementById('search-btn').onclick = () => searchReplace.openModal();
+  
+  // Print functionality  
+  document.getElementById('print-btn').onclick = () => {
+    const title = titleInput.value || 'Document';
+    printExport.printDocument(title);
+  };
+  
+  // Additional export options
+  document.getElementById('download-standalone-btn').onclick = () => exportDocument('standalone');
+  document.getElementById('download-pdf-btn').onclick = () => exportDocument('pdf');
+}
+
+// Make renderPreview globally available
+window.renderPreview = renderPreview;
 
 /**
  * Toggle button states based on input
@@ -188,6 +215,12 @@ async function exportDocument(format) {
       case 'text':
         await exportToText(filename);
         break;
+      case 'standalone':
+        await exportToStandalone(filename);
+        break;
+      case 'pdf':
+        await exportToPDF(filename);
+        break;
     }
   } catch (err) {
     console.error(err);
@@ -240,6 +273,25 @@ async function exportToHtml(filename) {
  */
 async function exportToText(filename) {
   fileManager.saveAsText(input.value, `${filename}.txt`);
+}
+
+/**
+ * Export to standalone HTML
+ */
+async function exportToStandalone(filename) {
+  printExport.downloadStandaloneHTML(
+    input.value,
+    titleInput.value || 'Document',
+    authorInput.value,
+    dateInput.value
+  );
+}
+
+/**
+ * Export to PDF
+ */
+async function exportToPDF(filename) {
+  printExport.exportToPDF(titleInput.value || 'Document');
 }
 
 // Set default date to today
