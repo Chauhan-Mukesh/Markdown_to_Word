@@ -220,6 +220,7 @@ body {
   color: white;
   padding: 1rem 0;
   margin-top: auto;
+  margin-bottom: 70px; /* Add space for fixed formatting toolbar */
   box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
 }
 
