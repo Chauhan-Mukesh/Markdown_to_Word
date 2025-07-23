@@ -1,15 +1,17 @@
 // Enhanced Showdown.js fallback for comprehensive Markdown conversion
-class ShowdownFallback {
-  constructor(options = {}) {
-    this.options = {
-      tables: true,
-      simplifiedAutoLink: true,
-      headerLevelStart: 1,
-      strikethrough: true,
-      tasklists: true,
-      ...options
-    };
-  }
+// Check if already loaded to prevent redeclaration
+if (typeof window.ShowdownFallback === 'undefined') {
+  class ShowdownFallback {
+    constructor(options = {}) {
+      this.options = {
+        tables: true,
+        simplifiedAutoLink: true,
+        headerLevelStart: 1,
+        strikethrough: true,
+        tasklists: true,
+        ...options
+      };
+    }
 
   makeHtml(markdown) {
     if (!markdown) return '';
@@ -147,11 +149,17 @@ class ShowdownFallback {
   }
 }
 
-// Make available globally
+// Make available globally - only if not already defined
 if (typeof window !== 'undefined' && !window.showdown) {
   window.showdown = { 
     Converter: ShowdownFallback,
     extension: () => {} // Stub for compatibility
   };
-  // Initialize fallback Showdown converter
+}
+
+} // Close the if check for ShowdownFallback definition
+
+// Assign to window for global access after the class is defined
+if (typeof window !== 'undefined' && typeof ShowdownFallback !== 'undefined') {
+  window.ShowdownFallback = ShowdownFallback;
 }
