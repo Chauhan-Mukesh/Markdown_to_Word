@@ -1374,6 +1374,7 @@ document.addEventListener('DOMContentLoaded', () => {
   setTimeout(() => {
     enhanceImageSupport();
     updateAutosaveWithEnhancedStorage();
+    initializeMobileToolbar();
     
     // Load saved settings
     const settings = enhancedStorage.loadSettings();
@@ -1382,3 +1383,37 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }, 500);
 });
+
+/**
+ * Initialize mobile toolbar functionality
+ */
+function initializeMobileToolbar() {
+  const toolbar = document.getElementById('toolbar');
+  const primaryActions = toolbar?.querySelector('.primary-actions');
+  
+  if (!toolbar || !primaryActions) return;
+  
+  // Add click handler for mobile toolbar expansion
+  function toggleToolbar() {
+    if (window.innerWidth <= 768) {
+      toolbar.classList.toggle('expanded');
+    }
+  }
+  
+  // Add click listener to primary actions area on mobile
+  if (window.innerWidth <= 768) {
+    primaryActions.addEventListener('click', (e) => {
+      // Only toggle if clicking on the primary actions area, not on buttons
+      if (e.target === primaryActions || e.target.classList.contains('section-label')) {
+        toggleToolbar();
+      }
+    });
+  }
+  
+  // Handle window resize
+  window.addEventListener('resize', () => {
+    if (window.innerWidth > 768) {
+      toolbar.classList.remove('expanded');
+    }
+  });
+}

@@ -212,7 +212,11 @@ class SearchReplace {
     const count = this.searchMatches.length;
     this.performSearch();
     
-    alert(`Replaced ${count} occurrences`);
+    if (window.notificationSystem) {
+      window.notificationSystem.success(`Replaced ${count} occurrences`);
+    } else {
+      alert(`Replaced ${count} occurrences`);
+    }
   }
 
   /**

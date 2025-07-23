@@ -146,7 +146,11 @@ class PrintExport {
    * Export as PDF (using browser's print to PDF)
    */
   exportToPDF(title = 'Document') {
-    alert('To export as PDF:\n1. Use the Print button\n2. Choose "Save as PDF" as the destination\n3. Click Save');
+    if (window.notificationSystem) {
+      window.notificationSystem.info('To export as PDF:\n1. Use the Print button\n2. Choose "Save as PDF" as the destination\n3. Click Save', 6000);
+    } else {
+      alert('To export as PDF:\n1. Use the Print button\n2. Choose "Save as PDF" as the destination\n3. Click Save');
+    }
     this.printDocument(title);
   }
 
