@@ -31,11 +31,88 @@ body { font-family: 'Segoe UI', sans-serif; background: #f0f4f8; color: #333; }
   color: #fff;
   cursor: pointer;
   transition: background 0.2s, transform 0.1s;
+  white-space: nowrap;
 }
 .btn:disabled { opacity: 0.6; cursor: not-allowed; }
 .btn:not(:disabled):hover { background: #78909c; transform: translateY(-1px); }
 .primary-btn { background: #1976d2; }
 .primary-btn:hover { background: #115293; }
+
+/* Enhanced Formatting Toolbar */
+.formatting-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+  padding: 0.5rem;
+  background: #f8f9fa;
+  border-top: 1px solid #ddd;
+  border-bottom: 1px solid #ddd;
+}
+
+.format-btn {
+  padding: 0.4rem 0.6rem;
+  border: 1px solid #ddd;
+  border-radius: 3px;
+  background: white;
+  color: #333;
+  cursor: pointer;
+  font-size: 0.85rem;
+  transition: all 0.2s;
+}
+
+.format-btn:hover {
+  background: #e9ecef;
+  border-color: #adb5bd;
+}
+
+.format-btn:active {
+  background: #dee2e6;
+  transform: translateY(1px);
+}
+
+/* Export Dropdown */
+.export-dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.export-menu {
+  display: none;
+  position: absolute;
+  top: 100%;
+  right: 0;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  z-index: 1000;
+  min-width: 120px;
+}
+
+.export-dropdown:hover .export-menu {
+  display: block;
+}
+
+.export-option {
+  display: block;
+  width: 100%;
+  padding: 0.5rem 0.75rem;
+  border: none;
+  background: white;
+  color: #333;
+  text-align: left;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.export-option:hover {
+  background: #f8f9fa;
+}
+
+/* Template Selector */
+.template-selector {
+  transition: border-color 0.3s, background 0.3s;
+}
 
 /* Spinner Animation */
 .spinner {
@@ -101,7 +178,9 @@ body.dark-mode { background: #263238; color: #eceff1; }
 body.dark-mode .panel { background: #37474f; }
 body.dark-mode .editor { background: #455a64; color: #eceff1; border-color: #546e7a; }
 body.dark-mode .toolbar { background: #37474f; border-color: #546e7a; }
+body.dark-mode .formatting-toolbar { background: #37474f; border-color: #546e7a; }
 body.dark-mode .input-field { background: #546e7a; color: #eceff1; border-color: #708090; }
+body.dark-mode .template-selector { background: #546e7a; color: #eceff1; border-color: #708090; }
 body.dark-mode .btn { background: #546e7a; color: #eceff1; }
 body.dark-mode .btn:not(:disabled):hover { background: #455a64; }
 body.dark-mode .primary-btn { background: #1e88e5; }
@@ -115,6 +194,26 @@ body.dark-mode #preview-header {
   background: #455a64;
   border-color: #546e7a;
   color: #eceff1;
+}
+body.dark-mode .format-btn {
+  background: #546e7a;
+  color: #eceff1;
+  border-color: #708090;
+}
+body.dark-mode .format-btn:hover {
+  background: #455a64;
+  border-color: #607d8b;
+}
+body.dark-mode .export-menu {
+  background: #455a64;
+  border-color: #546e7a;
+}
+body.dark-mode .export-option {
+  background: #455a64;
+  color: #eceff1;
+}
+body.dark-mode .export-option:hover {
+  background: #37474f;
 }
 
 /* Responsive Adjustments */
