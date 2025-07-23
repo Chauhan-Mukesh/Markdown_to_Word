@@ -23,7 +23,7 @@ body {
 }
 
 .navbar-container {
-  max-width: 1400px;
+  width: 100%;
   margin: 0 auto;
   display: flex;
   align-items: center;
@@ -136,7 +136,8 @@ body {
   transition: all 0.3s ease;
 }
 
-.dropdown:hover .dropdown-menu {
+.dropdown:hover .dropdown-menu,
+.dropdown.active .dropdown-menu {
   opacity: 1;
   visibility: visible;
   transform: translateY(0);
@@ -223,7 +224,7 @@ body {
 }
 
 .footer-container {
-  max-width: 1400px;
+  width: 100%;
   margin: 0 auto;
   display: flex;
   align-items: center;
@@ -1821,11 +1822,11 @@ body.dark-mode a:hover {
   }
 }
 
-/* Ultra-wide screens: limit max width */
+/* Ultra-wide screens: use full width */
 @media (min-width: 1400px) {
   #app {
-    max-width: 1400px;
-    margin: 0 auto;
+    width: 100%;
+    margin: 0;
   }
 }
 

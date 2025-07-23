@@ -46,6 +46,52 @@ class EditorToolbar {
   }
 
   /**
+   * Initialize history tracking for undo/redo functionality
+   * @description Sets up the history system to track text changes
+   * @since 2.1.0
+   */
+  initializeHistory() {
+    // Add initial state to history
+    this.addToHistory(this.textarea.value);
+    
+    // Track changes for history
+    this.textarea.addEventListener('input', () => {
+      this.debounceAddToHistory();
+    });
+  }
+
+  /**
+   * Add current state to history
+   * @param {string} content - The content to add to history
+   */
+  addToHistory(content) {
+    // Remove any future history if we're not at the end
+    if (this.historyIndex < this.history.length - 1) {
+      this.history = this.history.slice(0, this.historyIndex + 1);
+    }
+    
+    // Add new state
+    this.history.push(content);
+    this.historyIndex = this.history.length - 1;
+    
+    // Limit history size
+    if (this.history.length > this.maxHistory) {
+      this.history.shift();
+      this.historyIndex--;
+    }
+  }
+
+  /**
+   * Debounced version of addToHistory to avoid too many history entries
+   */
+  debounceAddToHistory() {
+    clearTimeout(this.historyTimeout);
+    this.historyTimeout = setTimeout(() => {
+      this.addToHistory(this.textarea.value);
+    }, 1000); // Add to history after 1 second of inactivity
+  }
+
+  /**
    * Insert text at cursor position with intelligent formatting
    * @description Inserts formatted text at the current cursor position or around selected text
    * @param {string} before - Text to insert before the selection/cursor
