@@ -306,7 +306,12 @@ class KeyboardShortcuts {
     this.helpBtn = document.getElementById('help-btn');
     this.helpClose = document.getElementById('help-close');
     
+    this.statsModal = document.getElementById('stats-modal');
+    this.statsBtn = document.getElementById('stats-btn');
+    this.statsClose = document.getElementById('stats-close');
+    
     this.initializeHelpModal();
+    this.initializeStatsModal();
     this.bindKeyboardShortcuts();
   }
 
@@ -329,6 +334,25 @@ class KeyboardShortcuts {
     });
   }
 
+  initializeStatsModal() {
+    // Stats button click
+    this.statsBtn?.addEventListener('click', () => {
+      this.showStats();
+    });
+
+    // Close stats modal
+    this.statsClose?.addEventListener('click', () => {
+      this.hideStats();
+    });
+
+    // Close on outside click
+    this.statsModal?.addEventListener('click', (e) => {
+      if (e.target === this.statsModal) {
+        this.hideStats();
+      }
+    });
+  }
+
   bindKeyboardShortcuts() {
     document.addEventListener('keydown', (e) => {
       // F1 - Show help
@@ -341,6 +365,7 @@ class KeyboardShortcuts {
       // Escape - Close modals
       if (e.key === 'Escape') {
         this.hideHelp();
+        this.hideStats();
         // Close other modals too
         document.querySelectorAll('.modal').forEach(modal => {
           modal.style.display = 'none';
@@ -388,6 +413,10 @@ class KeyboardShortcuts {
               downloadWordBtn?.click();
             }
             break;
+          case 'e':
+            e.preventDefault();
+            this.showStats();
+            break;
         }
       }
     });
@@ -404,6 +433,108 @@ class KeyboardShortcuts {
   hideHelp() {
     if (this.helpModal) {
       this.helpModal.style.display = 'none';
+    }
+  }
+
+  showStats() {
+    if (this.statsModal) {
+      this.calculateDocumentStats();
+      this.statsModal.style.display = 'block';
+      this.statsClose?.focus();
+    }
+  }
+
+  hideStats() {
+    if (this.statsModal) {
+      this.statsModal.style.display = 'none';
+    }
+  }
+
+  calculateDocumentStats() {
+    const input = document.getElementById('markdown-input');
+    const text = input?.value || '';
+    
+    // Basic counts
+    const words = text.trim() ? text.trim().split(/\s+/).length : 0;
+    const chars = text.length;
+    const charsNoSpaces = text.replace(/\s/g, '').length;
+    
+    // Advanced counts
+    const paragraphs = text.split(/\n\s*\n/).filter(p => p.trim()).length;
+    const sentences = text.split(/[.!?]+/).filter(s => s.trim()).length;
+    const headers = (text.match(/^#{1,6}\s+/gm) || []).length;
+    const codeBlocks = (text.match(/```[\s\S]*?```/g) || []).length;
+    const links = (text.match(/\[([^\]]*)\]\(([^)]*)\)/g) || []).length;
+    const lists = (text.match(/^[\s]*[-*+]\s+/gm) || []).length;
+    
+    // Reading time (average 200 words per minute)
+    const readingTime = Math.ceil(words / 200);
+    
+    // Advanced calculations
+    const avgWordsPerSentence = sentences > 0 ? Math.round(words / sentences) : 0;
+    const avgSentencesPerParagraph = paragraphs > 0 ? Math.round(sentences / paragraphs) : 0;
+    
+    // Readability assessment
+    const readabilityLevel = this.getReadabilityLevel(avgWordsPerSentence, sentences, words);
+    const targetAudience = this.getTargetAudience(readabilityLevel);
+    
+    // Update UI
+    this.updateStatsDisplay({
+      words,
+      chars,
+      charsNoSpaces,
+      paragraphs,
+      sentences,
+      readingTime,
+      avgWordsPerSentence,
+      avgSentencesPerParagraph,
+      headers,
+      codeBlocks,
+      links,
+      lists,
+      readabilityLevel,
+      targetAudience
+    });
+  }
+
+  updateStatsDisplay(stats) {
+    document.getElementById('word-count').textContent = stats.words.toLocaleString();
+    document.getElementById('char-count').textContent = stats.chars.toLocaleString();
+    document.getElementById('char-no-spaces').textContent = stats.charsNoSpaces.toLocaleString();
+    document.getElementById('paragraph-count').textContent = stats.paragraphs.toLocaleString();
+    document.getElementById('sentence-count').textContent = stats.sentences.toLocaleString();
+    document.getElementById('reading-time').textContent = stats.readingTime;
+    
+    document.getElementById('avg-words-sentence').textContent = stats.avgWordsPerSentence;
+    document.getElementById('avg-sentences-paragraph').textContent = stats.avgSentencesPerParagraph;
+    document.getElementById('header-count').textContent = stats.headers;
+    document.getElementById('code-block-count').textContent = stats.codeBlocks;
+    document.getElementById('link-count').textContent = stats.links;
+    document.getElementById('list-count').textContent = stats.lists;
+    
+    document.getElementById('readability-level').textContent = stats.readabilityLevel;
+    document.getElementById('target-audience').textContent = stats.targetAudience;
+  }
+
+  getReadabilityLevel(avgWordsPerSentence, sentences, words) {
+    if (words < 50) return 'Too short to analyze';
+    
+    // Simple readability assessment based on sentence length
+    if (avgWordsPerSentence <= 10) return 'Very Easy';
+    if (avgWordsPerSentence <= 15) return 'Easy';
+    if (avgWordsPerSentence <= 20) return 'Moderate';
+    if (avgWordsPerSentence <= 25) return 'Difficult';
+    return 'Very Difficult';
+  }
+
+  getTargetAudience(readabilityLevel) {
+    switch (readabilityLevel) {
+      case 'Very Easy': return 'Elementary school';
+      case 'Easy': return 'Middle school';
+      case 'Moderate': return 'High school';
+      case 'Difficult': return 'College level';
+      case 'Very Difficult': return 'Graduate level';
+      default: return 'General readers';
     }
   }
 

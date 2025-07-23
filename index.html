@@ -156,6 +156,7 @@
         <button id="preview-btn" class="btn primary-btn" disabled>🔍 Preview</button>
         <button id="search-btn" class="btn" title="Find & Replace (Ctrl+F)">🔍 Find</button>
         <button id="print-btn" class="btn" title="Print Document">🖨️ Print</button>
+        <button id="stats-btn" class="btn" title="Document Statistics">📊 Stats</button>
         <button id="help-btn" class="btn" title="Keyboard Shortcuts & Help (F1)">❓ Help</button>
         <div class="export-dropdown">
           <button id="export-btn" class="btn primary-btn" disabled>📥 Export ▼</button>
@@ -237,6 +238,10 @@
             <span>Export to Word</span>
           </div>
           <div class="shortcut-item">
+            <kbd>Ctrl</kbd> + <kbd>E</kbd>
+            <span>Show statistics</span>
+          </div>
+          <div class="shortcut-item">
             <kbd>F1</kbd>
             <span>Show this help</span>
           </div>
@@ -303,6 +308,85 @@
           <li><strong>Live Preview:</strong> See your formatted document in real-time as you type</li>
           <li><strong>Responsive:</strong> Works great on desktop, tablet, and mobile devices</li>
         </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Statistics Modal -->
+  <div id="stats-modal" class="modal">
+    <div class="modal-content">
+      <span class="close" id="stats-close">&times;</span>
+      <h2>📊 Document Statistics</h2>
+      
+      <div class="stats-container">
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-number" id="word-count">0</div>
+            <div class="stat-label">Words</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-number" id="char-count">0</div>
+            <div class="stat-label">Characters</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-number" id="char-no-spaces">0</div>
+            <div class="stat-label">Characters (no spaces)</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-number" id="paragraph-count">0</div>
+            <div class="stat-label">Paragraphs</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-number" id="sentence-count">0</div>
+            <div class="stat-label">Sentences</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-number" id="reading-time">0</div>
+            <div class="stat-label">Reading Time (min)</div>
+          </div>
+        </div>
+
+        <div class="detailed-stats">
+          <h3>📈 Detailed Analysis</h3>
+          <div class="stats-details">
+            <div class="detail-item">
+              <span class="detail-label">Average words per sentence:</span>
+              <span class="detail-value" id="avg-words-sentence">0</span>
+            </div>
+            <div class="detail-item">
+              <span class="detail-label">Average sentences per paragraph:</span>
+              <span class="detail-value" id="avg-sentences-paragraph">0</span>
+            </div>
+            <div class="detail-item">
+              <span class="detail-label">Headers found:</span>
+              <span class="detail-value" id="header-count">0</span>
+            </div>
+            <div class="detail-item">
+              <span class="detail-label">Code blocks:</span>
+              <span class="detail-value" id="code-block-count">0</span>
+            </div>
+            <div class="detail-item">
+              <span class="detail-label">Links found:</span>
+              <span class="detail-value" id="link-count">0</span>
+            </div>
+            <div class="detail-item">
+              <span class="detail-label">Lists found:</span>
+              <span class="detail-value" id="list-count">0</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="readability-score">
+          <h3>📚 Readability</h3>
+          <div class="readability-item">
+            <span class="readability-label">Estimated difficulty:</span>
+            <span class="readability-value" id="readability-level">Easy</span>
+          </div>
+          <div class="readability-item">
+            <span class="readability-label">Target audience:</span>
+            <span class="readability-value" id="target-audience">General readers</span>
+          </div>
+        </div>
       </div>
     </div>
   </div>
