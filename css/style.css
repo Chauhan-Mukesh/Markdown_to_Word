@@ -1144,4 +1144,255 @@ body.dark-mode .readability-label {
 body.dark-mode .readability-value {
   color: #64b5f6;
   background: #3a3a3a;
+  border: 1px solid #555;
+}
+
+/* Image Support and Positioning */
+.preview img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 6px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.1);
+  margin: 15px 0;
+  transition: all 0.3s ease;
+}
+
+.preview img:hover {
+  box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+  transform: translateY(-2px);
+  cursor: pointer;
+}
+
+.preview img.center {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.preview img.right {
+  float: right;
+  margin-left: 20px;
+  margin-bottom: 15px;
+  max-width: 50%;
+}
+
+.preview img.left {
+  float: left;
+  margin-right: 20px;
+  margin-bottom: 15px;
+  max-width: 50%;
+}
+
+.preview img.float-left {
+  float: left;
+  margin: 0 20px 15px 0;
+  max-width: 40%;
+}
+
+.preview img.float-right {
+  float: right;
+  margin: 0 0 15px 20px;
+  max-width: 40%;
+}
+
+.preview .image-container {
+  clear: both;
+  margin: 25px 0;
+  text-align: center;
+}
+
+.preview .image-caption {
+  font-style: italic;
+  text-align: center;
+  color: #666;
+  font-size: 0.9em;
+  margin-top: 8px;
+  padding: 0 10px;
+}
+
+/* Image preview modal */
+#image-preview-modal .modal-content {
+  max-width: 95vw;
+  max-height: 95vh;
+  text-align: center;
+  padding: 1rem;
+}
+
+#preview-image {
+  max-width: 100%;
+  max-height: 80vh;
+  object-fit: contain;
+  border-radius: 8px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+}
+
+#preview-caption {
+  margin-top: 15px;
+  font-style: italic;
+  color: #666;
+  font-size: 1rem;
+}
+
+/* Dark mode image styles */
+body.dark-mode .preview img {
+  box-shadow: 0 2px 12px rgba(0,0,0,0.4);
+}
+
+body.dark-mode .preview img:hover {
+  box-shadow: 0 4px 20px rgba(0,0,0,0.6);
+}
+
+body.dark-mode .preview .image-caption {
+  color: #ccc;
+}
+
+body.dark-mode #preview-caption {
+  color: #ccc;
+}
+
+/* Enhanced formatting toolbar for image upload */
+.format-btn#upload-image-btn {
+  background: linear-gradient(135deg, #4caf50, #45a049);
+  color: white;
+  border: none;
+  font-weight: 500;
+}
+
+.format-btn#upload-image-btn:hover {
+  background: linear-gradient(135deg, #45a049, #3d8b40);
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(76, 175, 80, 0.3);
+}
+
+body.dark-mode .format-btn#upload-image-btn {
+  background: linear-gradient(135deg, #4caf50, #45a049);
+}
+
+body.dark-mode .format-btn#upload-image-btn:hover {
+  background: linear-gradient(135deg, #45a049, #3d8b40);
+  box-shadow: 0 2px 8px rgba(76, 175, 80, 0.4);
+}
+
+/* Tutorial and image help styles */
+.image-help {
+  background: #f8f9fa;
+  padding: 1.5rem;
+  border-radius: 8px;
+  border-left: 4px solid #4caf50;
+  margin: 1rem 0;
+}
+
+.image-help h4 {
+  color: #2e7d32;
+  margin-bottom: 0.75rem;
+  font-size: 1rem;
+}
+
+.image-help ol, .image-help ul {
+  margin: 0.5rem 0;
+  padding-left: 1.5rem;
+}
+
+.image-help li {
+  margin: 0.5rem 0;
+  line-height: 1.5;
+}
+
+.image-help code {
+  background: #e8f5e8;
+  color: #2e7d32;
+  padding: 0.2rem 0.4rem;
+  border-radius: 3px;
+  font-size: 0.9rem;
+}
+
+body.dark-mode .image-help {
+  background: #2a2a2a;
+  border-left-color: #66bb6a;
+}
+
+body.dark-mode .image-help h4 {
+  color: #66bb6a;
+}
+
+body.dark-mode .image-help code {
+  background: #3a3a3a;
+  color: #66bb6a;
+}
+
+/* Auto-save indicator */
+.content-warning {
+  animation: slideInTop 0.3s ease;
+  z-index: 100;
+}
+
+@keyframes slideInTop {
+  from { transform: translateY(-100%); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+/* Loading states */
+.loading-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  animation: fadeIn 0.3s ease;
+}
+
+.loading-spinner {
+  width: 50px;
+  height: 50px;
+  border: 4px solid rgba(255, 255, 255, 0.3);
+  border-top-color: #1976d2;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+.loading-text {
+  color: white;
+  margin-left: 1rem;
+  font-size: 1.1rem;
+  font-weight: 500;
+}
+
+/* Enhanced accessibility */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Focus improvements */
+button:focus,
+input:focus,
+textarea:focus,
+select:focus {
+  outline: 2px solid #1976d2;
+  outline-offset: 2px;
+}
+
+body.dark-mode button:focus,
+body.dark-mode input:focus,
+body.dark-mode textarea:focus,
+body.dark-mode select:focus {
+  outline-color: #64b5f6;
+}
+
+/* Improved contrast for better readability */
+.high-contrast {
+  filter: contrast(1.2);
+}
 }

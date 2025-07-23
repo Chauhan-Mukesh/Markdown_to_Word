@@ -7,8 +7,9 @@
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='0.9em' font-size='90'%3E🚀%3C/text%3E%3C/svg%3E" />
   <title>🚀 Advanced Markdown → Word Exporter 🤖</title>
   
-  <!-- Stylesheet -->
+  <!-- Stylesheets -->
   <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/highlight-github.css">
   
   <!-- Enhanced CDN Libraries with Robust Fallbacks -->
   <script>
@@ -81,11 +82,8 @@
     // Load all libraries
     (async () => {
       try {
-        // Load CSS for syntax highlighting
-        await LibraryLoader.loadCSS([
-          'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/github.min.css',
-          'https://unpkg.com/@highlightjs/cdn-assets@11.7.0/styles/github.min.css'
-        ]);
+        // CSS for syntax highlighting is now loaded locally via CSS files
+        console.log('[CSS_LOADER]: Local CSS files loaded successfully');
 
         // Load Showdown with fallbacks
         await LibraryLoader.loadLibraryWithFallback([
@@ -179,6 +177,8 @@
         <button class="format-btn" id="code-btn" title="Code (Ctrl+`)">{ }</button>
         <button class="format-btn" id="link-btn" title="Link (Ctrl+K)">🔗</button>
         <button class="format-btn" id="image-btn" title="Image">🖼️</button>
+        <input type="file" id="image-upload" accept="image/*" multiple style="display: none;" />
+        <button class="format-btn" id="upload-image-btn" title="Upload Image">📁🖼️</button>
         <button class="format-btn" id="header-btn" title="Header">#</button>
         <button class="format-btn" id="list-btn" title="List">• List</button>
         <button class="format-btn" id="quote-btn" title="Quote">" Quote</button>
@@ -308,7 +308,39 @@
           <li><strong>Export Options:</strong> Choose from Word, HTML, PDF, or plain text formats</li>
           <li><strong>Live Preview:</strong> See your formatted document in real-time as you type</li>
           <li><strong>Responsive:</strong> Works great on desktop, tablet, and mobile devices</li>
+          <li><strong>Image Upload:</strong> Use the 📁🖼️ button to upload images directly from your device</li>
+          <li><strong>Image Positioning:</strong> Use markdown syntax for image alignment: `![alt](url){.center}`, `![alt](url){.right}`</li>
+          <li><strong>Large Documents:</strong> No size restrictions - save documents of any size</li>
         </ul>
+      </div>
+
+      <div class="help-section">
+        <h3>📸 Working with Images</h3>
+        <div class="image-help">
+          <h4>Upload Images:</h4>
+          <ol>
+            <li>Click the 📁🖼️ "Upload Image" button in the formatting toolbar</li>
+            <li>Select one or multiple images from your device</li>
+            <li>Images will be automatically converted to Base64 and inserted into your markdown</li>
+          </ol>
+          
+          <h4>Image Positioning:</h4>
+          <ul>
+            <li><code>![Description](image.jpg)</code> - Default (left-aligned)</li>
+            <li><code>![Description](image.jpg){.center}</code> - Center-aligned</li>
+            <li><code>![Description](image.jpg){.right}</code> - Right-aligned</li>
+            <li><code>![Description](image.jpg){.float-left}</code> - Float left with text wrap</li>
+            <li><code>![Description](image.jpg){.float-right}</code> - Float right with text wrap</li>
+            <li><code>![Description](image.jpg){width=50%}</code> - Resize image to 50% width</li>
+          </ul>
+          
+          <h4>Image Size Control:</h4>
+          <ul>
+            <li><code>![Description](image.jpg){width=300px}</code> - Set specific width</li>
+            <li><code>![Description](image.jpg){height=200px}</code> - Set specific height</li>
+            <li><code>![Description](image.jpg){width=50% height=auto}</code> - Responsive sizing</li>
+          </ul>
+        </div>
       </div>
     </div>
   </div>
