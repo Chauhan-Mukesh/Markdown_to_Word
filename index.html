@@ -10,11 +10,60 @@
   <!-- Stylesheet -->
   <link rel="stylesheet" href="css/style.css">
   
-  <!-- Markdown & Export Libraries -->
-  <script src="https://cdn.jsdelivr.net/npm/showdown@1.9.1/dist/showdown.min.js" defer></script>
-  <script src="https://unpkg.com/html-docx-js/dist/html-docx.js" defer></script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/github.min.css">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js" defer></script>
+  <!-- Local fallback libraries -->
+  <script src="js/showdown-fallback.js"></script>
+  <script src="js/html-docx-fallback.js"></script>
+  <script src="js/highlight-fallback.js"></script>
+  
+  <!-- Markdown & Export Libraries with fallbacks -->
+  <script>
+    // Fallback loader for external libraries
+    function loadLibraryWithFallback(urls, callback, fallbackAvailable = false) {
+      if (fallbackAvailable) {
+        // If fallback is already loaded, use it
+        setTimeout(callback, 10);
+        return;
+      }
+      
+      let currentIndex = 0;
+      function tryLoad() {
+        if (currentIndex >= urls.length) {
+          console.log('Using local fallback library');
+          if (callback) callback();
+          return;
+        }
+        const script = document.createElement('script');
+        script.src = urls[currentIndex];
+        script.onload = callback;
+        script.onerror = () => {
+          currentIndex++;
+          tryLoad();
+        };
+        document.head.appendChild(script);
+      }
+      tryLoad();
+    }
+
+    // Load Showdown with fallbacks
+    loadLibraryWithFallback([
+      'https://cdn.jsdelivr.net/npm/showdown@1.9.1/dist/showdown.min.js',
+      'https://unpkg.com/showdown@1.9.1/dist/showdown.min.js',
+      'https://cdnjs.cloudflare.com/ajax/libs/showdown/1.9.1/showdown.min.js'
+    ], () => console.log('Showdown loaded'), typeof showdown !== 'undefined');
+
+    // Load html-docx with fallbacks
+    loadLibraryWithFallback([
+      'https://unpkg.com/html-docx-js/dist/html-docx.js',
+      'https://cdn.jsdelivr.net/npm/html-docx-js/dist/html-docx.js'
+    ], () => console.log('html-docx loaded'), typeof htmlDocx !== 'undefined');
+
+    // Load highlight.js with fallbacks
+    loadLibraryWithFallback([
+      'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js',
+      'https://unpkg.com/@highlightjs/cdn-assets@11.7.0/highlight.min.js'
+    ], () => console.log('highlight.js loaded'), typeof hljs !== 'undefined');
+  </script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/github.min.css" onerror="this.href='https://unpkg.com/@highlightjs/cdn-assets@11.7.0/styles/github.min.css'">
   <!-- Core Script -->
   <script src="js/script.js" defer></script>
 </head>
@@ -24,6 +73,8 @@
       <div id="toolbar" class="toolbar">
         <button id="clear-btn" class="btn" title="Clear editor">🗑️ Clear</button>
         <button id="theme-btn" class="btn" title="Toggle theme">🎨 Theme</button>
+        <button id="templates-btn" class="btn" title="Load template">📄 Templates</button>
+        <button id="stats-btn" class="btn" title="Document statistics">📊 Stats</button>
 
         <!-- Metadata Inputs -->
         <input id="doc-title" class="input-field" placeholder="Document Title" value="My Document" />
@@ -31,7 +82,19 @@
         <input id="doc-date" type="date" class="input-field" />
 
         <button id="preview-btn" class="btn primary-btn" disabled>🔍 Preview</button>
-        <button id="download-btn" class="btn primary-btn" disabled>📥 Download</button>
+        
+        <!-- Export dropdown -->
+        <div class="dropdown">
+          <button id="export-btn" class="btn primary-btn" disabled>📥 Export ▼</button>
+          <div class="dropdown-content">
+            <a href="#" id="export-word">📄 Word (.docx)</a>
+            <a href="#" id="export-html">🌐 HTML</a>
+            <a href="#" id="export-pdf">📑 PDF</a>
+            <a href="#" id="export-txt">📝 Plain Text</a>
+          </div>
+        </div>
+        
+        <button id="toc-btn" class="btn" title="Generate Table of Contents">📚 TOC</button>
         <div id="spinner" class="spinner"></div>
       </div>
       <textarea id="markdown-input" class="editor" placeholder="Type or paste your Markdown..."></textarea>
@@ -44,6 +107,49 @@
       </header>
       <div id="preview-pane" class="preview darkable"><em>Enter Markdown and click Preview...</em></div>
     </section>
+
+    <!-- Modals -->
+    <div id="stats-modal" class="modal">
+      <div class="modal-content">
+        <span class="close">&times;</span>
+        <h2>📊 Document Statistics</h2>
+        <div id="stats-content">
+          <p><strong>Words:</strong> <span id="word-count">0</span></p>
+          <p><strong>Characters:</strong> <span id="char-count">0</span></p>
+          <p><strong>Characters (no spaces):</strong> <span id="char-no-spaces">0</span></p>
+          <p><strong>Paragraphs:</strong> <span id="paragraph-count">0</span></p>
+          <p><strong>Reading time:</strong> <span id="reading-time">0 min</span></p>
+        </div>
+      </div>
+    </div>
+
+    <div id="templates-modal" class="modal">
+      <div class="modal-content">
+        <span class="close">&times;</span>
+        <h2>📄 Document Templates</h2>
+        <div id="templates-grid">
+          <div class="template-card" data-template="resume">
+            <h3>📋 Resume</h3>
+            <p>Professional resume template</p>
+          </div>
+          <div class="template-card" data-template="report">
+            <h3>📊 Report</h3>
+            <p>Business report template</p>
+          </div>
+          <div class="template-card" data-template="letter">
+            <h3>✉️ Letter</h3>
+            <p>Formal letter template</p>
+          </div>
+          <div class="template-card" data-template="article">
+            <h3>📰 Article</h3>
+            <p>Blog article template</p>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
+
+  <!-- Auto-save indicator -->
+  <div id="autosave-indicator" class="autosave-indicator">💾 Auto-saved</div>
 </body>
 </html>
