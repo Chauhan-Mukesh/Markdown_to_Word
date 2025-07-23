@@ -47,6 +47,9 @@ class SimpleMarkdownConverter {
   makeHtml(markdown) {
     let html = markdown;
     
+    // Process tables first before other rules
+    html = this.processTables(html);
+    
     // Apply all rules
     this.rules.forEach(rule => {
       html = html.replace(rule.regex, rule.replacement);
@@ -61,6 +64,92 @@ class SimpleMarkdownConverter {
     html = html.replace(/<\/ul><ul>/g, '');
     
     return html;
+  }
+
+  processTables(markdown) {
+    // Split into lines
+    const lines = markdown.split('\n');
+    let result = [];
+    let i = 0;
+    
+    while (i < lines.length) {
+      const line = lines[i].trim();
+      
+      // Check if current line looks like a table row
+      if (line.includes('|') && line.startsWith('|') && line.endsWith('|')) {
+        // Check if next line is a separator
+        const nextLine = i + 1 < lines.length ? lines[i + 1].trim() : '';
+        
+        if (nextLine.includes('-') && nextLine.includes('|')) {
+          // This is a table
+          const tableHtml = this.parseTable(lines, i);
+          result.push(tableHtml.html);
+          i = tableHtml.endIndex;
+        } else {
+          result.push(lines[i]);
+          i++;
+        }
+      } else {
+        result.push(lines[i]);
+        i++;
+      }
+    }
+    
+    return result.join('\n');
+  }
+
+  parseTable(lines, startIndex) {
+    let i = startIndex;
+    const tableRows = [];
+    
+    // Parse header row
+    if (i < lines.length && lines[i].includes('|')) {
+      const headerCells = this.parseTableRow(lines[i]);
+      tableRows.push({ isHeader: true, cells: headerCells });
+      i++;
+    }
+    
+    // Skip separator row
+    if (i < lines.length && lines[i].includes('-') && lines[i].includes('|')) {
+      i++;
+    }
+    
+    // Parse data rows
+    while (i < lines.length && lines[i].trim().includes('|') && 
+           lines[i].trim().startsWith('|') && lines[i].trim().endsWith('|')) {
+      const dataCells = this.parseTableRow(lines[i]);
+      tableRows.push({ isHeader: false, cells: dataCells });
+      i++;
+    }
+    
+    // Generate HTML
+    let html = '<table class="markdown-table">\n';
+    
+    tableRows.forEach(row => {
+      if (row.isHeader) {
+        html += '  <thead>\n    <tr>\n';
+        row.cells.forEach(cell => {
+          html += `      <th>${cell}</th>\n`;
+        });
+        html += '    </tr>\n  </thead>\n  <tbody>\n';
+      } else {
+        html += '    <tr>\n';
+        row.cells.forEach(cell => {
+          html += `      <td>${cell}</td>\n`;
+        });
+        html += '    </tr>\n';
+      }
+    });
+    
+    html += '  </tbody>\n</table>';
+    
+    return { html, endIndex: i };
+  }
+
+  parseTableRow(line) {
+    // Remove leading and trailing pipes, then split by pipe
+    const trimmed = line.trim().slice(1, -1);
+    return trimmed.split('|').map(cell => cell.trim());
   }
 }
 

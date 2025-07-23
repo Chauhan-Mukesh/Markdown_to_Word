@@ -74,10 +74,21 @@ function initializeFormattingToolbar() {
 }
 
 /**
- * Initialize auto-save functionality
+ * Initialize auto-save functionality with validation
  */
 function initializeAutosave() {
-  fileManager.enableAutosave(() => input.value);
+  try {
+    fileManager.enableAutosave(() => {
+      const content = input.value;
+      // Basic content validation
+      if (content.length > 1000000) { // 1MB limit
+        throw new Error('Document too large for auto-save');
+      }
+      return content;
+    });
+  } catch (error) {
+    console.error('Auto-save initialization failed:', error);
+  }
 }
 
 /**
@@ -117,13 +128,75 @@ function initializeNewFeatures() {
 window.renderPreview = renderPreview;
 
 /**
- * Toggle button states based on input
+ * Toggle button states based on input with validation
  */
 input.addEventListener('input', () => {
-  const hasContent = input.value.trim().length > 0;
-  previewBtn.disabled = !hasContent;
-  exportBtn.disabled = !hasContent;
+  const content = input.value.trim();
+  const hasContent = content.length > 0;
+  const isValidContent = content.length <= 1000000; // 1MB limit
+  
+  previewBtn.disabled = !hasContent || !isValidContent;
+  exportBtn.disabled = !hasContent || !isValidContent;
+  
+  // Auto-format tables on input
+  autoFormatTables();
+  
+  // Show warning for large documents
+  if (content.length > 500000) { // 500KB warning
+    showContentWarning('Large document detected. Performance may be affected.');
+  }
 });
+
+/**
+ * Auto-format markdown tables
+ */
+function autoFormatTables() {
+  const content = input.value;
+  const lines = content.split('\n');
+  let formatted = false;
+  
+  for (let i = 0; i < lines.length; i++) {
+    if (lines[i].includes('|') && lines[i].trim().startsWith('|')) {
+      // Basic table formatting - ensure proper spacing
+      const cells = lines[i].split('|').map(cell => cell.trim());
+      const formattedLine = '| ' + cells.slice(1, -1).join(' | ') + ' |';
+      if (lines[i] !== formattedLine) {
+        lines[i] = formattedLine;
+        formatted = true;
+      }
+    }
+  }
+  
+  if (formatted) {
+    const cursorPos = input.selectionStart;
+    input.value = lines.join('\n');
+    input.setSelectionRange(cursorPos, cursorPos);
+  }
+}
+
+/**
+ * Show content warning
+ */
+function showContentWarning(message) {
+  const existing = document.querySelector('.content-warning');
+  if (existing) return;
+  
+  const warning = document.createElement('div');
+  warning.className = 'content-warning';
+  warning.innerHTML = `
+    <div style="background: #ff9800; color: white; padding: 0.5rem; border-radius: 4px; margin: 0.5rem; font-size: 0.85rem; display: flex; align-items: center; justify-content: space-between;">
+      <span>⚠️ ${message}</span>
+      <button onclick="this.parentElement.parentElement.remove()" style="background: none; border: none; color: white; cursor: pointer; font-size: 1.2rem;">×</button>
+    </div>
+  `;
+  document.querySelector('#editor-panel').insertBefore(warning, input);
+  
+  setTimeout(() => {
+    if (warning.parentNode) {
+      warning.parentNode.removeChild(warning);
+    }
+  }, 10000);
+}
 
 /**
  * File management handlers
@@ -171,11 +244,68 @@ if (localStorage.getItem('dark-mode') === 'true') {
 }
 
 /**
- * Render Markdown to HTML in preview pane
+ * Render Markdown to HTML in preview pane with security
  */
 function renderPreview() {
-  const html = converter.makeHtml(input.value);
-  previewPane.innerHTML = html;
+  try {
+    const content = input.value;
+    
+    // Basic security validation
+    if (content.length > 1000000) {
+      throw new Error('Content too large to preview');
+    }
+    
+    // Sanitize content - remove potentially dangerous elements
+    const sanitizedContent = sanitizeMarkdown(content);
+    const html = converter.makeHtml(sanitizedContent);
+    
+    // Additional HTML sanitization
+    const sanitizedHtml = sanitizeHtml(html);
+    previewPane.innerHTML = sanitizedHtml;
+    
+  } catch (error) {
+    previewPane.innerHTML = `<div style="color: #d32f2f; padding: 1rem; border: 1px solid #d32f2f; border-radius: 4px; background: #ffebee;">
+      <strong>❌ Preview Error</strong><br>
+      ${error.message}
+    </div>`;
+  }
+}
+
+/**
+ * Basic markdown sanitization
+ */
+function sanitizeMarkdown(content) {
+  // Remove script tags and event handlers
+  return content
+    .replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '')
+    .replace(/on\w+\s*=\s*["'][^"']*["']/gi, '')
+    .replace(/javascript:/gi, '')
+    .replace(/data:text\/html/gi, '');
+}
+
+/**
+ * Basic HTML sanitization
+ */
+function sanitizeHtml(html) {
+  // Create a temporary div to parse HTML
+  const temp = document.createElement('div');
+  temp.innerHTML = html;
+  
+  // Remove script tags and dangerous attributes
+  const scripts = temp.querySelectorAll('script');
+  scripts.forEach(script => script.remove());
+  
+  const elements = temp.querySelectorAll('*');
+  elements.forEach(el => {
+    // Remove event handlers
+    Array.from(el.attributes).forEach(attr => {
+      if (attr.name.startsWith('on') || attr.value.includes('javascript:')) {
+        el.removeAttribute(attr.name);
+      }
+    });
+  });
+  
+  return temp.innerHTML;
 }
 previewBtn.addEventListener('click', renderPreview);
 refreshBtn.addEventListener('click', renderPreview);
@@ -223,8 +353,25 @@ async function exportDocument(format) {
         break;
     }
   } catch (err) {
-    console.error(err);
-    alert(`Export failed: ${err.message}`);
+    console.error('Export error:', err);
+    
+    // Show user-friendly error message
+    const errorMsg = err.message || 'An unknown error occurred';
+    const notification = document.createElement('div');
+    notification.innerHTML = `
+      <div style="background: #f44336; color: white; padding: 1rem; border-radius: 4px; margin: 1rem; box-shadow: 0 2px 8px rgba(0,0,0,0.2);">
+        <strong>❌ Export Failed</strong><br>
+        ${errorMsg}<br>
+        <small>Please try again or check your document content.</small>
+      </div>
+    `;
+    document.body.appendChild(notification);
+    
+    setTimeout(() => {
+      if (notification.parentNode) {
+        notification.parentNode.removeChild(notification);
+      }
+    }, 5000);
   } finally {
     spinner.style.display = 'none';
     exportBtn.disabled = false;

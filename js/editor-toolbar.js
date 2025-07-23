@@ -129,7 +129,7 @@ class EditorToolbar {
   }
 
   /**
-   * Insert a table
+   * Insert a table with auto-preview
    */
   insertTable() {
     const table = `
@@ -139,6 +139,13 @@ class EditorToolbar {
 | Cell 4   | Cell 5   | Cell 6   |
 `;
     this.insertText(table, '', '');
+    
+    // Auto-trigger preview if available
+    setTimeout(() => {
+      if (window.renderPreview && typeof window.renderPreview === 'function') {
+        window.renderPreview();
+      }
+    }, 100);
   }
 
   /**

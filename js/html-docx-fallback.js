@@ -221,5 +221,5 @@ ${htmlString}
 // Make available globally
 if (typeof window !== 'undefined' && !window.htmlDocx) {
   window.htmlDocx = HtmlDocxFallback;
-  console.log('HTML-DOCX fallback initialized');
+  // Initialize fallback HTML to DOCX converter
 }
