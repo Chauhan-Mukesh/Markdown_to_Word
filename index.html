@@ -137,54 +137,65 @@
   <div id="app">
     <section id="editor-panel" class="panel">
       <div id="toolbar" class="toolbar">
-        <!-- Primary Actions - Always Visible -->
-        <div class="toolbar-section primary-actions">
-          <div id="template-container"></div>
-          <button id="preview-btn" class="btn primary-btn" disabled>🔍 Preview</button>
-          <div class="export-dropdown">
-            <button id="export-btn" class="btn primary-btn" disabled>📥 Export ▼</button>
-            <div id="export-menu" class="export-menu">
-              <button id="download-word-btn" class="export-option">📄 Word (.docx)</button>
-              <button id="download-html-btn" class="export-option">🌐 HTML</button>
-              <button id="download-standalone-btn" class="export-option">🌐 Standalone HTML</button>
-              <button id="download-txt-btn" class="export-option">📝 Text</button>
-              <button id="download-pdf-btn" class="export-option">📑 PDF</button>
+        <!-- Toolbar Header with Master Toggle -->
+        <div class="toolbar-header">
+          <div class="toolbar-title">🛠️ Toolbar</div>
+          <button id="toolbar-master-toggle" class="toolbar-master-toggle" title="Collapse/Expand Toolbar" aria-label="Toggle toolbar visibility">
+            ▲
+          </button>
+        </div>
+
+        <!-- All Toolbar Sections -->
+        <div class="toolbar-sections" id="toolbar-sections">
+          <!-- Primary Actions - Always Visible -->
+          <div class="toolbar-section primary-actions">
+            <div id="template-container"></div>
+            <button id="preview-btn" class="btn primary-btn" disabled>🔍 Preview</button>
+            <div class="export-dropdown">
+              <button id="export-btn" class="btn primary-btn" disabled>📥 Export ▼</button>
+              <div id="export-menu" class="export-menu">
+                <button id="download-word-btn" class="export-option">📄 Word (.docx)</button>
+                <button id="download-html-btn" class="export-option">🌐 HTML</button>
+                <button id="download-standalone-btn" class="export-option">🌐 Standalone HTML</button>
+                <button id="download-txt-btn" class="export-option">📝 Text</button>
+                <button id="download-pdf-btn" class="export-option">📑 PDF</button>
+              </div>
             </div>
           </div>
-        </div>
 
-        <!-- File & Document Management -->
-        <div class="toolbar-section file-section">
-          <div class="section-label">File & Document</div>
-          <div class="section-buttons">
-            <button id="load-btn" class="btn" title="Load markdown file">📁 Load</button>
-            <button id="save-md-btn" class="btn" title="Save as markdown">💾 Save</button>
-            <button id="clear-btn" class="btn" title="Clear editor">🗑️ Clear</button>
-            <button id="theme-btn" class="btn" title="Toggle theme">🎨 Theme</button>
+          <!-- File & Document Management -->
+          <div class="toolbar-section file-section">
+            <div class="section-label">File & Document</div>
+            <div class="section-buttons">
+              <button id="load-btn" class="btn" title="Load markdown file">📁 Load</button>
+              <button id="save-md-btn" class="btn" title="Save as markdown">💾 Save</button>
+              <button id="clear-btn" class="btn" title="Clear editor">🗑️ Clear</button>
+              <button id="theme-btn" class="btn" title="Toggle theme">🎨 Theme</button>
+            </div>
           </div>
-        </div>
 
-        <!-- Document Metadata -->
-        <div class="toolbar-section metadata-section">
-          <div class="section-label">Document Info</div>
-          <div class="section-inputs">
-            <input id="doc-title" class="input-field compact" placeholder="Title" value="My Document" />
-            <input id="doc-author" class="input-field compact" placeholder="Author" />
-            <input id="doc-date" type="date" class="input-field compact" />
+          <!-- Document Metadata -->
+          <div class="toolbar-section metadata-section">
+            <div class="section-label">Document Info</div>
+            <div class="section-inputs">
+              <input id="doc-title" class="input-field compact" placeholder="Title" value="My Document" />
+              <input id="doc-author" class="input-field compact" placeholder="Author" />
+              <input id="doc-date" type="date" class="input-field compact" />
+            </div>
           </div>
-        </div>
 
-        <!-- Editor Tools -->
-        <div class="toolbar-section tools-section">
-          <div class="section-label">
-            <span>Tools</span>
-            <button id="tools-toggle" class="tools-toggle" title="Toggle Tools Section">▼</button>
-          </div>
-          <div class="section-buttons" id="tools-buttons">
-            <button id="search-btn" class="btn" title="Find & Replace (Ctrl+F)">🔍 Find</button>
-            <button id="print-btn" class="btn" title="Print Document">🖨️ Print</button>
-            <button id="stats-btn" class="btn" title="Document Statistics">📊 Stats</button>
-            <button id="help-btn" class="btn" title="Keyboard Shortcuts & Help (F1)">❓ Help</button>
+          <!-- Editor Tools -->
+          <div class="toolbar-section tools-section">
+            <div class="section-label">
+              <span>Tools</span>
+              <button id="tools-toggle" class="tools-toggle" title="Toggle Tools Section">▼</button>
+            </div>
+            <div class="section-buttons" id="tools-buttons">
+              <button id="search-btn" class="btn" title="Find & Replace (Ctrl+F)">🔍 Find</button>
+              <button id="print-btn" class="btn" title="Print Document">🖨️ Print</button>
+              <button id="stats-btn" class="btn" title="Document Statistics">📊 Stats</button>
+              <button id="help-btn" class="btn" title="Keyboard Shortcuts & Help (F1)">❓ Help</button>
+            </div>
           </div>
         </div>
 
@@ -261,6 +272,10 @@
           <div class="shortcut-item">
             <kbd>Ctrl</kbd> + <kbd>E</kbd>
             <span>Show statistics</span>
+          </div>
+          <div class="shortcut-item">
+            <kbd>Ctrl</kbd> + <kbd>T</kbd>
+            <span>Toggle toolbar</span>
           </div>
           <div class="shortcut-item">
             <kbd>F1</kbd>

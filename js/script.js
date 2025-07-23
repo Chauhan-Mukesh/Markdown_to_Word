@@ -1,9 +1,12 @@
 /**
  * @file script.js
  * @description Enhanced core logic for Markdown to Word exporter with advanced features
+ * @version 2.0.0
+ * @author Markdown to Word Exporter Team
+ * @license MIT
  */
 
-// Grab DOM elements
+// DOM element references for the main application components
 const input = document.getElementById('markdown-input');
 const clearBtn = document.getElementById('clear-btn');
 const themeBtn = document.getElementById('theme-btn');
@@ -21,7 +24,7 @@ const titleInput = document.getElementById('doc-title');
 const authorInput = document.getElementById('doc-author');
 const dateInput = document.getElementById('doc-date');
 
-// Initialize components
+// Component instances - initialized on DOM load
 let converter, fileManager, editorToolbar, templates, searchReplace, printExport;
 
 // Wait for all scripts to load
@@ -105,17 +108,27 @@ function initializeAutosave() {
 }
 
 /**
- * Restore auto-saved content
+ * Restore auto-saved content using custom confirmation modal
+ * @description Prompts user to restore auto-saved content with a custom modal instead of browser confirm
  */
 function restoreAutosavedContent() {
   const autosaved = fileManager.restoreAutosaved();
   if (autosaved && autosaved.trim()) {
-    if (confirm('Restore auto-saved content?')) {
-      input.value = autosaved;
-      input.dispatchEvent(new Event('input'));
-    } else {
-      fileManager.clearAutosaved();
-    }
+    // Use custom confirmation modal to avoid browser dialog suppression
+    showCustomConfirm(
+      '💾 Restore Content',
+      'Auto-saved content found. Would you like to restore it?',
+      (confirmed) => {
+        if (confirmed) {
+          input.value = autosaved;
+          input.dispatchEvent(new Event('input'));
+          showNotification('Auto-saved content restored! 💾', 'success', 3000);
+        } else {
+          fileManager.clearAutosaved();
+          showNotification('Auto-saved content discarded 🗑️', 'info', 2000);
+        }
+      }
+    );
   }
 }
 
@@ -149,6 +162,9 @@ function initializeNewFeatures() {
   
   // Initialize collapsible tools
   initializeToolsToggle();
+  
+  // Initialize master toolbar toggle
+  initializeToolbarMasterToggle();
   
   // Initialize custom confirmation
   initializeCustomConfirmation();
@@ -1519,6 +1535,118 @@ function initializeMobileToolbar() {
   window.addEventListener('resize', () => {
     if (window.innerWidth > 768) {
       toolbar.classList.remove('expanded');
+    }
+  });
+}
+
+/**
+ * Initialize master toolbar collapse functionality
+ * @description Provides ability to collapse/expand the entire toolbar for more editing space
+ */
+function initializeToolbarMasterToggle() {
+  const masterToggle = document.getElementById('toolbar-master-toggle');
+  const toolbarTitle = document.querySelector('.toolbar-title');
+  const toolbar = document.getElementById('toolbar');
+  const toolbarSections = document.getElementById('toolbar-sections');
+  
+  if (!masterToggle || !toolbar || !toolbarSections) {
+    console.warn('Toolbar master toggle elements not found');
+    return;
+  }
+  
+  // Load saved state from localStorage
+  const isCollapsed = localStorage.getItem('toolbarCollapsed') === 'true';
+  const isMobileExpanded = localStorage.getItem('toolbarMobileExpanded') === 'true';
+  
+  if (isCollapsed) {
+    toolbar.classList.add('collapsed');
+    masterToggle.textContent = '▼';
+    masterToggle.classList.add('collapsed');
+  }
+  
+  // Set mobile expanded state
+  if (isMobileExpanded && window.innerWidth <= 768) {
+    toolbar.classList.add('expanded');
+  }
+  
+  /**
+   * Toggle toolbar collapse state
+   * @param {boolean} fromMobile - Whether the toggle is triggered from mobile interaction
+   */
+  const toggleToolbar = (fromMobile = false) => {
+    const isCurrentlyCollapsed = toolbar.classList.contains('collapsed');
+    
+    if (isCurrentlyCollapsed) {
+      // Expand toolbar
+      toolbar.classList.remove('collapsed');
+      masterToggle.textContent = '▲';
+      masterToggle.classList.remove('collapsed');
+      localStorage.setItem('toolbarCollapsed', 'false');
+      showNotification('Toolbar expanded 📖', 'info', 2000);
+    } else {
+      // Collapse toolbar
+      toolbar.classList.add('collapsed');
+      masterToggle.textContent = '▼';
+      masterToggle.classList.add('collapsed');
+      localStorage.setItem('toolbarCollapsed', 'true');
+      showNotification('Toolbar collapsed 📁 - More editing space!', 'info', 2000);
+    }
+    
+    // On mobile, also handle the mobile expansion
+    if (fromMobile || window.innerWidth <= 768) {
+      handleMobileToolbarToggle();
+    }
+  };
+  
+  /**
+   * Handle mobile-specific toolbar expansion
+   */
+  const handleMobileToolbarToggle = () => {
+    if (window.innerWidth <= 768) {
+      const isMobileExpanded = toolbar.classList.contains('expanded');
+      
+      if (isMobileExpanded) {
+        toolbar.classList.remove('expanded');
+        localStorage.setItem('toolbarMobileExpanded', 'false');
+      } else {
+        toolbar.classList.add('expanded');
+        localStorage.setItem('toolbarMobileExpanded', 'true');
+      }
+    }
+  };
+  
+  // Add click event listeners
+  masterToggle.addEventListener('click', () => toggleToolbar(false));
+  
+  // On mobile, clicking the toolbar title toggles mobile expansion
+  if (toolbarTitle) {
+    toolbarTitle.addEventListener('click', () => {
+      if (window.innerWidth <= 768) {
+        handleMobileToolbarToggle();
+      }
+    });
+    
+    // Add cursor pointer style for mobile
+    toolbarTitle.style.cursor = window.innerWidth <= 768 ? 'pointer' : 'default';
+  }
+  
+  // Handle window resize to update mobile behavior
+  window.addEventListener('resize', () => {
+    if (toolbarTitle) {
+      toolbarTitle.style.cursor = window.innerWidth <= 768 ? 'pointer' : 'default';
+    }
+    
+    // Reset mobile expanded state on desktop
+    if (window.innerWidth > 768) {
+      toolbar.classList.remove('expanded');
+    }
+  });
+  
+  // Add keyboard shortcut (Ctrl+T) for toolbar toggle
+  document.addEventListener('keydown', (e) => {
+    if (e.ctrlKey && e.key === 't') {
+      e.preventDefault();
+      toggleToolbar(false);
     }
   });
 }

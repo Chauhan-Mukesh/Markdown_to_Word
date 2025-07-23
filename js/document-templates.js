@@ -468,20 +468,40 @@ Create a new user.
       if (e.target.value) {
         const template = this.getTemplate(e.target.value);
         
-        // Add confirmation for non-empty editor
+        // Add confirmation for non-empty editor using custom modal
         const currentContent = document.getElementById('markdown-input')?.value?.trim();
         if (currentContent && currentContent.length > 50) {
-          if (!confirm('Replace current content with template? This action cannot be undone.')) {
+          // Use the existing custom confirmation modal instead of window.confirm()
+          if (typeof showCustomConfirm === 'function') {
+            showCustomConfirm(
+              '📋 Replace Content',
+              'Replace current content with template? This action cannot be undone.',
+              (confirmed) => {
+                if (confirmed) {
+                  onSelect(template.content);
+                  this.showTemplateNotification(`✅ Applied ${template.name} template`);
+                }
+                e.target.value = ''; // Reset selector
+              }
+            );
+          } else {
+            // Fallback for custom confirmation
+            const proceed = window.confirm('Replace current content with template? This action cannot be undone.');
+            if (!proceed) {
+              e.target.value = ''; // Reset selector
+              return;
+            }
+            onSelect(template.content);
+            this.showTemplateNotification(`✅ Applied ${template.name} template`);
             e.target.value = ''; // Reset selector
-            return;
           }
+        } else {
+          onSelect(template.content);
+          e.target.value = ''; // Reset selector
+          
+          // Show success notification
+          this.showTemplateNotification(`✅ Applied ${template.name} template`);
         }
-        
-        onSelect(template.content);
-        e.target.value = ''; // Reset selector
-        
-        // Show success notification
-        this.showTemplateNotification(`✅ Applied ${template.name} template`);
       }
     });
 
