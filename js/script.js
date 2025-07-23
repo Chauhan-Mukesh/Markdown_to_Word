@@ -298,3 +298,161 @@ async function exportToPDF(filename) {
 if (!dateInput.value) {
   dateInput.value = new Date().toISOString().split('T')[0];
 }
+
+// Enhanced Keyboard Shortcuts and Help Modal
+class KeyboardShortcuts {
+  constructor() {
+    this.helpModal = document.getElementById('help-modal');
+    this.helpBtn = document.getElementById('help-btn');
+    this.helpClose = document.getElementById('help-close');
+    
+    this.initializeHelpModal();
+    this.bindKeyboardShortcuts();
+  }
+
+  initializeHelpModal() {
+    // Help button click
+    this.helpBtn?.addEventListener('click', () => {
+      this.showHelp();
+    });
+
+    // Close help modal
+    this.helpClose?.addEventListener('click', () => {
+      this.hideHelp();
+    });
+
+    // Close on outside click
+    this.helpModal?.addEventListener('click', (e) => {
+      if (e.target === this.helpModal) {
+        this.hideHelp();
+      }
+    });
+  }
+
+  bindKeyboardShortcuts() {
+    document.addEventListener('keydown', (e) => {
+      // F1 - Show help
+      if (e.key === 'F1') {
+        e.preventDefault();
+        this.showHelp();
+        return;
+      }
+
+      // Escape - Close modals
+      if (e.key === 'Escape') {
+        this.hideHelp();
+        // Close other modals too
+        document.querySelectorAll('.modal').forEach(modal => {
+          modal.style.display = 'none';
+        });
+        return;
+      }
+
+      // Ctrl/Cmd combinations
+      if (e.ctrlKey || e.metaKey) {
+        switch (e.key.toLowerCase()) {
+          case 'b':
+            e.preventDefault();
+            editorToolbar?.formatBold();
+            break;
+          case 'i':
+            e.preventDefault();
+            editorToolbar?.formatItalic();
+            break;
+          case 'k':
+            e.preventDefault();
+            editorToolbar?.formatLink();
+            break;
+          case '`':
+            e.preventDefault();
+            editorToolbar?.formatCode();
+            break;
+          case 'f':
+            e.preventDefault();
+            searchReplace?.showModal();
+            break;
+          case 'p':
+            e.preventDefault();
+            if (!previewBtn.disabled) {
+              previewBtn.click();
+            }
+            break;
+          case 's':
+            e.preventDefault();
+            fileManager?.saveMarkdown();
+            this.showSaveNotification();
+            break;
+          case 'enter':
+            e.preventDefault();
+            if (!exportBtn.disabled) {
+              downloadWordBtn?.click();
+            }
+            break;
+        }
+      }
+    });
+  }
+
+  showHelp() {
+    if (this.helpModal) {
+      this.helpModal.style.display = 'block';
+      // Focus the close button for accessibility
+      this.helpClose?.focus();
+    }
+  }
+
+  hideHelp() {
+    if (this.helpModal) {
+      this.helpModal.style.display = 'none';
+    }
+  }
+
+  showSaveNotification() {
+    // Create a temporary notification
+    const notification = document.createElement('div');
+    notification.textContent = '💾 Document saved locally';
+    notification.style.cssText = `
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: #4caf50;
+      color: white;
+      padding: 8px 12px;
+      border-radius: 4px;
+      font-size: 0.85rem;
+      z-index: 1000;
+      animation: slideIn 0.3s ease;
+    `;
+    
+    document.body.appendChild(notification);
+    
+    setTimeout(() => {
+      notification.style.animation = 'slideOut 0.3s ease';
+      setTimeout(() => {
+        document.body.removeChild(notification);
+      }, 300);
+    }, 2000);
+  }
+}
+
+// Initialize keyboard shortcuts
+let keyboardShortcuts;
+document.addEventListener('DOMContentLoaded', () => {
+  setTimeout(() => {
+    keyboardShortcuts = new KeyboardShortcuts();
+  }, 100);
+});
+
+// Add slide animations
+const style = document.createElement('style');
+style.textContent = `
+  @keyframes slideIn {
+    from { transform: translateX(100%); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
+  }
+  @keyframes slideOut {
+    from { transform: translateX(0); opacity: 1; }
+    to { transform: translateX(100%); opacity: 0; }
+  }
+`;
+document.head.appendChild(style);

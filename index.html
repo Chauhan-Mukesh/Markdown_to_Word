@@ -10,7 +10,119 @@
   <!-- Stylesheet -->
   <link rel="stylesheet" href="css/style.css">
   
+  <!-- Enhanced CDN Libraries with Robust Fallbacks -->
+  <script>
+    // Enhanced fallback loader with better error handling
+    class LibraryLoader {
+      static async loadLibraryWithFallback(urls, globalVarName, fallbackScript = null) {
+        // Check if library is already loaded
+        if (window[globalVarName]) {
+          console.log(`${globalVarName} already loaded`);
+          return Promise.resolve();
+        }
+
+        const loadScript = (url) => {
+          return new Promise((resolve, reject) => {
+            const script = document.createElement('script');
+            script.src = url;
+            script.onload = () => {
+              console.log(`Loaded ${globalVarName} from ${url}`);
+              resolve();
+            };
+            script.onerror = () => {
+              console.warn(`Failed to load ${globalVarName} from ${url}`);
+              reject();
+            };
+            document.head.appendChild(script);
+          });
+        };
+
+        // Try loading from CDNs
+        for (const url of urls) {
+          try {
+            await loadScript(url);
+            if (window[globalVarName]) return;
+          } catch (e) {
+            continue;
+          }
+        }
+
+        // If all CDNs fail, load fallback
+        if (fallbackScript) {
+          console.log(`Loading ${globalVarName} fallback`);
+          await loadScript(fallbackScript);
+        }
+        
+        // Final check
+        if (!window[globalVarName]) {
+          console.warn(`${globalVarName} could not be loaded from any source`);
+        }
+      }
+
+      static async loadCSS(urls) {
+        const loadStylesheet = (url) => {
+          return new Promise((resolve, reject) => {
+            const link = document.createElement('link');
+            link.rel = 'stylesheet';
+            link.href = url;
+            link.onload = resolve;
+            link.onerror = reject;
+            document.head.appendChild(link);
+          });
+        };
+
+        for (const url of urls) {
+          try {
+            await loadStylesheet(url);
+            console.log(`Loaded CSS from ${url}`);
+            return;
+          } catch (e) {
+            console.warn(`Failed to load CSS from ${url}`);
+            continue;
+          }
+        }
+      }
+    }
+
+    // Load all libraries
+    (async () => {
+      try {
+        // Load CSS for syntax highlighting
+        await LibraryLoader.loadCSS([
+          'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/github.min.css',
+          'https://unpkg.com/@highlightjs/cdn-assets@11.7.0/styles/github.min.css'
+        ]);
+
+        // Load Showdown with fallbacks
+        await LibraryLoader.loadLibraryWithFallback([
+          'https://cdn.jsdelivr.net/npm/showdown@1.9.1/dist/showdown.min.js',
+          'https://unpkg.com/showdown@1.9.1/dist/showdown.min.js',
+          'https://cdnjs.cloudflare.com/ajax/libs/showdown/1.9.1/showdown.min.js'
+        ], 'showdown', 'js/showdown-fallback.js');
+
+        // Load html-docx with fallbacks
+        await LibraryLoader.loadLibraryWithFallback([
+          'https://unpkg.com/html-docx-js/dist/html-docx.js',
+          'https://cdn.jsdelivr.net/npm/html-docx-js/dist/html-docx.js'
+        ], 'htmlDocx', 'js/html-docx-fallback.js');
+
+        // Load highlight.js with fallbacks
+        await LibraryLoader.loadLibraryWithFallback([
+          'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js',
+          'https://unpkg.com/@highlightjs/cdn-assets@11.7.0/highlight.min.js'
+        ], 'hljs', 'js/highlight-fallback.js');
+
+        console.log('All libraries loaded successfully');
+      } catch (error) {
+        console.error('Library loading error:', error);
+      }
+    })();
+  </script>
+  
   <!-- Local Libraries -->
+  <script src="js/showdown-fallback.js"></script>
+  <script src="js/html-docx-fallback.js"></script>
+  <script src="js/highlight-fallback.js"></script>
   <script src="js/markdown-converter.js" defer></script>
   <script src="js/file-manager.js" defer></script>
   <script src="js/editor-toolbar.js" defer></script>
@@ -44,6 +156,7 @@
         <button id="preview-btn" class="btn primary-btn" disabled>🔍 Preview</button>
         <button id="search-btn" class="btn" title="Find & Replace (Ctrl+F)">🔍 Find</button>
         <button id="print-btn" class="btn" title="Print Document">🖨️ Print</button>
+        <button id="help-btn" class="btn" title="Keyboard Shortcuts & Help (F1)">❓ Help</button>
         <div class="export-dropdown">
           <button id="export-btn" class="btn primary-btn" disabled>📥 Export ▼</button>
           <div id="export-menu" class="export-menu">
@@ -80,6 +193,118 @@
       </header>
       <div id="preview-pane" class="preview darkable"><em>Enter Markdown and click Preview...</em></div>
     </section>
+  </div>
+
+  <!-- Help Modal -->
+  <div id="help-modal" class="modal">
+    <div class="modal-content">
+      <span class="close" id="help-close">&times;</span>
+      <h2>📚 Keyboard Shortcuts & Help</h2>
+      
+      <div class="help-section">
+        <h3>⌨️ Keyboard Shortcuts</h3>
+        <div class="shortcuts-grid">
+          <div class="shortcut-item">
+            <kbd>Ctrl</kbd> + <kbd>B</kbd>
+            <span>Bold text</span>
+          </div>
+          <div class="shortcut-item">
+            <kbd>Ctrl</kbd> + <kbd>I</kbd>
+            <span>Italic text</span>
+          </div>
+          <div class="shortcut-item">
+            <kbd>Ctrl</kbd> + <kbd>K</kbd>
+            <span>Insert link</span>
+          </div>
+          <div class="shortcut-item">
+            <kbd>Ctrl</kbd> + <kbd>`</kbd>
+            <span>Inline code</span>
+          </div>
+          <div class="shortcut-item">
+            <kbd>Ctrl</kbd> + <kbd>F</kbd>
+            <span>Find & Replace</span>
+          </div>
+          <div class="shortcut-item">
+            <kbd>Ctrl</kbd> + <kbd>P</kbd>
+            <span>Preview document</span>
+          </div>
+          <div class="shortcut-item">
+            <kbd>Ctrl</kbd> + <kbd>S</kbd>
+            <span>Save document</span>
+          </div>
+          <div class="shortcut-item">
+            <kbd>Ctrl</kbd> + <kbd>Enter</kbd>
+            <span>Export to Word</span>
+          </div>
+          <div class="shortcut-item">
+            <kbd>F1</kbd>
+            <span>Show this help</span>
+          </div>
+          <div class="shortcut-item">
+            <kbd>Esc</kbd>
+            <span>Close modals</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="help-section">
+        <h3>📝 Markdown Quick Reference</h3>
+        <div class="markdown-reference">
+          <div class="ref-item">
+            <code># Header 1</code>
+            <span>Large heading</span>
+          </div>
+          <div class="ref-item">
+            <code>## Header 2</code>
+            <span>Medium heading</span>
+          </div>
+          <div class="ref-item">
+            <code>**bold**</code>
+            <span>Bold text</span>
+          </div>
+          <div class="ref-item">
+            <code>*italic*</code>
+            <span>Italic text</span>
+          </div>
+          <div class="ref-item">
+            <code>`code`</code>
+            <span>Inline code</span>
+          </div>
+          <div class="ref-item">
+            <code>[text](url)</code>
+            <span>Link</span>
+          </div>
+          <div class="ref-item">
+            <code>- item</code>
+            <span>Bullet list</span>
+          </div>
+          <div class="ref-item">
+            <code>1. item</code>
+            <span>Numbered list</span>
+          </div>
+          <div class="ref-item">
+            <code>> quote</code>
+            <span>Blockquote</span>
+          </div>
+          <div class="ref-item">
+            <code>---</code>
+            <span>Horizontal rule</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="help-section">
+        <h3>🎯 Tips & Tricks</h3>
+        <ul class="tips-list">
+          <li><strong>Auto-save:</strong> Your work is automatically saved locally every few seconds</li>
+          <li><strong>Templates:</strong> Use the template dropdown to start with pre-formatted documents</li>
+          <li><strong>Dark Mode:</strong> Toggle between light and dark themes for comfortable editing</li>
+          <li><strong>Export Options:</strong> Choose from Word, HTML, PDF, or plain text formats</li>
+          <li><strong>Live Preview:</strong> See your formatted document in real-time as you type</li>
+          <li><strong>Responsive:</strong> Works great on desktop, tablet, and mobile devices</li>
+        </ul>
+      </div>
+    </div>
   </div>
 </body>
 </html>
