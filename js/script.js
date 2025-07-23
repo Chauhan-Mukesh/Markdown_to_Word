@@ -298,3 +298,292 @@ async function exportToPDF(filename) {
 if (!dateInput.value) {
   dateInput.value = new Date().toISOString().split('T')[0];
 }
+
+// Enhanced Keyboard Shortcuts and Help Modal
+class KeyboardShortcuts {
+  constructor() {
+    this.helpModal = document.getElementById('help-modal');
+    this.helpBtn = document.getElementById('help-btn');
+    this.helpClose = document.getElementById('help-close');
+    
+    this.statsModal = document.getElementById('stats-modal');
+    this.statsBtn = document.getElementById('stats-btn');
+    this.statsClose = document.getElementById('stats-close');
+    
+    this.initializeHelpModal();
+    this.initializeStatsModal();
+    this.bindKeyboardShortcuts();
+  }
+
+  initializeHelpModal() {
+    // Help button click
+    this.helpBtn?.addEventListener('click', () => {
+      this.showHelp();
+    });
+
+    // Close help modal
+    this.helpClose?.addEventListener('click', () => {
+      this.hideHelp();
+    });
+
+    // Close on outside click
+    this.helpModal?.addEventListener('click', (e) => {
+      if (e.target === this.helpModal) {
+        this.hideHelp();
+      }
+    });
+  }
+
+  initializeStatsModal() {
+    // Stats button click
+    this.statsBtn?.addEventListener('click', () => {
+      this.showStats();
+    });
+
+    // Close stats modal
+    this.statsClose?.addEventListener('click', () => {
+      this.hideStats();
+    });
+
+    // Close on outside click
+    this.statsModal?.addEventListener('click', (e) => {
+      if (e.target === this.statsModal) {
+        this.hideStats();
+      }
+    });
+  }
+
+  bindKeyboardShortcuts() {
+    document.addEventListener('keydown', (e) => {
+      // F1 - Show help
+      if (e.key === 'F1') {
+        e.preventDefault();
+        this.showHelp();
+        return;
+      }
+
+      // Escape - Close modals
+      if (e.key === 'Escape') {
+        this.hideHelp();
+        this.hideStats();
+        // Close other modals too
+        document.querySelectorAll('.modal').forEach(modal => {
+          modal.style.display = 'none';
+        });
+        return;
+      }
+
+      // Ctrl/Cmd combinations
+      if (e.ctrlKey || e.metaKey) {
+        switch (e.key.toLowerCase()) {
+          case 'b':
+            e.preventDefault();
+            editorToolbar?.formatBold();
+            break;
+          case 'i':
+            e.preventDefault();
+            editorToolbar?.formatItalic();
+            break;
+          case 'k':
+            e.preventDefault();
+            editorToolbar?.formatLink();
+            break;
+          case '`':
+            e.preventDefault();
+            editorToolbar?.formatCode();
+            break;
+          case 'f':
+            e.preventDefault();
+            searchReplace?.showModal();
+            break;
+          case 'p':
+            e.preventDefault();
+            if (!previewBtn.disabled) {
+              previewBtn.click();
+            }
+            break;
+          case 's':
+            e.preventDefault();
+            fileManager?.saveMarkdown();
+            this.showSaveNotification();
+            break;
+          case 'enter':
+            e.preventDefault();
+            if (!exportBtn.disabled) {
+              downloadWordBtn?.click();
+            }
+            break;
+          case 'e':
+            e.preventDefault();
+            this.showStats();
+            break;
+        }
+      }
+    });
+  }
+
+  showHelp() {
+    if (this.helpModal) {
+      this.helpModal.style.display = 'block';
+      // Focus the close button for accessibility
+      this.helpClose?.focus();
+    }
+  }
+
+  hideHelp() {
+    if (this.helpModal) {
+      this.helpModal.style.display = 'none';
+    }
+  }
+
+  showStats() {
+    if (this.statsModal) {
+      this.calculateDocumentStats();
+      this.statsModal.style.display = 'block';
+      this.statsClose?.focus();
+    }
+  }
+
+  hideStats() {
+    if (this.statsModal) {
+      this.statsModal.style.display = 'none';
+    }
+  }
+
+  calculateDocumentStats() {
+    const input = document.getElementById('markdown-input');
+    const text = input?.value || '';
+    
+    // Basic counts
+    const words = text.trim() ? text.trim().split(/\s+/).length : 0;
+    const chars = text.length;
+    const charsNoSpaces = text.replace(/\s/g, '').length;
+    
+    // Advanced counts
+    const paragraphs = text.split(/\n\s*\n/).filter(p => p.trim()).length;
+    const sentences = text.split(/[.!?]+/).filter(s => s.trim()).length;
+    const headers = (text.match(/^#{1,6}\s+/gm) || []).length;
+    const codeBlocks = (text.match(/```[\s\S]*?```/g) || []).length;
+    const links = (text.match(/\[([^\]]*)\]\(([^)]*)\)/g) || []).length;
+    const lists = (text.match(/^[\s]*[-*+]\s+/gm) || []).length;
+    
+    // Reading time (average 200 words per minute)
+    const readingTime = Math.ceil(words / 200);
+    
+    // Advanced calculations
+    const avgWordsPerSentence = sentences > 0 ? Math.round(words / sentences) : 0;
+    const avgSentencesPerParagraph = paragraphs > 0 ? Math.round(sentences / paragraphs) : 0;
+    
+    // Readability assessment
+    const readabilityLevel = this.getReadabilityLevel(avgWordsPerSentence, sentences, words);
+    const targetAudience = this.getTargetAudience(readabilityLevel);
+    
+    // Update UI
+    this.updateStatsDisplay({
+      words,
+      chars,
+      charsNoSpaces,
+      paragraphs,
+      sentences,
+      readingTime,
+      avgWordsPerSentence,
+      avgSentencesPerParagraph,
+      headers,
+      codeBlocks,
+      links,
+      lists,
+      readabilityLevel,
+      targetAudience
+    });
+  }
+
+  updateStatsDisplay(stats) {
+    document.getElementById('word-count').textContent = stats.words.toLocaleString();
+    document.getElementById('char-count').textContent = stats.chars.toLocaleString();
+    document.getElementById('char-no-spaces').textContent = stats.charsNoSpaces.toLocaleString();
+    document.getElementById('paragraph-count').textContent = stats.paragraphs.toLocaleString();
+    document.getElementById('sentence-count').textContent = stats.sentences.toLocaleString();
+    document.getElementById('reading-time').textContent = stats.readingTime;
+    
+    document.getElementById('avg-words-sentence').textContent = stats.avgWordsPerSentence;
+    document.getElementById('avg-sentences-paragraph').textContent = stats.avgSentencesPerParagraph;
+    document.getElementById('header-count').textContent = stats.headers;
+    document.getElementById('code-block-count').textContent = stats.codeBlocks;
+    document.getElementById('link-count').textContent = stats.links;
+    document.getElementById('list-count').textContent = stats.lists;
+    
+    document.getElementById('readability-level').textContent = stats.readabilityLevel;
+    document.getElementById('target-audience').textContent = stats.targetAudience;
+  }
+
+  getReadabilityLevel(avgWordsPerSentence, sentences, words) {
+    if (words < 50) return 'Too short to analyze';
+    
+    // Simple readability assessment based on sentence length
+    if (avgWordsPerSentence <= 10) return 'Very Easy';
+    if (avgWordsPerSentence <= 15) return 'Easy';
+    if (avgWordsPerSentence <= 20) return 'Moderate';
+    if (avgWordsPerSentence <= 25) return 'Difficult';
+    return 'Very Difficult';
+  }
+
+  getTargetAudience(readabilityLevel) {
+    switch (readabilityLevel) {
+      case 'Very Easy': return 'Elementary school';
+      case 'Easy': return 'Middle school';
+      case 'Moderate': return 'High school';
+      case 'Difficult': return 'College level';
+      case 'Very Difficult': return 'Graduate level';
+      default: return 'General readers';
+    }
+  }
+
+  showSaveNotification() {
+    // Create a temporary notification
+    const notification = document.createElement('div');
+    notification.textContent = '💾 Document saved locally';
+    notification.style.cssText = `
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: #4caf50;
+      color: white;
+      padding: 8px 12px;
+      border-radius: 4px;
+      font-size: 0.85rem;
+      z-index: 1000;
+      animation: slideIn 0.3s ease;
+    `;
+    
+    document.body.appendChild(notification);
+    
+    setTimeout(() => {
+      notification.style.animation = 'slideOut 0.3s ease';
+      setTimeout(() => {
+        document.body.removeChild(notification);
+      }, 300);
+    }, 2000);
+  }
+}
+
+// Initialize keyboard shortcuts
+let keyboardShortcuts;
+document.addEventListener('DOMContentLoaded', () => {
+  setTimeout(() => {
+    keyboardShortcuts = new KeyboardShortcuts();
+  }, 100);
+});
+
+// Add slide animations
+const style = document.createElement('style');
+style.textContent = `
+  @keyframes slideIn {
+    from { transform: translateX(100%); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
+  }
+  @keyframes slideOut {
+    from { transform: translateX(0); opacity: 1; }
+    to { transform: translateX(100%); opacity: 0; }
+  }
+`;
+document.head.appendChild(style);
