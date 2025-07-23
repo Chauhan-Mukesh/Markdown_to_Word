@@ -1,16 +1,60 @@
 /**
  * @file notification-system.js
- * @description Custom notification system to replace native alerts
+ * @description Advanced notification system for enhanced user experience
+ * @version 2.1.0
+ * @author Markdown to Word Exporter Team
+ * @license MIT
+ * 
+ * @overview
+ * Provides a modern, non-intrusive notification system that replaces
+ * browser's native alert dialogs with beautiful, customizable toast notifications.
+ * Features include:
+ * - Multiple notification types (success, error, warning, info)
+ * - Configurable duration and auto-dismiss
+ * - Smooth animations and transitions
+ * - Queue management for multiple notifications
+ * - Mobile-responsive design
+ * - Accessibility support with proper ARIA attributes
  */
 
+/**
+ * Custom notification system class
+ * @class
+ * @description Manages toast notifications with queue support and animations
+ * @since 2.1.0
+ */
 class NotificationSystem {
+  /**
+   * Constructor for NotificationSystem
+   * @description Initializes the notification system and creates the container
+   * @since 2.1.0
+   */
   constructor() {
+    /** @type {?HTMLElement} Container element for notifications */
     this.container = null;
+    
+    /** @type {Array} Queue of active notifications */
+    this.activeNotifications = [];
+    
+    /** @type {number} Maximum number of simultaneous notifications */
+    this.maxNotifications = 5;
+    
+    /** @type {Object} Default configuration options */
+    this.defaults = {
+      duration: 4000,
+      position: 'top-right',
+      closable: true,
+      pauseOnHover: true
+    };
+    
     this.createContainer();
   }
 
   /**
-   * Create notification container
+   * Create notification container with proper positioning
+   * @description Creates and configures the main container for notifications
+   * @since 2.1.0
+   * @private
    */
   createContainer() {
     // Create container if it doesn't exist

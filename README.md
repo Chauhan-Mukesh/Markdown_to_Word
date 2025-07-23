@@ -1,10 +1,41 @@
 # 🚀 Advanced Markdown → Word Exporter 🤖
 
-A comprehensive, feature-rich web application that transforms your Markdown into polished Word documents with advanced editing capabilities, multiple export formats, and professional templates. Features modern Gen-Z style UI with organized toolbars, custom notifications, collapsible sections, smooth animations, and works seamlessly across all major browsers.
+A comprehensive, feature-rich web application that transforms your Markdown into polished Word documents with advanced editing capabilities, multiple export formats, and professional templates. Features modern UI with enhanced mobile navigation, perfectly centered modals, organized toolbars, custom notifications, and works seamlessly across all major browsers.
 
 🔗 **Live Demo**: [https://chauhan-mukesh.github.io/Markdown_to_Word/](https://chauhan-mukesh.github.io/Markdown_to_Word/)
 
-![Screenshot Preview](./screenshot.png)
+![Desktop Interface](https://github.com/user-attachments/assets/b60ddd85-4f0e-46ac-892e-08e35d100e08)
+*Modern desktop interface with improved navbar and centered modals*
+
+## ✨ New & Enhanced Features (2025)
+
+### 🎯 **Major UI Improvements**
+![Mobile Navigation](https://github.com/user-attachments/assets/19596fe2-d715-4d8e-8f7c-0c137e99e163)
+*Enhanced mobile navigation with improved hamburger menu styling*
+
+- 🔔 **Custom Notification System**: Beautiful, non-intrusive alerts replace jarring browser popups
+- 📱 **Enhanced Mobile Navigation**: Improved hamburger menu with glassmorphism effects and smooth animations
+- 🎛️ **Organized Toolbar**: Logical grouping of features with color-coded sections and visual hierarchy
+- 🎯 **Perfectly Centered Modals**: Fixed modal positioning using modern flexbox layout
+- 🗂️ **Collapsible Tools Section**: Space-saving collapsible tools with state persistence
+- 🎨 **Modern UI Design**: Gradient styling, smooth animations, and contemporary interactive effects
+
+### 🔧 **Mobile Experience Enhancements**
+- **Responsive Hamburger Menu**: Glassmorphism-styled menu with backdrop blur effects
+- **Improved Touch Targets**: Larger, more accessible buttons for mobile interaction
+- **Full-Width Mobile Layout**: Optimized spacing and layout for mobile screens
+- **Smooth Animations**: Cubic-bezier transitions for premium feel
+- **Better Focus Management**: Enhanced keyboard navigation and accessibility
+
+### 🎨 **Modern Modal System**
+![Centered Confirmation Modal](https://github.com/user-attachments/assets/a6732e21-c129-4b80-9fc1-1fd844d15028)
+*Perfectly centered confirmation dialogs with smooth animations*
+
+- **Flexbox Centering**: All modals properly centered using modern CSS techniques
+- **Enhanced Animations**: Smooth scale and slide animations with backdrop blur
+- **Mobile Optimized**: Responsive modal sizing for all device types
+- **Accessibility Features**: Proper focus management, ESC key support, ARIA attributes
+- **Custom Confirmation Dialogs**: Beautiful modals replace jarring browser alerts
 
 ## ✨ New & Enhanced Features (2025)
 
@@ -92,9 +123,17 @@ A comprehensive, feature-rich web application that transforms your Markdown into
 - 📑 **PDF**: Print-to-PDF functionality with optimized layouts
 - 🖨️ **Print**: Print-optimized formatting with proper page breaks
 
+### 🛠️ **Technical Excellence & Code Quality**
+- 📝 **Comprehensive Documentation**: Full JSDoc documentation with examples and type information
+- 🏗️ **Modern Architecture**: ES6+ classes with proper separation of concerns
+- 🔒 **Enhanced Security**: XSS prevention, secure modal handling, and proper input validation
+- ♿ **Accessibility Compliant**: ARIA attributes, keyboard navigation, screen reader support
+- 🎯 **Performance Optimized**: Efficient DOM manipulation and memory management
+- 📱 **Mobile-First Design**: Responsive breakpoints and touch-optimized interactions
+
 ### 🎨 **Enhanced User Experience**
 - 🌓 **Superior Dark/Light Themes**: High contrast, accessible themes with smooth transitions
-- 🚀 **Gen-Z Animations**: Smooth button interactions, ripple effects, and loading states
+- 🚀 **Modern Animations**: Smooth button interactions, ripple effects, and loading states
 - 📱 **Mobile-First Responsive Design**: Optimized for mobile, tablet, and desktop
 - ♿ **Full Accessibility**: Keyboard navigation, screen reader support, ARIA labels
 - 🌐 **Cross-Browser**: Chrome, Firefox, Edge, Safari, IE11+
@@ -113,27 +152,36 @@ A comprehensive, feature-rich web application that transforms your Markdown into
 ## 🚀 Quick Start Guide
 
 ### 1. **Choose Your Starting Point**
-![Organized Toolbar](https://github.com/user-attachments/assets/f9f4b136-a3e4-4d55-aac9-3ee5f1336279)
+![Desktop Interface Overview](https://github.com/user-attachments/assets/b60ddd85-4f0e-46ac-892e-08e35d100e08)
+*Clean, organized interface with improved navigation and modal system*
 
 - **Select a Template**: Use the dropdown to start with a professional template
 - **Start Blank**: Begin with an empty document for complete creative freedom
 
-### 2. **Write and Format**
+### 2. **Mobile-First Experience**
+![Mobile Navigation](https://github.com/user-attachments/assets/19596fe2-d715-4d8e-8f7c-0c137e99e163)
+*Enhanced mobile interface with improved hamburger menu*
+
+- **Tap the Menu**: Access all features through the improved hamburger menu
+- **Full-Width Controls**: All inputs and buttons optimized for touch interaction
+- **Smooth Navigation**: Glassmorphism effects and smooth animations throughout
+
+### 3. **Write and Format**
 - Type your content in the editor using Markdown syntax
 - Use the streamlined formatting toolbar for quick formatting
 - Collapse the tools section using the ▼ button to focus on writing
 - Press `F1` for help with shortcuts and Markdown syntax
 
-### 3. **Preview and Refine**
+### 4. **Preview and Refine**
 - Click **🔍 Preview** to see your formatted document
 - Use **🔍 Find** to search and replace text (draggable modal)
 - Check **📊 Stats** for document metrics
-- Collapse tools section for distraction-free writing
+- All modals are perfectly centered and mobile-optimized
 
-### 4. **Export Your Work**
+### 5. **Export Your Work**
 - Click **📥 Export** dropdown
 - Choose from Word, HTML, PDF, or text formats
-- Enjoy the clean, professional output
+- Enjoy the clean, professional output with proper formatting
 
 ## 📦 Installation & Usage
 
@@ -254,7 +302,7 @@ Markdown_to_Word/
 └── LICENSE                          # Open source license
 ```
 
-## 🛠️ Browser Compatibility
+## 🛠️ Browser Compatibility & Technical Requirements
 
 | Browser        | Supported Versions | Export Formats | Special Features |
 | -------------- | ------------------ | -------------- | ---------------- |
@@ -264,15 +312,20 @@ Markdown_to_Word/
 | Safari         | Latest & 2 prior   | All formats    | Full feature set |
 | Internet Expl. | 11+                | Word, HTML, Text | Basic features |
 
-## 🚀 Technical Implementation
+### 📱 **Mobile Device Support**
+- **iOS Safari**: Full feature support with optimized touch interactions
+- **Android Chrome**: Complete functionality with responsive design
+- **Mobile Firefox**: All features available with smooth animations
+- **Samsung Internet**: Comprehensive support with enhanced UI
+
+## 🚀 Technical Implementation & Architecture
 
 ### 🆕 **Recent Improvements (2025)**
-- **Custom Modal System**: Replaced browser alerts with beautiful toast notifications and confirmation dialogs
-- **Collapsible Interface**: Space-saving collapsible tools section with state persistence
-- **Enhanced Responsiveness**: Improved mobile layouts and better visual organization
-- **Gen-Z Styling**: Modern animations, gradients, and interactive effects
-- **Draggable Find/Replace**: Moveable search modal for better workflow
-- **Streamlined UI**: Removed clutter by eliminating unused image upload features
+- **Enhanced Modal System**: Flexbox-based centering replaces absolute positioning for better responsiveness
+- **Mobile Navigation Overhaul**: Improved hamburger menu with glassmorphism effects and smooth transitions
+- **Code Quality Standards**: Comprehensive JSDoc documentation and Sonar-compliant coding practices
+- **Accessibility Enhancements**: Proper ARIA attributes, focus management, and keyboard navigation
+- **Performance Optimizations**: Efficient DOM manipulation and reduced memory footprint
 
 ### 🏗️ **Core Architecture**
 - **ES6+ JavaScript**: Clean, maintainable class-based architecture
