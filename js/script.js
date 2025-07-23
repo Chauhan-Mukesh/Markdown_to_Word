@@ -66,6 +66,7 @@ function initializeFormattingToolbar() {
   document.getElementById('code-btn').onclick = () => editorToolbar.makeCode();
   document.getElementById('link-btn').onclick = () => editorToolbar.insertLink();
   document.getElementById('image-btn').onclick = () => editorToolbar.insertImage();
+  document.getElementById('upload-image-btn').onclick = () => handleImageUpload();
   document.getElementById('header-btn').onclick = () => editorToolbar.insertHeader();
   document.getElementById('list-btn').onclick = () => editorToolbar.insertList();
   document.getElementById('quote-btn').onclick = () => editorToolbar.insertBlockquote();
@@ -81,8 +82,9 @@ function initializeAutosave() {
     fileManager.enableAutosave(() => {
       const content = input.value;
       // Basic content validation
-      if (content.length > 1000000) { // 1MB limit
-        throw new Error('Document too large for auto-save');
+      // Basic content validation - removed size restriction
+      if (content.length > 10000000) { // 10MB limit for auto-save only
+        console.warn('Document very large, auto-save may be slow');
       }
       return content;
     });
@@ -134,7 +136,7 @@ let debounceTimer;
 input.addEventListener('input', () => {
   const content = input.value.trim();
   const hasContent = content.length > 0;
-  const isValidContent = content.length <= 1000000; // 1MB limit
+  const isValidContent = content.length <= 10000000; // 10MB limit for live preview
   
   previewBtn.disabled = !hasContent || !isValidContent;
   exportBtn.disabled = !hasContent || !isValidContent;
@@ -150,9 +152,9 @@ input.addEventListener('input', () => {
     }
   }, 300);
   
-  // Show warning for large documents
-  if (content.length > 500000) { // 500KB warning
-    showContentWarning('Large document detected. Performance may be affected.');
+  // Show warning for very large documents
+  if (content.length > 2000000) { // 2MB warning
+    showContentWarning('Very large document detected. Performance may be affected for live preview.');
   }
 });
 
@@ -271,9 +273,9 @@ function renderPreview() {
     // Use setTimeout for non-blocking processing
     setTimeout(() => {
       try {
-        // Basic security validation
-        if (content.length > 1000000) {
-          throw new Error('Content too large to preview (max 1MB)');
+        // Basic security validation - increased size limit
+        if (content.length > 10000000) { // 10MB limit for preview
+          throw new Error('Content too large to preview (max 10MB)');
         }
         
         // Sanitize content - remove potentially dangerous elements
@@ -413,9 +415,9 @@ async function exportDocument(format) {
     return;
   }
   
-  if (content.length > 2000000) { // 2MB limit
-    showUserNotification('❌ Document too large to export (max 2MB)', 'error');
-    return;
+  // Removed size restriction for export - allow any size
+  if (content.length > 50000000) { // 50MB warning only
+    showUserNotification('⚠️ Very large document - export may take some time', 'warning');
   }
 
   spinner.style.display = 'inline-block';
@@ -877,5 +879,506 @@ style.textContent = `
     from { transform: translateX(0); opacity: 1; }
     to { transform: translateX(100%); opacity: 0; }
   }
+  @keyframes slideInRight {
+    from { transform: translateX(100%); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
+  }
+  @keyframes slideOutRight {
+    from { transform: translateX(0); opacity: 1; }
+    to { transform: translateX(100%); opacity: 0; }
+  }
 `;
 document.head.appendChild(style);
+
+/**
+ * Image upload and management functionality
+ */
+function handleImageUpload() {
+  const fileInput = document.getElementById('image-upload');
+  fileInput.click();
+}
+
+// Initialize image upload event listener
+document.addEventListener('DOMContentLoaded', () => {
+  const fileInput = document.getElementById('image-upload');
+  if (fileInput) {
+    fileInput.addEventListener('change', async (e) => {
+      const files = Array.from(e.target.files);
+      if (files.length === 0) return;
+      
+      // Show loading indicator
+      showUserNotification('📁 Uploading images...', 'info');
+      
+      try {
+        const imagePromises = files.map(file => processImageFile(file));
+        const imageResults = await Promise.all(imagePromises);
+        
+        // Insert images into markdown
+        const cursor = input.selectionStart;
+        const imageMarkdown = imageResults.join('\n\n');
+        const newContent = input.value.slice(0, cursor) + '\n\n' + imageMarkdown + '\n\n' + input.value.slice(cursor);
+        
+        input.value = newContent;
+        input.dispatchEvent(new Event('input'));
+        
+        // Set cursor after inserted images
+        const newCursor = cursor + imageMarkdown.length + 4;
+        input.setSelectionRange(newCursor, newCursor);
+        input.focus();
+        
+        showUserNotification(`✅ Successfully uploaded ${files.length} image(s)`, 'success');
+        
+        // Clear the file input
+        fileInput.value = '';
+        
+      } catch (error) {
+        console.error('Image upload error:', error);
+        showUserNotification('❌ Failed to upload images: ' + error.message, 'error');
+      }
+    });
+  }
+});
+
+/**
+ * Process individual image file
+ */
+async function processImageFile(file) {
+  return new Promise((resolve, reject) => {
+    // Validate file type
+    if (!file.type.startsWith('image/')) {
+      reject(new Error(`${file.name} is not an image file`));
+      return;
+    }
+    
+    // Validate file size (max 10MB per image to be more generous)
+    const maxSize = 10 * 1024 * 1024; // 10MB
+    if (file.size > maxSize) {
+      reject(new Error(`${file.name} is too large (max 10MB)`));
+      return;
+    }
+    
+    const reader = new FileReader();
+    
+    reader.onload = (e) => {
+      try {
+        const base64Data = e.target.result;
+        const fileName = sanitizeFilename(file.name.replace(/\.[^/.]+$/, "")); // Remove extension
+        
+        // Create markdown with default center alignment
+        const imageMarkdown = `![${fileName}](${base64Data}){.center width=80%}`;
+        
+        resolve(imageMarkdown);
+      } catch (error) {
+        reject(new Error(`Failed to process ${file.name}: ${error.message}`));
+      }
+    };
+    
+    reader.onerror = () => {
+      reject(new Error(`Failed to read ${file.name}`));
+    };
+    
+    // Read as data URL (base64)
+    reader.readAsDataURL(file);
+  });
+}
+
+/**
+ * Enhanced image support in markdown converter
+ */
+function enhanceImageSupport() {
+  // Add CSS for image positioning
+  const imageCSS = `
+    .preview img {
+      max-width: 100%;
+      height: auto;
+      border-radius: 4px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      margin: 10px 0;
+    }
+    
+    .preview img.center {
+      display: block;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    
+    .preview img.right {
+      float: right;
+      margin-left: 20px;
+      margin-bottom: 10px;
+    }
+    
+    .preview img.left {
+      float: left;
+      margin-right: 20px;
+      margin-bottom: 10px;
+    }
+    
+    .preview img.float-left {
+      float: left;
+      margin: 0 20px 10px 0;
+    }
+    
+    .preview img.float-right {
+      float: right;
+      margin: 0 0 10px 20px;
+    }
+    
+    .preview .image-container {
+      clear: both;
+      margin: 20px 0;
+    }
+    
+    .preview .image-caption {
+      font-style: italic;
+      text-align: center;
+      color: #666;
+      font-size: 0.9em;
+      margin-top: 5px;
+    }
+  `;
+  
+  const imageStyleSheet = document.createElement('style');
+  imageStyleSheet.textContent = imageCSS;
+  document.head.appendChild(imageStyleSheet);
+  
+  // Process images in preview after render
+  const originalRenderPreview = window.renderPreview;
+  window.renderPreview = function() {
+    if (originalRenderPreview) {
+      originalRenderPreview();
+    }
+    processImagesInPreview();
+  };
+}
+
+/**
+ * Process images in preview to apply positioning
+ */
+function processImagesInPreview() {
+  const previewPane = document.getElementById('preview-pane');
+  if (!previewPane) return;
+  
+  const images = previewPane.querySelectorAll('img');
+  images.forEach(img => {
+    const src = img.getAttribute('src');
+    const alt = img.getAttribute('alt') || '';
+    
+    // Parse markdown-style attributes from the image's parent text
+    const imgElement = img.parentElement;
+    if (imgElement && imgElement.innerHTML) {
+      const imgHTML = imgElement.innerHTML;
+      
+      // Look for attribute syntax: {.class width=50% height=auto}
+      const attrMatch = imgHTML.match(/\{([^}]+)\}/);
+      if (attrMatch) {
+        const attrs = attrMatch[1];
+        
+        // Parse classes
+        const classMatches = attrs.match(/\.([a-zA-Z-]+)/g);
+        if (classMatches) {
+          classMatches.forEach(cls => {
+            img.classList.add(cls.substring(1)); // Remove the dot
+          });
+        }
+        
+        // Parse width
+        const widthMatch = attrs.match(/width=([^}\s]+)/);
+        if (widthMatch) {
+          img.style.width = widthMatch[1];
+        }
+        
+        // Parse height
+        const heightMatch = attrs.match(/height=([^}\s]+)/);
+        if (heightMatch) {
+          img.style.height = heightMatch[1];
+        }
+        
+        // Remove the attribute text from display
+        imgElement.innerHTML = imgElement.innerHTML.replace(/\{[^}]+\}/, '');
+      }
+    }
+    
+    // Add click handler for image preview
+    img.style.cursor = 'pointer';
+    img.addEventListener('click', () => showImagePreview(src, alt));
+  });
+}
+
+/**
+ * Show image preview modal
+ */
+function showImagePreview(src, alt) {
+  // Create modal if it doesn't exist
+  let modal = document.getElementById('image-preview-modal');
+  if (!modal) {
+    modal = document.createElement('div');
+    modal.id = 'image-preview-modal';
+    modal.className = 'modal';
+    modal.innerHTML = `
+      <div class="modal-content" style="max-width: 90vw; max-height: 90vh; text-align: center;">
+        <span class="close" onclick="this.parentElement.parentElement.style.display='none'">&times;</span>
+        <img id="preview-image" style="max-width: 100%; max-height: 80vh; object-fit: contain;" />
+        <p id="preview-caption" style="margin-top: 10px; font-style: italic; color: #666;"></p>
+      </div>
+    `;
+    document.body.appendChild(modal);
+    
+    // Close on outside click
+    modal.addEventListener('click', (e) => {
+      if (e.target === modal) {
+        modal.style.display = 'none';
+      }
+    });
+  }
+  
+  // Update modal content
+  document.getElementById('preview-image').src = src;
+  document.getElementById('preview-caption').textContent = alt || 'Image Preview';
+  modal.style.display = 'block';
+}
+
+/**
+ * Enhanced caching and storage management
+ */
+class EnhancedStorage {
+  constructor() {
+    this.storageKey = 'markdown_editor_data';
+    this.cacheKey = 'markdown_editor_cache';
+    this.settingsKey = 'markdown_editor_settings';
+    
+    // Initialize cache cleanup
+    this.cleanupOldCache();
+    
+    // Set up periodic cache management
+    setInterval(() => this.cleanupOldCache(), 60000); // Every minute
+  }
+  
+  /**
+   * Save document with enhanced metadata
+   */
+  saveDocument(content, metadata = {}) {
+    try {
+      const document = {
+        content,
+        metadata: {
+          title: metadata.title || 'Untitled Document',
+          author: metadata.author || '',
+          lastModified: new Date().toISOString(),
+          wordCount: content.trim().split(/\s+/).length,
+          characterCount: content.length,
+          ...metadata
+        },
+        version: '1.0'
+      };
+      
+      // Save to localStorage with compression for large documents
+      if (content.length > 100000) { // 100KB threshold
+        document.compressed = true;
+        document.content = this.compressContent(content);
+      }
+      
+      localStorage.setItem(this.storageKey, JSON.stringify(document));
+      
+      // Also save to cache for quick access
+      this.updateCache(document);
+      
+      return true;
+    } catch (error) {
+      console.error('Save failed:', error);
+      // Fallback: try to save without metadata
+      try {
+        localStorage.setItem(this.storageKey + '_backup', content);
+        return false; // Partial save
+      } catch (backupError) {
+        throw new Error('Storage quota exceeded. Please clear some space and try again.');
+      }
+    }
+  }
+  
+  /**
+   * Load document with fallback options
+   */
+  loadDocument() {
+    try {
+      const saved = localStorage.getItem(this.storageKey);
+      if (!saved) {
+        // Try backup
+        const backup = localStorage.getItem(this.storageKey + '_backup');
+        if (backup) {
+          return { content: backup, metadata: { title: 'Recovered Document' } };
+        }
+        return null;
+      }
+      
+      const document = JSON.parse(saved);
+      
+      // Decompress if needed
+      if (document.compressed) {
+        document.content = this.decompressContent(document.content);
+      }
+      
+      return document;
+    } catch (error) {
+      console.error('Load failed:', error);
+      
+      // Try to recover from backup
+      const backup = localStorage.getItem(this.storageKey + '_backup');
+      if (backup) {
+        return { content: backup, metadata: { title: 'Recovered Document' } };
+      }
+      
+      return null;
+    }
+  }
+  
+  /**
+   * Simple compression for large text content
+   */
+  compressContent(content) {
+    // Simple run-length encoding for spaces and newlines
+    return content
+      .replace(/\s{2,}/g, (match) => `\\s{${match.length}}`)
+      .replace(/\n{2,}/g, (match) => `\\n{${match.length}}`);
+  }
+  
+  /**
+   * Decompress content
+   */
+  decompressContent(compressed) {
+    return compressed
+      .replace(/\\s\{(\d+)\}/g, (match, count) => ' '.repeat(parseInt(count)))
+      .replace(/\\n\{(\d+)\}/g, (match, count) => '\n'.repeat(parseInt(count)));
+  }
+  
+  /**
+   * Update cache with recent documents
+   */
+  updateCache(document) {
+    try {
+      let cache = JSON.parse(localStorage.getItem(this.cacheKey) || '[]');
+      
+      // Add to cache (limit to 10 recent documents)
+      cache.unshift({
+        id: Date.now(),
+        title: document.metadata.title,
+        preview: document.content.substring(0, 200) + '...',
+        lastModified: document.metadata.lastModified,
+        wordCount: document.metadata.wordCount
+      });
+      
+      // Keep only recent 10
+      cache = cache.slice(0, 10);
+      
+      localStorage.setItem(this.cacheKey, JSON.stringify(cache));
+    } catch (error) {
+      console.error('Cache update failed:', error);
+    }
+  }
+  
+  /**
+   * Clean up old cache entries
+   */
+  cleanupOldCache() {
+    try {
+      const cache = JSON.parse(localStorage.getItem(this.cacheKey) || '[]');
+      const weekAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
+      
+      const cleaned = cache.filter(item => 
+        new Date(item.lastModified) > weekAgo
+      );
+      
+      if (cleaned.length !== cache.length) {
+        localStorage.setItem(this.cacheKey, JSON.stringify(cleaned));
+      }
+    } catch (error) {
+      console.error('Cache cleanup failed:', error);
+    }
+  }
+  
+  /**
+   * Get storage usage information
+   */
+  getStorageInfo() {
+    try {
+      let totalSize = 0;
+      for (let key in localStorage) {
+        if (localStorage.hasOwnProperty(key)) {
+          totalSize += localStorage[key].length;
+        }
+      }
+      
+      return {
+        used: totalSize,
+        usedMB: (totalSize / 1024 / 1024).toFixed(2),
+        available: 5 * 1024 * 1024 - totalSize, // Assume 5MB limit
+        availableMB: ((5 * 1024 * 1024 - totalSize) / 1024 / 1024).toFixed(2)
+      };
+    } catch (error) {
+      return { error: error.message };
+    }
+  }
+  
+  /**
+   * Save user settings
+   */
+  saveSettings(settings) {
+    try {
+      const currentSettings = this.loadSettings();
+      const newSettings = { ...currentSettings, ...settings };
+      localStorage.setItem(this.settingsKey, JSON.stringify(newSettings));
+      return true;
+    } catch (error) {
+      console.error('Settings save failed:', error);
+      return false;
+    }
+  }
+  
+  /**
+   * Load user settings
+   */
+  loadSettings() {
+    try {
+      const settings = localStorage.getItem(this.settingsKey);
+      return settings ? JSON.parse(settings) : {};
+    } catch (error) {
+      console.error('Settings load failed:', error);
+      return {};
+    }
+  }
+}
+
+// Initialize enhanced storage
+const enhancedStorage = new EnhancedStorage();
+
+// Update the existing autosave to use enhanced storage
+function updateAutosaveWithEnhancedStorage() {
+  const originalSaveMethod = fileManager.enableAutosave;
+  if (originalSaveMethod && typeof originalSaveMethod === 'function') {
+    // Override the autosave to use enhanced storage
+    setInterval(() => {
+      const content = input.value;
+      if (content.trim()) {
+        enhancedStorage.saveDocument(content, {
+          title: document.getElementById('doc-title')?.value || 'Untitled',
+          author: document.getElementById('doc-author')?.value || '',
+          date: document.getElementById('doc-date')?.value || ''
+        });
+      }
+    }, 5000); // Every 5 seconds
+  }
+}
+
+// Initialize enhanced features
+document.addEventListener('DOMContentLoaded', () => {
+  setTimeout(() => {
+    enhanceImageSupport();
+    updateAutosaveWithEnhancedStorage();
+    
+    // Load saved settings
+    const settings = enhancedStorage.loadSettings();
+    if (settings.theme === 'dark') {
+      document.body.classList.add('dark-mode');
+    }
+  }, 500);
+});
