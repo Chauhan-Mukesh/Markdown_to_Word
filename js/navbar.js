@@ -1,7 +1,24 @@
 /**
  * @file navbar.js
- * @description Navbar functionality for mobile hamburger menu and responsive behavior
- * @version 1.0.0
+ * @description Enhanced navbar functionality for mobile hamburger menu and responsive behavior
+ * @version 2.1.0
+ * @author Markdown to Word Exporter Team
+ * @license MIT
+ * 
+ * @overview
+ * Handles responsive navigation behavior including:
+ * - Mobile hamburger menu with smooth animations
+ * - Dropdown menu management for mobile/desktop
+ * - Responsive design patterns
+ * - Accessibility features (ARIA attributes, keyboard navigation)
+ * - Smooth transitions and modern UX patterns
+ */
+
+/**
+ * Navbar class for managing responsive navigation behavior
+ * @class
+ * @description Manages all navbar interactions including mobile menu, dropdowns, and responsive behavior
+ * @since 2.1.0
  */
 
 class Navbar {

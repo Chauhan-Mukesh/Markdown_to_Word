@@ -1,18 +1,50 @@
 /**
  * @file document-templates.js
- * @description Pre-defined document templates for different use cases
+ * @description Professional document templates for various business and personal use cases
+ * @version 2.1.0
+ * @author Markdown to Word Exporter Team
+ * @license MIT
+ * 
+ * @overview
+ * Provides a comprehensive collection of document templates including:
+ * - Business reports and proposals
+ * - Meeting notes and documentation
+ * - Technical documentation templates
+ * - Personal correspondence formats
+ * - Academic and research templates
+ * - Resume and professional formats
+ * - API and software documentation
+ * 
+ * All templates are designed to be professional, well-structured,
+ * and easily customizable for specific needs.
  */
 
+/**
+ * Document templates manager class
+ * @class
+ * @description Manages a collection of professional document templates with metadata
+ * @since 2.1.0
+ */
 class DocumentTemplates {
+  /**
+   * Constructor for DocumentTemplates
+   * @description Initializes the template collection with comprehensive business and personal templates
+   * @since 2.1.0
+   */
   constructor() {
+    /** @type {Object} Collection of document templates with metadata */
     this.templates = {
       blank: {
         name: '📄 Blank Document',
+        description: 'Start with a clean, empty document',
+        category: 'general',
         content: ''
       },
       
       report: {
         name: '📊 Business Report',
+        description: 'Professional business report with executive summary',
+        category: 'business',
         content: `# Executive Summary
 
 ## Overview

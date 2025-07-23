@@ -1,16 +1,59 @@
 /**
  * @file editor-toolbar.js
- * @description Enhanced toolbar with formatting buttons and shortcuts
+ * @description Advanced editor toolbar with formatting capabilities and keyboard shortcuts
+ * @version 2.1.0
+ * @author Markdown to Word Exporter Team
+ * @license MIT
+ * 
+ * @overview
+ * Provides a comprehensive editor toolbar system with:
+ * - Rich text formatting for markdown syntax
+ * - Keyboard shortcut integration
+ * - Text insertion and cursor management
+ * - Template and snippet support
+ * - Undo/redo functionality
+ * - Selection-aware formatting operations
  */
 
+/**
+ * Enhanced editor toolbar class for markdown formatting
+ * @class
+ * @description Manages toolbar functionality including text formatting, shortcuts, and cursor operations
+ * @since 2.1.0
+ */
 class EditorToolbar {
+  /**
+   * Constructor for EditorToolbar
+   * @description Initializes the toolbar with textarea reference and keyboard shortcuts
+   * @param {HTMLTextAreaElement} textarea - The textarea element to operate on
+   * @since 2.1.0
+   */
   constructor(textarea) {
+    /** @type {HTMLTextAreaElement} Reference to the textarea element */
     this.textarea = textarea;
+    
+    /** @type {Array} History of text changes for undo/redo */
+    this.history = [];
+    
+    /** @type {number} Current position in history */
+    this.historyIndex = -1;
+    
+    /** @type {number} Maximum history entries */
+    this.maxHistory = 50;
+    
     this.setupKeyboardShortcuts();
+    this.initializeHistory();
   }
 
   /**
-   * Insert text at cursor position
+   * Insert text at cursor position with intelligent formatting
+   * @description Inserts formatted text at the current cursor position or around selected text
+   * @param {string} before - Text to insert before the selection/cursor
+   * @param {string} [after=''] - Text to insert after the selection/cursor
+   * @param {string} [placeholder=''] - Placeholder text when no selection exists
+   * @since 2.1.0
+   * @example
+   * toolbar.insertText('**', '**', 'bold text'); // Creates **bold text**
    */
   insertText(before, after = '', placeholder = '') {
     const start = this.textarea.selectionStart;

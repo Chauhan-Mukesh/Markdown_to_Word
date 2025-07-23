@@ -30,6 +30,7 @@ body {
   justify-content: space-between;
   padding: 0.75rem 1rem;
   gap: 1rem;
+  min-height: 60px; /* Ensure consistent height */
 }
 
 .navbar-brand {
@@ -168,19 +169,33 @@ body {
 .navbar-toggle {
   display: none;
   flex-direction: column;
-  background: none;
-  border: none;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 6px;
   cursor: pointer;
-  padding: 0.5rem;
-  gap: 3px;
+  padding: 0.75rem;
+  gap: 4px;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+}
+
+.navbar-toggle:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
 }
 
 .hamburger-line {
-  width: 24px;
+  width: 20px;
   height: 2px;
   background: white;
-  transition: all 0.3s ease;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   border-radius: 2px;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+}
+
+.navbar-toggle.active {
+  background: rgba(255, 255, 255, 0.25);
 }
 
 .navbar-toggle.active .hamburger-line:nth-child(1) {
@@ -189,6 +204,7 @@ body {
 
 .navbar-toggle.active .hamburger-line:nth-child(2) {
   opacity: 0;
+  transform: scale(0);
 }
 
 .navbar-toggle.active .hamburger-line:nth-child(3) {
@@ -267,6 +283,15 @@ body {
     display: flex;
   }
   
+  .navbar-container {
+    padding: 0.5rem 1rem;
+    min-height: 56px;
+  }
+  
+  .logo {
+    font-size: 1.25rem;
+  }
+  
   .navbar-menu {
     position: absolute;
     top: 100%;
@@ -275,13 +300,15 @@ body {
     background: linear-gradient(135deg, #1976d2, #1565c0);
     flex-direction: column;
     align-items: stretch;
-    padding: 1rem;
-    gap: 0.75rem;
+    padding: 1.5rem 1rem;
+    gap: 1rem;
     opacity: 0;
     visibility: hidden;
-    transform: translateY(-10px);
-    transition: all 0.3s ease;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    transform: translateY(-20px);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+    backdrop-filter: blur(10px);
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
   }
   
   .navbar-menu.active {
@@ -293,6 +320,64 @@ body {
   .navbar-item {
     width: 100%;
     justify-content: center;
+    margin-bottom: 0.5rem;
+  }
+  
+  .navbar-item:last-child {
+    margin-bottom: 0;
+  }
+  
+  .navbar-btn,
+  .navbar-input {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border-radius: 8px;
+    font-size: 0.9rem;
+  }
+  
+  .dropdown {
+    width: 100%;
+  }
+  
+  .dropdown-toggle {
+    width: 100%;
+    justify-content: center;
+    padding: 0.75rem 1rem;
+    border-radius: 8px;
+  }
+  
+  .dropdown-menu {
+    position: static;
+    width: 100%;
+    margin-top: 0.5rem;
+    opacity: 1;
+    visibility: visible;
+    transform: none;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  
+  .dropdown:hover .dropdown-menu,
+  .dropdown.active .dropdown-menu {
+    display: block;
+  }
+  
+  .export-dropdown {
+    width: 100%;
+  }
+  
+  .export-menu {
+    position: static;
+    width: 100%;
+    margin-top: 0.5rem;
+    opacity: 1;
+    visibility: visible;
+    transform: none;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    border-radius: 8px;
+  }
+}
   }
   
   .navbar-input {
@@ -808,19 +893,29 @@ body.dark-mode .tools-section {
   background-color: rgba(0, 0, 0, 0.6);
   backdrop-filter: blur(5px);
   animation: modalFadeIn 0.3s ease;
+  /* Ensure proper centering */
+  justify-content: center;
+  align-items: center;
+}
+
+.modal.show {
+  display: flex;
 }
 
 @keyframes modalFadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
+  from { 
+    opacity: 0;
+    backdrop-filter: blur(0px);
+  }
+  to { 
+    opacity: 1;
+    backdrop-filter: blur(5px);
+  }
 }
 
 .modal-content {
   background-color: #fefefe;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+  position: relative;
   padding: 2rem;
   border: none;
   border-radius: 16px;
@@ -829,24 +924,26 @@ body.dark-mode .tools-section {
   max-width: 90vw;
   max-height: 90vh;
   overflow-y: auto;
+  /* Center the modal properly */
+  margin: auto;
+  transform: none;
 }
 
 @keyframes modalSlideIn {
   from {
-    transform: translate(-50%, -60%);
+    transform: scale(0.8) translateY(-20px);
     opacity: 0;
-    scale: 0.8;
   }
   to {
-    transform: translate(-50%, -50%);
+    transform: scale(1) translateY(0);
     opacity: 1;
-    scale: 1;
   }
 }
 
 /* Confirmation Modal Styling */
 .confirmation-modal {
-  max-width: 400px;
+  max-width: 450px;
+  width: 90%;
   text-align: center;
 }
 
@@ -932,22 +1029,29 @@ body.dark-mode .tools-toggle:hover {
 /* Improved Responsive Design */
 @media (max-width: 768px) {
   .modal-content {
-    margin: 1rem;
+    margin: 2rem 1rem;
     padding: 1.5rem;
     border-radius: 12px;
+    max-width: none;
+    width: calc(100% - 2rem);
   }
   
   .confirmation-modal {
     max-width: none;
+    width: 100%;
+    margin: 1rem;
   }
   
   .modal-footer {
     flex-direction: column;
+    gap: 0.75rem;
   }
   
   .btn-secondary,
   .btn-danger {
     width: 100%;
+    padding: 1rem;
+    font-size: 1rem;
   }
 }
 

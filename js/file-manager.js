@@ -1,17 +1,63 @@
 /**
  * @file file-manager.js
- * @description File management functionality for loading/saving markdown files
+ * @description Advanced file management system for markdown documents
+ * @version 2.1.0
+ * @author Markdown to Word Exporter Team
+ * @license MIT
+ * 
+ * @overview
+ * Provides comprehensive file management capabilities including:
+ * - File loading from local device with multiple format support
+ * - Markdown file saving with proper MIME types
+ * - Auto-save functionality with conflict resolution
+ * - Local storage management with data persistence
+ * - Export capabilities to multiple formats
+ * - Error handling and user feedback integration
+ * 
+ * @requires NotificationSystem - For user feedback
  */
 
+/**
+ * File management class for handling document operations
+ * @class
+ * @description Manages all file-related operations including load, save, auto-save, and export
+ * @since 2.1.0
+ */
 class FileManager {
+  /**
+   * Constructor for FileManager
+   * @description Initializes file management with auto-save configuration
+   * @since 2.1.0
+   */
   constructor() {
+    /** @type {string} Local storage key for auto-saved content */
     this.autosaveKey = 'markdown-editor-content';
-    this.autosaveInterval = 30000; // 30 seconds
+    
+    /** @type {number} Auto-save interval in milliseconds (30 seconds) */
+    this.autosaveInterval = 30000;
+    
+    /** @type {?number} Auto-save timer reference for cleanup */
     this.autosaveTimer = null;
+    
+    /** @type {Array<string>} Supported file extensions for import */
+    this.supportedExtensions = ['.md', '.markdown', '.txt', '.text'];
+    
+    /** @type {number} Maximum file size in bytes (5MB) */
+    this.maxFileSize = 5 * 1024 * 1024;
   }
 
   /**
-   * Load a markdown file from user's device
+   * Load a markdown file from user's device with validation
+   * @description Opens file picker and loads selected markdown file with error handling
+   * @param {Function} callback - Callback function to handle loaded content
+   * @param {Function} [errorCallback] - Optional error callback
+   * @since 2.1.0
+   * @example
+   * fileManager.loadFile((content, filename) => {
+   *   editor.setValue(content);
+   * }, (error) => {
+   *   console.error('Failed to load file:', error);
+   * });
    */
   loadFile(callback) {
     const input = document.createElement('input');
