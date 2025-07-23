@@ -413,7 +413,7 @@ body {
   }
   
   .footer {
-    margin-bottom: 100px; /* Extra margin for mobile due to taller formatting toolbar */
+    margin-bottom: 110px; /* Extra margin for mobile due to taller formatting toolbar (85px + padding) */
   }
   
   .footer-left p {
