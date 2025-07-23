@@ -21,8 +21,8 @@ Experience the power of our Markdown to Word converter instantly! No downloads, 
 ## 🖼️ Project Screenshots
 
 ### Desktop Interface - Full Width Layout
-![Desktop Interface](https://github.com/user-attachments/assets/06434bb6-a546-445b-8a02-82e89bfa0154)
-*Clean, professional interface with full-width layout and functional dropdown menus*
+![Desktop Interface](https://github.com/user-attachments/assets/cdf197bd-ed26-4353-bea3-083b5644dced)
+*Clean, professional interface with properly collapsed dropdowns and functional navbar*
 
 ### Mobile-Responsive Design
 ![Mobile Interface](https://github.com/user-attachments/assets/c0b7aa1b-0790-4276-8ec8-a4a8705fa1ee)
