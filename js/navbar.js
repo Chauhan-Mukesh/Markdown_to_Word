@@ -95,23 +95,25 @@ class Navbar {
       
       if (!toggle || !menu) return;
       
-      // For mobile, toggle dropdown on click
+      // Handle click to toggle dropdown
       toggle.addEventListener('click', (e) => {
-        if (window.innerWidth <= 768) {
-          e.preventDefault();
-          e.stopPropagation();
-          
-          // Close other dropdowns
-          this.dropdowns.forEach(otherDropdown => {
-            if (otherDropdown !== dropdown) {
-              const otherMenu = otherDropdown.querySelector('.dropdown-menu');
-              if (otherMenu) {
-                otherMenu.classList.remove('mobile-active');
-              }
+        e.preventDefault();
+        e.stopPropagation();
+        
+        // Close other dropdowns
+        this.dropdowns.forEach(otherDropdown => {
+          if (otherDropdown !== dropdown) {
+            otherDropdown.classList.remove('active');
+            const otherMenu = otherDropdown.querySelector('.dropdown-menu');
+            if (otherMenu) {
+              otherMenu.classList.remove('mobile-active');
             }
-          });
-          
-          // Toggle current dropdown
+          }
+        });
+        
+        // Toggle current dropdown
+        dropdown.classList.toggle('active');
+        if (window.innerWidth <= 768) {
           menu.classList.toggle('mobile-active');
         }
       });
@@ -120,11 +122,25 @@ class Navbar {
       const items = menu.querySelectorAll('.dropdown-item');
       items.forEach(item => {
         item.addEventListener('click', () => {
+          dropdown.classList.remove('active');
           menu.classList.remove('mobile-active');
           if (window.innerWidth <= 768) {
             this.closeMobileMenu();
           }
         });
+      });
+    });
+    
+    // Close dropdowns when clicking outside
+    document.addEventListener('click', (e) => {
+      this.dropdowns.forEach(dropdown => {
+        if (!dropdown.contains(e.target)) {
+          dropdown.classList.remove('active');
+          const menu = dropdown.querySelector('.dropdown-menu');
+          if (menu) {
+            menu.classList.remove('mobile-active');
+          }
+        }
       });
     });
   }
