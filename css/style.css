@@ -1580,24 +1580,25 @@ body.dark-mode a:hover {
   #app { 
     flex-direction: column; 
     height: auto;
-    min-height: calc(100vh - 120px);
+    min-height: calc(100vh - 100px);
   }
   
   .panel { 
     flex: 1 1 100%; 
     height: auto;
-    min-height: 40vh;
+    min-height: 45vh;
     margin: 0;
+    padding: 0.5rem;
   }
   
   #editor-panel {
     order: 1;
-    min-height: 50vh;
+    min-height: 55vh;
   }
   
   #preview-panel {
     order: 2;
-    min-height: 40vh;
+    min-height: 45vh;
   }
   
   .formatting-toolbar {
