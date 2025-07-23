@@ -160,12 +160,6 @@ function initializeNewFeatures() {
   document.getElementById('download-standalone-btn').onclick = () => exportDocument('standalone');
   document.getElementById('download-pdf-btn').onclick = () => exportDocument('pdf');
   
-  // Initialize collapsible tools
-  initializeToolsToggle();
-  
-  // Initialize master toolbar toggle
-  initializeToolbarMasterToggle();
-  
   // Initialize custom confirmation
   initializeCustomConfirmation();
   
@@ -722,6 +716,15 @@ async function exportToPDF(filename) {
   printExport.exportToPDF(titleInput.value || 'Document');
 }
 
+/**
+ * Update document statistics
+ */
+function updateStats() {
+  if (keyboardShortcuts) {
+    keyboardShortcuts.updateStats();
+  }
+}
+
 // Set default date to today
 if (!dateInput.value) {
   dateInput.value = new Date().toISOString().split('T')[0];
@@ -866,7 +869,7 @@ class KeyboardShortcuts {
 
   showStats() {
     if (this.statsModal) {
-      this.calculateDocumentStats();
+      this.updateStats();
       this.statsModal.style.display = 'block';
       this.statsClose?.focus();
     }
@@ -878,7 +881,7 @@ class KeyboardShortcuts {
     }
   }
 
-  calculateDocumentStats() {
+  updateStats() {
     const input = document.getElementById('markdown-input');
     const text = input?.value || '';
     
@@ -1495,7 +1498,6 @@ document.addEventListener('DOMContentLoaded', () => {
   setTimeout(() => {
     enhanceImageSupport();
     updateAutosaveWithEnhancedStorage();
-    initializeMobileToolbar();
     
     // Load saved settings
     const settings = enhancedStorage.loadSettings();
@@ -1504,188 +1506,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }, 500);
 });
-
-/**
- * Initialize mobile toolbar functionality
- */
-function initializeMobileToolbar() {
-  const toolbar = document.getElementById('toolbar');
-  const primaryActions = toolbar?.querySelector('.primary-actions');
-  
-  if (!toolbar || !primaryActions) return;
-  
-  // Add click handler for mobile toolbar expansion
-  function toggleToolbar() {
-    if (window.innerWidth <= 768) {
-      toolbar.classList.toggle('expanded');
-    }
-  }
-  
-  // Add click listener to primary actions area on mobile
-  if (window.innerWidth <= 768) {
-    primaryActions.addEventListener('click', (e) => {
-      // Only toggle if clicking on the primary actions area, not on buttons
-      if (e.target === primaryActions || e.target.classList.contains('section-label')) {
-        toggleToolbar();
-      }
-    });
-  }
-  
-  // Handle window resize
-  window.addEventListener('resize', () => {
-    if (window.innerWidth > 768) {
-      toolbar.classList.remove('expanded');
-    }
-  });
-}
-
-/**
- * Initialize master toolbar collapse functionality
- * @description Provides ability to collapse/expand the entire toolbar for more editing space
- */
-function initializeToolbarMasterToggle() {
-  const masterToggle = document.getElementById('toolbar-master-toggle');
-  const toolbarTitle = document.querySelector('.toolbar-title');
-  const toolbar = document.getElementById('toolbar');
-  const toolbarSections = document.getElementById('toolbar-sections');
-  
-  if (!masterToggle || !toolbar || !toolbarSections) {
-    console.warn('Toolbar master toggle elements not found');
-    return;
-  }
-  
-  // Load saved state from localStorage
-  const isCollapsed = localStorage.getItem('toolbarCollapsed') === 'true';
-  const isMobileExpanded = localStorage.getItem('toolbarMobileExpanded') === 'true';
-  
-  if (isCollapsed) {
-    toolbar.classList.add('collapsed');
-    masterToggle.textContent = '▼';
-    masterToggle.classList.add('collapsed');
-  }
-  
-  // Set mobile expanded state
-  if (isMobileExpanded && window.innerWidth <= 768) {
-    toolbar.classList.add('expanded');
-  }
-  
-  /**
-   * Toggle toolbar collapse state
-   * @param {boolean} fromMobile - Whether the toggle is triggered from mobile interaction
-   */
-  const toggleToolbar = (fromMobile = false) => {
-    const isCurrentlyCollapsed = toolbar.classList.contains('collapsed');
-    
-    if (isCurrentlyCollapsed) {
-      // Expand toolbar
-      toolbar.classList.remove('collapsed');
-      masterToggle.textContent = '▲';
-      masterToggle.classList.remove('collapsed');
-      localStorage.setItem('toolbarCollapsed', 'false');
-      showNotification('Toolbar expanded 📖', 'info', 2000);
-    } else {
-      // Collapse toolbar
-      toolbar.classList.add('collapsed');
-      masterToggle.textContent = '▼';
-      masterToggle.classList.add('collapsed');
-      localStorage.setItem('toolbarCollapsed', 'true');
-      showNotification('Toolbar collapsed 📁 - More editing space!', 'info', 2000);
-    }
-    
-    // On mobile, also handle the mobile expansion
-    if (fromMobile || window.innerWidth <= 768) {
-      handleMobileToolbarToggle();
-    }
-  };
-  
-  /**
-   * Handle mobile-specific toolbar expansion
-   */
-  const handleMobileToolbarToggle = () => {
-    if (window.innerWidth <= 768) {
-      const isMobileExpanded = toolbar.classList.contains('expanded');
-      
-      if (isMobileExpanded) {
-        toolbar.classList.remove('expanded');
-        localStorage.setItem('toolbarMobileExpanded', 'false');
-      } else {
-        toolbar.classList.add('expanded');
-        localStorage.setItem('toolbarMobileExpanded', 'true');
-      }
-    }
-  };
-  
-  // Add click event listeners
-  masterToggle.addEventListener('click', () => toggleToolbar(false));
-  
-  // On mobile, clicking the toolbar title toggles mobile expansion
-  if (toolbarTitle) {
-    toolbarTitle.addEventListener('click', () => {
-      if (window.innerWidth <= 768) {
-        handleMobileToolbarToggle();
-      }
-    });
-    
-    // Add cursor pointer style for mobile
-    toolbarTitle.style.cursor = window.innerWidth <= 768 ? 'pointer' : 'default';
-  }
-  
-  // Handle window resize to update mobile behavior
-  window.addEventListener('resize', () => {
-    if (toolbarTitle) {
-      toolbarTitle.style.cursor = window.innerWidth <= 768 ? 'pointer' : 'default';
-    }
-    
-    // Reset mobile expanded state on desktop
-    if (window.innerWidth > 768) {
-      toolbar.classList.remove('expanded');
-    }
-  });
-  
-  // Add keyboard shortcut (Ctrl+T) for toolbar toggle
-  document.addEventListener('keydown', (e) => {
-    if (e.ctrlKey && e.key === 't') {
-      e.preventDefault();
-      toggleToolbar(false);
-    }
-  });
-}
-
-/**
- * Initialize collapsible tools section
- */
-function initializeToolsToggle() {
-  const toolsToggle = document.getElementById('tools-toggle');
-  const toolsButtons = document.getElementById('tools-buttons');
-  
-  if (!toolsToggle || !toolsButtons) return;
-  
-  // Load saved state
-  const isCollapsed = localStorage.getItem('toolsCollapsed') === 'true';
-  if (isCollapsed) {
-    toolsButtons.classList.add('collapsed');
-    toolsToggle.textContent = '▶';
-    toolsToggle.classList.add('collapsed');
-  }
-  
-  toolsToggle.addEventListener('click', () => {
-    const isCurrentlyCollapsed = toolsButtons.classList.contains('collapsed');
-    
-    if (isCurrentlyCollapsed) {
-      toolsButtons.classList.remove('collapsed');
-      toolsToggle.textContent = '▼';
-      toolsToggle.classList.remove('collapsed');
-      localStorage.setItem('toolsCollapsed', 'false');
-      showNotification('Tools section expanded 📖', 'info', 2000);
-    } else {
-      toolsButtons.classList.add('collapsed');
-      toolsToggle.textContent = '▶';
-      toolsToggle.classList.add('collapsed');
-      localStorage.setItem('toolsCollapsed', 'true');
-      showNotification('Tools section collapsed 📁', 'info', 2000);
-    }
-  });
-}
 
 /**
  * Initialize custom confirmation modal
