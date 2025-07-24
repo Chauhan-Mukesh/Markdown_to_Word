@@ -10,9 +10,13 @@ An advanced, AI-enhanced web application that converts Markdown text to Microsof
 
 ## 📸 Screenshots
 
-### 🖥️ Desktop View (1920px)
-![Desktop View](https://github.com/user-attachments/assets/b7eeb7fd-6ca3-4041-bd7e-1a201ee0a6d8)
-*Ultra-wide desktop layout with side-by-side editor and preview panels*
+### 🖥️ Desktop View (1600px+) - Improved Dynamic Layout
+![Desktop View](https://github.com/user-attachments/assets/fa22f85b-269e-4ec6-85ac-d2aca1c82809)
+*Enhanced desktop layout with dynamic panel sizing - editor panel (60%) and preview panel (40%) for optimal workflow*
+
+### 📱 Tablet View (1024x768) - Touch-Optimized
+![Tablet View](https://github.com/user-attachments/assets/f3ee1444-5d8a-4d54-ab65-cd1e0f5d6120)
+*Improved tablet layout with touch-friendly buttons, better spacing, and enhanced visual hierarchy*
 
 ### 📱 Mobile View
 <img src="https://github.com/user-attachments/assets/cb081e59-1c11-4bde-b90e-0f32a7beba3b" width="300" alt="Mobile View">
@@ -84,11 +88,11 @@ Visit our [live demo](https://chauhan-mukesh.github.io/Markdown_to_Word/) - work
 ## 📱 Device Compatibility
 
 ### ✅ **Optimized Screen Sizes**
-- **🖥️ Ultra-wide (1920px+)**: Enhanced side-by-side layout with full width utilization
-- **🖥️ Desktop (1366x768+)**: Optimized responsive layout with proper navbar alignment
-- **💻 Laptop (1024px-1365px)**: Touch-friendly adaptive design
-- **📱 Tablet (768px-1024px)**: Responsive layout with collapsible navigation
-- **📱 Mobile (≤768px)**: Vertical stacking with hamburger menu, fixed footer
+- **🖥️ Ultra-wide (1600px+)**: Enhanced dynamic layout with 60/40 editor-to-preview ratio for optimal productivity
+- **🖥️ Desktop (1400px-1599px)**: Balanced layout with intelligent panel sizing and centered content
+- **🖥️ Standard Desktop (1025px-1399px)**: Optimized responsive layout with improved panel proportions
+- **📱 Tablet (769px-1024px)**: Touch-optimized design with larger buttons, better spacing, and enhanced visual hierarchy
+- **📱 Mobile (≤768px)**: Vertical stacking with hamburger menu, touch-friendly controls, and fixed footer
 
 ### ✅ **Browser Support**
 - **Chrome** 70+ (Recommended)
@@ -231,17 +235,14 @@ We welcome contributions from the community!
 
 ## 📊 Recent Improvements
 
-### 🔧 **Version 2.1 Updates (Latest)**
-- ✅ **Fixed template selection bug** - Content now updates properly when switching templates
-- ✅ **Improved navbar alignment** - Tools and Preview now align properly with File menu in large screens
-- ✅ **Fixed mobile menu behavior** - Dropdowns no longer show open by default on mobile
-- ✅ **Enhanced footer positioning** - Fixed footer placement in mobile view
-- ✅ **Optimized large screen layout** - Editor and preview panels now display side-by-side on large screens
-- ✅ **Full width utilization** - Content now properly utilizes full screen width up to 1920px
-- ✅ **Improved scroll behavior** - Added smooth scrolling and custom scrollbar styling
-- ✅ **Removed duplicate CSS** - Cleaned up conflicting and duplicate code
-- ✅ **Enhanced SEO optimization** - AI-focused meta tags and improved discoverability
-- ✅ **Updated branding** - Enhanced with AI-powered messaging and modern design
+### 🔧 **Version 2.2 Updates (Latest)**
+- ✅ **Enhanced tablet experience** - Touch-optimized buttons, improved spacing, and better visual hierarchy
+- ✅ **Dynamic panel sizing** - Editor/preview panels now auto-adjust for optimal screen utilization
+- ✅ **Improved large screen layout** - 60/40 editor-to-preview ratio for better productivity on wide displays
+- ✅ **Cleaned duplicate CSS** - Removed redundant styles and optimized file size for better performance
+- ✅ **Enhanced license documentation** - More comprehensive license information and third-party library details
+- ✅ **Updated responsive breakpoints** - Better support for modern display sizes and touch devices
+- ✅ **Improved visual consistency** - Enhanced border radius, shadows, and transitions across all components
 
 ### 🔧 **Version 3.0 Previous Updates**
 - ✅ **Fixed mobile responsive layout** - Panels now stack vertically on mobile
