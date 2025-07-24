@@ -1,4 +1,10 @@
 /* Global & Layout */
+/* TODO: Future improvement - consolidate duplicate CSS selectors and media queries for better maintainability
+   Current duplications found:
+   - 7 @media (max-width: 768px) blocks
+   - 6 .navbar-container blocks  
+   - Multiple other duplicate selectors
+   Consider combining into organized sections to reduce from 3711 lines */
 * { box-sizing: border-box; margin: 0; padding: 0; }
 html, body { height: 100%; width: 100%; }
 html { scroll-behavior: smooth; }
@@ -2208,6 +2214,11 @@ body.dark-mode a:hover {
     border-radius: 10px; /* Slightly larger radius for modern look */
     box-sizing: border-box;
     overflow: hidden; /* Better content containment */
+  }
+  
+  /* Hide panel resizer on mobile since panels stack vertically */
+  .panel-resizer {
+    display: none !important;
   }
   
   #editor-panel {
