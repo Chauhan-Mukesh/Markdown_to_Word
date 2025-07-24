@@ -7,7 +7,7 @@ A powerful, responsive web application that converts Markdown text to Microsoft 
 [![Live Demo](https://img.shields.io/badge/🌐_Live_Demo-Try_Now-blue?style=for-the-badge)](https://chauhan-mukesh.github.io/Markdown_to_Word/)
 [![License](https://img.shields.io/badge/License-GPL--3.0-green?style=for-the-badge)](LICENSE)
 [![GitHub Stars](https://img.shields.io/github/stars/Chauhan-Mukesh/Markdown_to_Word?style=for-the-badge)](https://github.com/Chauhan-Mukesh/Markdown_to_Word/stargazers)
-[![Version](https://img.shields.io/badge/Version-2.3.0-orange?style=for-the-badge)](https://github.com/Chauhan-Mukesh/Markdown_to_Word/releases)
+[![Version](https://img.shields.io/badge/Version-2.4.0-orange?style=for-the-badge)](https://github.com/Chauhan-Mukesh/Markdown_to_Word/releases)
 
 ---
 
@@ -33,7 +33,7 @@ A powerful, responsive web application that converts Markdown text to Microsoft 
 - 📝 **Enhanced Formatting Toolbar** - Comprehensive toolbar with dropdown menus
   - **Text Formatting**: Bold, Italic, Underline, Strikethrough
   - **Headers**: All 6 header levels (H1-H6) with dropdown selector
-  - **Lists**: Bullet lists, numbered lists, and nested sub-lists
+  - **Lists**: Advanced multi-level nested lists with proper numbered and bulleted rendering
   - **Code**: Inline code and code blocks with syntax highlighting
   - **Media**: Links, images, and tables
 - ⌨️ **Smart Keyboard Shortcuts** - Professional productivity features
@@ -47,10 +47,10 @@ A powerful, responsive web application that converts Markdown text to Microsoft 
 - 🎨 **Modern UI/UX** - Clean, professional interface with smooth animations
 
 ### 📊 **Smart Document Processing**
-- 🧠 **Intelligent Templates** - Pre-built templates for various document types
-- 🎨 **Auto-formatting** - Smart suggestions for document structure
-- 📈 **Content Analysis** - Real-time readability and structure analysis
-- 🔍 **Live Preview** - Context-aware real-time preview with syntax highlighting
+- 🧠 **Enhanced Document Templates** - Professional templates with comprehensive nested structures for business reports, meeting notes, project proposals, and tutorials
+- 🎨 **Intelligent List Processing** - Advanced nested list rendering with proper indentation and numbering
+- 📈 **Accurate Content Analysis** - Real-time statistics including proper list detection and document structure analysis
+- 🔍 **Live Preview** - Context-aware real-time preview with advanced syntax highlighting and nested element support
 
 ### 📄 **Multiple Export Formats**
 - 📝 **Microsoft Word (.docx)** - Industry-standard document format
@@ -289,7 +289,17 @@ We welcome contributions from the community! Here's how you can help make Markdo
 
 ## 📊 Recent Updates & Changelog
 
-### 🔧 **Version 2.3.0 - Enhanced Productivity (Latest)**
+### 🎯 **Version 2.4.0 - Enhanced List Rendering & Templates (Latest)**
+- ✅ **Advanced Nested List Support** - Complete rewrite of list rendering engine with support for multi-level nested numbered and bulleted lists
+- ✅ **Intelligent Converter Selection** - Automatic detection and use of enhanced markdown processor for complex nested structures
+- ✅ **Fixed Statistics Engine** - Corrected list detection to properly count both numbered and bulleted lists including nested items
+- ✅ **Comprehensive Template Overhaul** - Enhanced all document templates with professional nested structures and detailed content
+- ✅ **Business Report Template** - Added methodology frameworks, detailed findings analysis, multi-phase implementation plans
+- ✅ **Meeting Notes Template** - Enhanced with structured agenda management, comprehensive action tracking, and risk documentation
+- ✅ **Project Proposal Template** - Added detailed project phases, resource planning, and success metrics with nested structures
+- ✅ **Tutorial Guide Template** - Comprehensive step-by-step format with learning objectives and troubleshooting sections
+
+### 🔧 **Version 2.3.0 - Enhanced Productivity**
 - ✅ **Layout Optimization** - Improved 55/45 editor-to-preview ratio for better productivity
 - ✅ **Enhanced Formatting Toolbar** - Added dropdown menus for headers and lists
 - ✅ **Advanced List Support** - Bullet, numbered, and nested sub-lists

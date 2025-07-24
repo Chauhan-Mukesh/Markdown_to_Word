@@ -90,20 +90,147 @@ class SimpleMarkdownConverter {
     // Process tables first before other rules
     html = this.processTables(html);
     
-    // Apply all rules
-    this.rules.forEach(rule => {
+    // Process lists with proper nesting support
+    html = this.processLists(html);
+    
+    // Apply all rules except list rules (they're handled above)
+    const nonListRules = this.rules.filter(rule => 
+      !rule.regex.toString().includes('\\* (.+)') && 
+      !rule.regex.toString().includes('\\d+\\. (.+)')
+    );
+    
+    nonListRules.forEach(rule => {
       html = html.replace(rule.regex, rule.replacement);
     });
     
     // Wrap in paragraphs
     html = '<p>' + html + '</p>';
     
-    // Clean up empty paragraphs and fix list wrapping
+    // Clean up empty paragraphs
     html = html.replace(/<p><\/p>/g, '');
-    html = html.replace(/(<li>.*<\/li>)/g, '<ul>$1</ul>');
-    html = html.replace(/<\/ul><ul>/g, '');
+    html = html.replace(/<p>(<[ou]l>)/g, '$1');
+    html = html.replace(/(<\/[ou]l>)<\/p>/g, '$1');
     
     return html;
+  }
+
+  /**
+   * Process lists with proper nesting support
+   * @description Handles both bullet and numbered lists with indentation
+   * @param {string} markdown - The markdown text to process
+   * @returns {string} - HTML with properly nested lists
+   * @since 2.1.0
+   */
+  processLists(markdown) {
+    const lines = markdown.split('\n');
+    const result = [];
+    let i = 0;
+    
+    while (i < lines.length) {
+      const line = lines[i];
+      
+      // Check if this line starts a list
+      if (this.isListItem(line)) {
+        const listData = this.parseList(lines, i);
+        result.push(listData.html);
+        i = listData.endIndex;
+      } else {
+        result.push(line);
+        i++;
+      }
+    }
+    
+    return result.join('\n');
+  }
+
+  /**
+   * Check if a line is a list item
+   * @param {string} line - The line to check
+   * @returns {boolean} - True if the line is a list item
+   */
+  isListItem(line) {
+    // Match bullet lists: *, -, + (with optional indentation)
+    // Match numbered lists: 1., 2., etc. (with optional indentation)
+    return /^\s*(?:[*+-]|\d+\.)\s+/.test(line);
+  }
+
+  /**
+   * Parse a complete list structure with nesting
+   * @param {Array} lines - All lines in the document
+   * @param {number} startIndex - Index where the list starts
+   * @returns {Object} - Object with html and endIndex
+   */
+  parseList(lines, startIndex) {
+    const listItems = [];
+    let i = startIndex;
+    let baseIndent = null;
+    
+    while (i < lines.length) {
+      const line = lines[i];
+      
+      if (!this.isListItem(line) && line.trim() !== '') {
+        // Non-list line that's not empty - end of list
+        break;
+      }
+      
+      if (line.trim() === '') {
+        // Empty line - skip but continue
+        i++;
+        continue;
+      }
+      
+      const itemData = this.parseListItem(line);
+      if (baseIndent === null) {
+        baseIndent = itemData.indent;
+      }
+      
+      // Check if this item belongs to current list level
+      if (itemData.indent === baseIndent) {
+        listItems.push(itemData);
+        i++;
+      } else if (itemData.indent > baseIndent) {
+        // This is a nested list - parse it recursively
+        const nestedList = this.parseList(lines, i);
+        if (listItems.length > 0) {
+          // Add nested list to the last item
+          listItems[listItems.length - 1].content += '\n' + nestedList.html;
+        }
+        i = nestedList.endIndex;
+      } else {
+        // This item has less indentation - end of current list
+        break;
+      }
+    }
+    
+    // Determine list type from first item
+    const listType = listItems.length > 0 && listItems[0].type === 'numbered' ? 'ol' : 'ul';
+    
+    // Generate HTML
+    let html = `<${listType}>`;
+    listItems.forEach(item => {
+      html += `<li>${item.content}</li>`;
+    });
+    html += `</${listType}>`;
+    
+    return { html, endIndex: i };
+  }
+
+  /**
+   * Parse a single list item
+   * @param {string} line - The line containing the list item
+   * @returns {Object} - Object with type, indent, and content
+   */
+  parseListItem(line) {
+    const match = line.match(/^(\s*)(?:([*+-])|\d+\.)\s+(.*)$/);
+    if (!match) {
+      return { type: 'bullet', indent: 0, content: line.trim() };
+    }
+    
+    const [, indentStr, bulletChar, content] = match;
+    const indent = indentStr.length;
+    const type = bulletChar ? 'bullet' : 'numbered';
+    
+    return { type, indent, content: content.trim() };
   }
 
   processTables(markdown) {
