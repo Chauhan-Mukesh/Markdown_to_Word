@@ -3,6 +3,8 @@ Version 3, 29 June 2007
 
 Copyright (C) 2025 Mukesh Chauhan
 
+                    Markdown to Word Converter
+                    
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
@@ -16,4 +18,36 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-Full license text: https://www.gnu.org/licenses/gpl-3.0.txt
+==============================================================================
+
+                        ADDITIONAL INFORMATION
+
+Project Name: Markdown to Word Converter
+Author: Mukesh Chauhan
+Description: AI-powered web application for converting Markdown documents 
+             to professional Word format with intelligent templates and 
+             real-time preview capabilities.
+
+Repository: https://github.com/Chauhan-Mukesh/Markdown_to_Word
+Website: https://chauhan-mukesh.github.io/Markdown_to_Word/
+
+License Summary:
+- ✅ Commercial use allowed
+- ✅ Modification allowed  
+- ✅ Distribution allowed
+- ✅ Private use allowed
+- ⚖️ License and copyright notice required
+- ⚖️ State changes required
+- 🔓 Source code must be disclosed when distributing
+
+For the complete license text, visit:
+https://www.gnu.org/licenses/gpl-3.0.txt
+
+==============================================================================
+
+This project includes the following third-party libraries:
+- Showdown.js (BSD License) - Markdown to HTML conversion
+- html-docx-js (MIT License) - HTML to Word document conversion  
+- Highlight.js (BSD License) - Syntax highlighting for code blocks
+
+All third-party libraries retain their original licenses and copyrights.
