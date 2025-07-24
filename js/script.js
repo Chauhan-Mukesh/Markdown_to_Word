@@ -44,7 +44,29 @@ let converter, fileManager, editorToolbar, templates, searchReplace, printExport
 
 // Wait for all scripts to load
 window.addEventListener('DOMContentLoaded', () => {
-  converter = new SimpleMarkdownConverter();
+  // Initialize converter with priority: Showdown > SimpleMarkdownConverter fallback
+  if (window.showdown) {
+    converter = new showdown.Converter({
+      tables: true,
+      strikethrough: true,
+      tasklists: true,
+      openLinksInNewWindow: true,
+      backslashEscapesHTMLTags: true,
+      emoji: true,
+      underline: true,
+      simpleLineBreaks: true,
+      requireSpaceBeforeHeadingText: true,
+      parseImgDimensions: true,
+      simplifiedAutoLink: true,
+      literalMidWordUnderscores: true,
+      metadata: true
+    });
+    console.log('✅ Using Showdown.js for markdown conversion');
+  } else {
+    converter = new SimpleMarkdownConverter();
+    console.log('⚠️ Using fallback SimpleMarkdownConverter');
+  }
+  
   fileManager = new FileManager();
   editorToolbar = new EditorToolbar(input);
   templates = new DocumentTemplates();
@@ -69,19 +91,30 @@ window.addEventListener('DOMContentLoaded', () => {
 function initializeTemplates() {
   const templateContainer = document.getElementById('template-container');
   templates.createTemplateSelector(templateContainer, (content) => {
-    if (input.value.trim() === '') {
+    const currentContent = input.value.trim();
+    
+    if (currentContent === '' || currentContent.length <= 10) {
+      // Empty or minimal content - apply template directly
       input.value = content;
       input.dispatchEvent(new Event('input'));
       showNotification('Template loaded successfully! 📋', 'success', 3000);
     } else {
+      // Content exists - show confirmation
       showCustomConfirm(
         '📋 Replace Content',
-        'Replace current content with template?',
+        'Replace current content with template? This action cannot be undone.',
         (confirmed) => {
           if (confirmed) {
             input.value = content;
             input.dispatchEvent(new Event('input'));
             showNotification('Template loaded successfully! 📋', 'success', 3000);
+          }
+          // Reset template selector regardless of confirmation result
+          const templateSelector = document.querySelector('.template-selector');
+          if (templateSelector) {
+            setTimeout(() => {
+              templateSelector.value = '';
+            }, 100);
           }
         }
       );
@@ -413,6 +446,17 @@ clearBtn.addEventListener('click', () => {
           previewBtn.disabled = true;
           exportBtn.disabled = true;
           fileManager.clearAutosaved();
+          
+          // Reset template selector to default state
+          const templateSelector = document.querySelector('.template-selector');
+          if (templateSelector) {
+            templateSelector.value = '';
+          }
+          
+          // Clear document title and author fields
+          titleInput.value = 'My Document';
+          authorInput.value = '';
+          
           showNotification('Document cleared successfully! 🗑️', 'success', 3000);
         }
       }
@@ -1652,9 +1696,10 @@ function initializeCustomConfirmation() {
    * Handle cancel button click
    */
   cancelBtn.addEventListener('click', () => {
+    const callback = window.currentConfirmCallback;
     hideModal(modal);
-    if (window.currentConfirmCallback) {
-      window.currentConfirmCallback(false);
+    if (callback) {
+      callback(false);
     }
   });
   
@@ -1662,9 +1707,10 @@ function initializeCustomConfirmation() {
    * Handle confirm button click
    */
   confirmBtn.addEventListener('click', () => {
+    const callback = window.currentConfirmCallback;
     hideModal(modal);
-    if (window.currentConfirmCallback) {
-      window.currentConfirmCallback(true);
+    if (callback) {
+      callback(true);
     }
   });
   

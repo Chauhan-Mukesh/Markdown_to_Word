@@ -501,56 +501,17 @@ Create a new user.
         const templateKey = e.target.value;
         const template = this.getTemplate(templateKey);
         
-        // Add confirmation for non-empty editor using custom modal
-        const currentContent = document.getElementById('markdown-input')?.value?.trim();
-        if (currentContent && currentContent.length > 50) {
-          // Use the existing custom confirmation modal instead of window.confirm()
-          if (typeof showCustomConfirm === 'function') {
-            showCustomConfirm(
-              '📋 Replace Content',
-              'Replace current content with template? This action cannot be undone.',
-              (confirmed) => {
-                if (confirmed) {
-                  onSelect(template.content);
-                  this.showTemplateNotification(`✅ Applied ${template.name} template`);
-                  // Trigger preview update
-                  const input = document.getElementById('markdown-input');
-                  if (input) {
-                    input.dispatchEvent(new Event('input', { bubbles: true }));
-                  }
-                }
-                // Always reset selector after confirmation
-                select.value = '';
-              }
-            );
-          } else {
-            // Fallback for custom confirmation
-            const proceed = window.confirm('Replace current content with template? This action cannot be undone.');
-            if (!proceed) {
-              select.value = ''; // Reset selector
-              return;
-            }
-            onSelect(template.content);
-            this.showTemplateNotification(`✅ Applied ${template.name} template`);
-            // Trigger preview update
-            const input = document.getElementById('markdown-input');
-            if (input) {
-              input.dispatchEvent(new Event('input', { bubbles: true }));
-            }
-            select.value = ''; // Reset selector
-          }
-        } else {
-          onSelect(template.content);
-          // Trigger preview update
-          const input = document.getElementById('markdown-input');
-          if (input) {
-            input.dispatchEvent(new Event('input', { bubbles: true }));
-          }
-          
-          // Show success notification
-          this.showTemplateNotification(`✅ Applied ${template.name} template`);
-          select.value = ''; // Reset selector
-        }
+        // Call the onSelect callback with template content
+        // The main script (script.js) will handle confirmation logic
+        onSelect(template.content);
+        
+        // Show success notification
+        this.showTemplateNotification(`✅ Applied ${template.name} template`);
+        
+        // Reset selector to default state
+        setTimeout(() => {
+          select.value = '';
+        }, 100);
       }
     });
 
