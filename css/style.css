@@ -2210,6 +2210,11 @@ body.dark-mode a:hover {
     overflow: hidden; /* Better content containment */
   }
   
+  /* Hide panel resizer on mobile since panels stack vertically */
+  .panel-resizer {
+    display: none !important;
+  }
+  
   #editor-panel {
     order: 1;
     min-height: 400px; /* Better height for comfortable editing */

@@ -25,7 +25,6 @@
 const input = document.getElementById('markdown-input');
 const clearBtn = document.getElementById('clear-btn');
 const themeBtn = document.getElementById('theme-btn');
-const previewBtn = document.getElementById('preview-btn');
 const exportBtn = document.getElementById('export-btn');
 const downloadWordBtn = document.getElementById('download-word-btn');
 const downloadHtmlBtn = document.getElementById('download-html-btn');
@@ -350,7 +349,6 @@ input.addEventListener('input', () => {
   const hasContent = content.length > 0;
   const isValidContent = content.length <= 10000000; // 10MB limit for live preview
   
-  previewBtn.disabled = !hasContent || !isValidContent;
   exportBtn.disabled = !hasContent || !isValidContent;
   
   // Debounced auto-formatting to improve performance
@@ -454,8 +452,7 @@ clearBtn.addEventListener('click', () => {
       (confirmed) => {
         if (confirmed) {
           input.value = '';
-          previewPane.innerHTML = '<em>Enter Markdown and click Preview...</em>';
-          previewBtn.disabled = true;
+          previewPane.innerHTML = '<em>Enter Markdown and click Refresh...</em>';
           exportBtn.disabled = true;
           fileManager.clearAutosaved();
           
@@ -767,7 +764,6 @@ function sanitizeHtml(html) {
   
   return temp.innerHTML;
 }
-previewBtn.addEventListener('click', renderPreview);
 refreshBtn.addEventListener('click', renderPreview);
 
 /**
@@ -1090,8 +1086,8 @@ class KeyboardShortcuts {
             break;
           case 'p':
             e.preventDefault();
-            if (!previewBtn.disabled) {
-              previewBtn.click();
+            if (refreshBtn) {
+              refreshBtn.click();
             }
             break;
           case 's':
