@@ -1,10 +1,10 @@
 /* Global & Layout */
-/* TODO: Future improvement - consolidate duplicate CSS selectors and media queries for better maintainability
-   Current duplications found:
-   - 7 @media (max-width: 768px) blocks
-   - 6 .navbar-container blocks  
-   - Multiple other duplicate selectors
-   Consider combining into organized sections to reduce from 3711 lines */
+/* Optimized CSS - Consolidated mobile media queries and removed redundant selectors
+   Improvements made:
+   - Consolidated 7 @media (max-width: 768px) blocks into 1 comprehensive block
+   - Removed redundant CSS selectors  
+   - Reduced from 3720 lines to 3660 lines
+   - Improved maintainability and organization */
 * { box-sizing: border-box; margin: 0; padding: 0; }
 html, body { height: 100%; width: 100%; }
 html { scroll-behavior: smooth; }
@@ -430,174 +430,7 @@ body.dark-mode ::-webkit-scrollbar-thumb:hover {
 /* ===================== */
 /* RESPONSIVE NAVBAR */
 /* ===================== */
-@media (max-width: 768px) {
-  .navbar-toggle {
-    display: flex;
-  }
-  
-  .navbar-container {
-    padding: 0.2rem 0.6rem; /* Further reduced for mobile and consistency */
-    min-height: 36px; /* More compact on mobile */
-  }
-  
-  .logo {
-    font-size: 1.1rem; /* Smaller on mobile */
-  }
-  
-  .navbar-menu {
-    position: absolute;
-    top: 100%;
-    left: 0;
-    right: 0;
-    background: linear-gradient(135deg, #1976d2, #1565c0);
-    flex-direction: column;
-    align-items: stretch;
-    padding: 1.5rem 1rem;
-    gap: 1rem;
-    opacity: 0;
-    visibility: hidden;
-    transform: translateY(-20px);
-    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-    box-shadow: 0 8px 24px rgba(0,0,0,0.15);
-    backdrop-filter: blur(10px);
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
-    z-index: 1000;
-    max-height: 0;
-    overflow: hidden;
-  }
-  
-  .navbar-menu.active {
-    opacity: 1;
-    visibility: visible;
-    transform: translateY(0);
-    max-height: 100vh;
-  }
-  
-  /* Hide all navbar items when menu is not active */
-  .navbar-menu:not(.active) .navbar-item,
-  .navbar-menu:not(.active) .dropdown-menu,
-  .navbar-menu:not(.active) .export-menu {
-    display: none !important;
-  }
-  
-  .navbar-item {
-    width: 100%;
-    justify-content: center;
-    margin-bottom: 0.5rem;
-  }
-  
-  .navbar-item:last-child {
-    margin-bottom: 0;
-  }
-  
-  .navbar-btn,
-  .navbar-input {
-    width: 100%;
-    padding: 0.75rem 1rem;
-    border-radius: 8px;
-    font-size: 0.9rem;
-  }
-  
-  .dropdown {
-    width: 100%;
-  }
-  
-  .dropdown-toggle {
-    width: 100%;
-    justify-content: center;
-    padding: 0.75rem 1rem;
-    border-radius: 8px;
-  }
-  
-  .dropdown-menu {
-    position: static;
-    width: 100%;
-    margin-top: 0.5rem;
-    opacity: 0;
-    visibility: hidden;
-    transform: none;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-    border-radius: 8px;
-    overflow: hidden;
-    max-height: 0;
-    transition: all 0.3s ease;
-  }
-  
-  .dropdown:hover .dropdown-menu,
-  .dropdown.active .dropdown-menu {
-    display: block;
-    opacity: 1;
-    visibility: visible;
-    max-height: 300px;
-  }
-  
-  .export-dropdown {
-    width: 100%;
-  }
-  
-  .export-menu {
-    position: static;
-    width: 100%;
-    margin-top: 0.5rem;
-    opacity: 0;
-    visibility: hidden;
-    transform: none;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-    border-radius: 8px;
-    max-height: 0;
-    overflow: hidden;
-    transition: all 0.3s ease;
-  }
-  
-  .export-dropdown:hover .export-menu,
-  .export-dropdown.active .export-menu {
-    opacity: 1;
-    visibility: visible;
-    max-height: 300px;
-  }
-  
-  .navbar-input {
-    width: 100%;
-    max-width: 300px;
-  }
-
-  .footer-container {
-    flex-direction: column;
-    text-align: center;
-    gap: 0.75rem;
-  }
-  
-  .footer {
-    position: static; /* Non-sticky on mobile */
-    margin-top: auto;
-  }
-  
-  .footer-left p {
-    font-size: 0.8rem;
-  }
-  
-  /* Mobile Panel Layout - Stack Vertically */
-  #app {
-    flex-direction: column;
-    min-height: calc(100vh - 60px); /* Reduced height compensation for non-sticky footer */
-  }
-  
-  .panel {
-    flex: 1 1 auto !important; /* Override flex settings */
-    margin: 0.25rem 0.125rem;
-    min-height: 300px;
-  }
-  
-  #editor-panel,
-  #preview-panel {
-    flex: 1 1 auto !important;
-  }
-  
-  /* Hide resizer on mobile */
-  .panel-resizer {
-    display: none;
-  }
-}
+/* Consolidated mobile styles moved to end of file */
 
 /* ===================== */
 /* MAIN LAYOUT UPDATES */
@@ -989,71 +822,6 @@ body.dark-mode .tools-section {
   }
 }
 
-@media (max-width: 768px) {
-  .toolbar {
-    gap: 0.5rem;
-    padding: 0.75rem;
-  }
-  
-  .toolbar-header {
-    padding: 0.25rem 0;
-    margin-bottom: 0.25rem;
-  }
-  
-  .toolbar-title {
-    font-size: 0.8rem;
-  }
-  
-  .toolbar-master-toggle {
-    width: 28px;
-    height: 28px;
-    font-size: 0.9rem;
-  }
-  
-  /* Show only primary actions and header by default on mobile */
-  .toolbar-sections .toolbar-section:not(.primary-actions) {
-    display: none;
-  }
-  
-  .toolbar.expanded .toolbar-sections .toolbar-section {
-    display: flex;
-  }
-  
-  .primary-actions {
-    position: relative;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 0.5rem;
-    padding: 0.5rem;
-  }
-  
-  /* Mobile toolbar expand indicator */
-  .primary-actions::after {
-    content: '👆 Tap toolbar title to see more tools';
-    position: absolute;
-    bottom: -1.5rem;
-    left: 50%;
-    transform: translateX(-50%);
-    background: rgba(0,0,0,0.8);
-    color: white;
-    padding: 0.25rem 0.5rem;
-    border-radius: 4px;
-    font-size: 0.7rem;
-    cursor: pointer;
-    white-space: nowrap;
-    z-index: 10;
-  }
-  
-  .toolbar.expanded .primary-actions::after {
-    content: '👆 Tap toolbar title to hide tools';
-  }
-  
-  /* Hide the after element when toolbar is collapsed */
-  .toolbar.collapsed .primary-actions::after {
-    display: none;
-  }
-}
-
 /* Collapsible Tools Section */
 .tools-toggle {
   background: none;
@@ -1348,34 +1116,6 @@ body.dark-mode .tools-toggle:hover {
 }
 
 /* Improved Responsive Design */
-@media (max-width: 768px) {
-  .modal-content {
-    margin: 2rem 1rem;
-    padding: 1.5rem;
-    border-radius: 12px;
-    max-width: none;
-    width: calc(100% - 2rem);
-  }
-  
-  .confirmation-modal {
-    max-width: none;
-    width: 100%;
-    margin: 1rem;
-  }
-  
-  .modal-footer {
-    flex-direction: column;
-    gap: 0.75rem;
-  }
-  
-  .btn-secondary,
-  .btn-danger {
-    width: 100%;
-    padding: 1rem;
-    font-size: 1rem;
-  }
-}
-
 /* Buttons & Inputs */
 .input-field {
   flex: 1 1 150px;
@@ -1824,17 +1564,6 @@ body.dark-mode .license {
 }
 
 /* Dark mode responsive navbar */
-@media (max-width: 768px) {
-  body.dark-mode .navbar-menu {
-    background: linear-gradient(135deg, #0d47a1, #1565c0);
-  }
-  
-  body.dark-mode .dropdown-menu {
-    background: rgba(45, 45, 45, 0.95);
-    border-color: rgba(255, 255, 255, 0.1);
-  }
-}
-
 body.dark-mode .panel {
   background: #2d2d2d;
   border-color: #404040;
@@ -2183,242 +1912,6 @@ body.dark-mode a:hover {
 
 /* Enhanced Responsive Design */
 /* Enhanced mobile responsive design */
-@media (max-width: 768px) {
-  .navbar-container {
-    padding: 0.5rem 1rem;
-    min-height: 56px;
-    gap: 0.75rem;
-  }
-  
-  #app { 
-    flex-direction: column !important; /* Force vertical stacking */
-    height: auto;
-    min-height: calc(100vh - 120px); /* Optimized for mobile viewport */
-    padding: 5px 0.5rem; /* Maintain responsive top/bottom spacing on mobile */
-    margin: 0;
-    max-width: 100%;
-    overflow-x: hidden; /* Prevent horizontal scrolling */
-    gap: 0.75rem; /* Better spacing between panels */
-  }
-  
-  .panel { 
-    flex: none !important; /* Override flex grow */
-    width: 100% !important; /* Full width */
-    height: auto;
-    min-height: 280px; /* Optimized minimum height */
-    margin: 0; /* Use gap instead */
-    padding: 1rem;
-    border-radius: 10px; /* Slightly larger radius for modern look */
-    box-sizing: border-box;
-    overflow: hidden; /* Better content containment */
-  }
-  
-  /* Hide panel resizer on mobile since panels stack vertically */
-  .panel-resizer {
-    display: none !important;
-  }
-  
-  #editor-panel {
-    order: 1;
-    min-height: 400px; /* Better height for comfortable editing */
-    padding: 1rem;
-    gap: 0.75rem; /* Better spacing between toolbar and editor */
-  }
-  
-  #preview-panel {
-    order: 2;
-    min-height: 350px; /* Better height for preview content */
-    max-height: 60vh; /* Prevent excessive height on tall screens */
-    overflow-y: auto; /* Enable scrolling for long content */
-  }
-  
-  .formatting-toolbar {
-    flex-wrap: wrap;
-    gap: 0.375rem;
-    padding: 0.75rem;
-    border-radius: 6px;
-    bottom: auto;
-  }
-  
-  .format-btn {
-    font-size: 0.8rem;
-    padding: 0.4rem 0.6rem;
-    min-width: auto;
-    border-radius: 4px;
-  }
-  
-  .btn {
-    font-size: 0.8rem;
-    padding: 0.5rem 0.75rem;
-  }
-  
-  .input-field {
-    font-size: 0.875rem;
-    padding: 0.5rem;
-    margin: 0.125rem;
-    flex: 1 1 auto;
-    min-width: 120px;
-    border-radius: 6px;
-  }
-  
-  .editor {
-    font-size: 0.9rem;
-    min-height: 300px; /* Better minimum height for mobile editing */
-    height: auto;
-    max-height: 50vh; /* Prevent excessive height, enable scrolling */
-    padding: 1rem;
-    line-height: 1.6; /* Better readability */
-    border-radius: 8px;
-    resize: none; /* Disable manual resize on mobile */
-    overflow-y: auto; /* Enable vertical scrolling for long content */
-    margin-bottom: 20px; /* Enhanced bottom margin for mobile for better touch spacing */
-    padding-bottom: 2.5rem; /* Extra internal padding at bottom for mobile editing comfort */
-  }
-  
-  .export-dropdown {
-    position: relative;
-  }
-  
-  .export-menu {
-    position: absolute;
-    top: 100%;
-    right: 0;
-    left: auto;
-    min-width: 180px;
-    z-index: 1000;
-  }
-
-  /* Modal improvements for mobile */
-  .modal-content {
-    margin: 5% auto;
-    padding: 1rem;
-    width: 95%;
-    max-height: 85vh;
-    border-radius: 6px;
-  }
-
-  .close {
-    top: 0.5rem;
-    right: 1rem;
-    font-size: 1.5rem;
-  }
-
-  /* Help modal mobile optimizations */
-  #help-modal .modal-content {
-    padding: 1rem;
-  }
-
-  .help-section {
-    margin-bottom: 1.5rem;
-  }
-
-  .help-section h3 {
-    font-size: 1.1rem;
-    margin-bottom: 0.75rem;
-  }
-
-  .shortcuts-grid {
-    grid-template-columns: 1fr;
-    gap: 0.5rem;
-  }
-
-  .shortcut-item {
-    padding: 0.5rem;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 0.5rem;
-  }
-
-  .shortcut-item span {
-    text-align: left;
-    margin-left: 0;
-    font-size: 0.85rem;
-  }
-
-  .shortcut-item kbd {
-    font-size: 0.75rem;
-    padding: 0.2rem 0.4rem;
-  }
-
-  .markdown-reference {
-    grid-template-columns: 1fr;
-    gap: 0.4rem;
-  }
-
-  .ref-item {
-    padding: 0.5rem;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 0.4rem;
-  }
-
-  .ref-item span {
-    text-align: left;
-    margin-left: 0;
-    font-size: 0.8rem;
-  }
-
-  .ref-item code {
-    font-size: 0.8rem;
-  }
-
-  .tips-list li {
-    padding: 0.5rem 0;
-    font-size: 0.9rem;
-  }
-
-  /* Stats modal mobile optimizations */
-  #stats-modal .modal-content {
-    padding: 1rem;
-  }
-
-  .stats-grid {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 0.75rem;
-    margin-bottom: 1.5rem;
-  }
-
-  .stat-card {
-    padding: 1rem 0.5rem;
-  }
-
-  .stat-number {
-    font-size: 1.5rem;
-  }
-
-  .stat-label {
-    font-size: 0.8rem;
-  }
-
-  .stats-details {
-    grid-template-columns: 1fr;
-    gap: 0.5rem;
-    margin-bottom: 1.5rem;
-  }
-
-  .detail-item {
-    padding: 0.5rem;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 0.4rem;
-  }
-
-  .detail-value {
-    margin-left: 0;
-  }
-
-  .readability-score {
-    padding: 1rem;
-  }
-
-  .readability-item {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 0.5rem;
-    margin-bottom: 0.5rem;
-  }
-}
-
 /* Tablets: optimized layout */
 /* Tablet view improvements - optimized for touch and better spacing */
 @media (min-width: 769px) and (max-width: 1024px) {
@@ -3427,28 +2920,6 @@ body.dark-mode .notification-info {
   border-left-color: #64b5f6;
 }
 
-/* Mobile responsive notifications */
-@media (max-width: 768px) {
-  .notification-container {
-    top: 10px;
-    right: 10px;
-    left: 10px;
-    max-width: none;
-  }
-  
-  .notification {
-    transform: translateY(-100%);
-  }
-  
-  .notification-show {
-    transform: translateY(0);
-  }
-  
-  .notification-hide {
-    transform: translateY(-100%);
-  }
-}
-
 /* Enhanced Help Modal Styles */
 .help-tabs {
   display: flex;
@@ -3685,8 +3156,359 @@ body.dark-mode .ref-item span {
   color: #ccc;
 }
 
-/* Mobile Responsive Help Modal */
+/* ===================== */
+/* CONSOLIDATED MOBILE RESPONSIVE STYLES */
+/* ===================== */
 @media (max-width: 768px) {
+  /* Navbar Styles */
+  .navbar-toggle {
+    display: flex;
+  }
+  
+  .navbar-container {
+    padding: 0.5rem 1rem;
+    min-height: 56px;
+    gap: 0.75rem;
+  }
+  
+  .logo {
+    font-size: 1.1rem;
+  }
+  
+  .navbar-menu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: linear-gradient(135deg, #1976d2, #1565c0);
+    flex-direction: column;
+    align-items: stretch;
+    padding: 1.5rem 1rem;
+    gap: 1rem;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-20px);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+    backdrop-filter: blur(10px);
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    z-index: 1000;
+    max-height: 0;
+    overflow: hidden;
+  }
+  
+  .navbar-menu.active {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+    max-height: 100vh;
+  }
+  
+  .navbar-menu:not(.active) .navbar-item,
+  .navbar-menu:not(.active) .dropdown-menu,
+  .navbar-menu:not(.active) .export-menu {
+    display: none !important;
+  }
+  
+  .navbar-item {
+    width: 100%;
+    justify-content: center;
+    margin-bottom: 0.5rem;
+  }
+  
+  .navbar-item:last-child {
+    margin-bottom: 0;
+  }
+  
+  .navbar-btn,
+  .navbar-input {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border-radius: 8px;
+    font-size: 0.9rem;
+  }
+  
+  .dropdown {
+    width: 100%;
+  }
+  
+  .dropdown-toggle {
+    width: 100%;
+    justify-content: center;
+    padding: 0.75rem 1rem;
+    border-radius: 8px;
+  }
+  
+  .dropdown-menu {
+    position: static;
+    width: 100%;
+    margin-top: 0.5rem;
+    opacity: 0;
+    visibility: hidden;
+    transform: none;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    border-radius: 8px;
+    overflow: hidden;
+    max-height: 0;
+    transition: all 0.3s ease;
+  }
+  
+  .dropdown:hover .dropdown-menu,
+  .dropdown.active .dropdown-menu {
+    display: block;
+    opacity: 1;
+    visibility: visible;
+    max-height: 300px;
+  }
+  
+  .export-dropdown {
+    width: 100%;
+    position: relative;
+  }
+  
+  .export-menu {
+    position: static;
+    width: 100%;
+    margin-top: 0.5rem;
+    opacity: 0;
+    visibility: hidden;
+    transform: none;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    border-radius: 8px;
+    max-height: 0;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    top: 100%;
+    right: 0;
+    left: auto;
+    min-width: 180px;
+    z-index: 1000;
+  }
+  
+  .export-dropdown:hover .export-menu,
+  .export-dropdown.active .export-menu {
+    opacity: 1;
+    visibility: visible;
+    max-height: 300px;
+  }
+  
+  .navbar-input {
+    width: 100%;
+    max-width: 300px;
+  }
+
+  /* Footer Styles */
+  .footer-container {
+    flex-direction: column;
+    text-align: center;
+    gap: 0.75rem;
+  }
+  
+  .footer {
+    position: static;
+    margin-top: auto;
+  }
+  
+  .footer-left p {
+    font-size: 0.8rem;
+  }
+  
+  /* Main Layout Styles */
+  #app { 
+    flex-direction: column !important;
+    height: auto;
+    min-height: calc(100vh - 60px);
+    padding: 5px 0.5rem;
+    margin: 0;
+    max-width: 100%;
+    overflow-x: hidden;
+    gap: 0.75rem;
+  }
+  
+  .panel { 
+    flex: none !important;
+    width: 100% !important;
+    height: auto;
+    min-height: 280px;
+    margin: 0;
+    padding: 1rem;
+    border-radius: 10px;
+    box-sizing: border-box;
+    overflow: hidden;
+  }
+  
+  .panel-resizer {
+    display: none !important;
+  }
+  
+  #editor-panel {
+    order: 1;
+    min-height: 400px;
+    padding: 1rem;
+    gap: 0.75rem;
+  }
+  
+  #preview-panel {
+    order: 2;
+    min-height: 350px;
+    max-height: 60vh;
+    overflow-y: auto;
+  }
+  
+  /* Toolbar Styles */
+  .toolbar {
+    gap: 0.5rem;
+    padding: 0.75rem;
+  }
+  
+  .toolbar-header {
+    padding: 0.25rem 0;
+    margin-bottom: 0.25rem;
+  }
+  
+  .toolbar-title {
+    font-size: 0.8rem;
+  }
+  
+  .toolbar-master-toggle {
+    width: 28px;
+    height: 28px;
+    font-size: 0.9rem;
+  }
+  
+  .toolbar-sections .toolbar-section:not(.primary-actions) {
+    display: none;
+  }
+  
+  .toolbar.expanded .toolbar-sections .toolbar-section {
+    display: flex;
+  }
+  
+  .primary-actions {
+    position: relative;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.5rem;
+  }
+  
+  .primary-actions::after {
+    content: '👆 Tap toolbar title to see more tools';
+    position: absolute;
+    bottom: -1.5rem;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0,0,0,0.8);
+    color: white;
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+    font-size: 0.7rem;
+    cursor: pointer;
+    white-space: nowrap;
+    z-index: 10;
+  }
+  
+  .toolbar.expanded .primary-actions::after {
+    content: '👆 Tap toolbar title to hide tools';
+  }
+  
+  .toolbar.collapsed .primary-actions::after {
+    display: none;
+  }
+  
+  /* Formatting Toolbar */
+  .formatting-toolbar {
+    flex-wrap: wrap;
+    gap: 0.375rem;
+    padding: 0.75rem;
+    border-radius: 6px;
+    bottom: auto;
+  }
+  
+  .format-btn {
+    font-size: 0.8rem;
+    padding: 0.4rem 0.6rem;
+    min-width: auto;
+    border-radius: 4px;
+  }
+  
+  /* Buttons and Inputs */
+  .btn {
+    font-size: 0.8rem;
+    padding: 0.5rem 0.75rem;
+  }
+  
+  .input-field {
+    font-size: 0.875rem;
+    padding: 0.5rem;
+    margin: 0.125rem;
+    flex: 1 1 auto;
+    min-width: 120px;
+    border-radius: 6px;
+  }
+  
+  /* Editor */
+  .editor {
+    font-size: 0.9rem;
+    min-height: 300px;
+    height: auto;
+    max-height: 50vh;
+    padding: 1rem;
+    line-height: 1.6;
+    border-radius: 8px;
+    resize: none;
+    overflow-y: auto;
+    margin-bottom: 20px;
+    padding-bottom: 2.5rem;
+  }
+  
+  /* Modal Styles */
+  .modal-content {
+    margin: 5% auto;
+    padding: 1rem;
+    width: 95%;
+    max-height: 85vh;
+    border-radius: 6px;
+  }
+  
+  .confirmation-modal {
+    max-width: none;
+    width: 100%;
+    margin: 1rem;
+  }
+  
+  .modal-footer {
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+  
+  .btn-secondary,
+  .btn-danger {
+    width: 100%;
+    padding: 1rem;
+    font-size: 1rem;
+  }
+  
+  .close {
+    top: 0.5rem;
+    right: 1rem;
+    font-size: 1.5rem;
+  }
+
+  /* Help Modal */
+  #help-modal .modal-content {
+    padding: 1rem;
+  }
+
+  .help-section {
+    margin-bottom: 1.5rem;
+  }
+
+  .help-section h3 {
+    font-size: 1.1rem;
+    margin-bottom: 0.75rem;
+  }
+  
   .help-tabs {
     flex-wrap: wrap;
     gap: 2px;
@@ -3702,20 +3524,138 @@ body.dark-mode .ref-item span {
   .markdown-categories {
     grid-template-columns: 1fr;
   }
-  
+
   .shortcuts-grid {
     grid-template-columns: 1fr;
+    gap: 0.5rem;
   }
-  
-  .ref-item {
+
+  .shortcut-item {
+    padding: 0.5rem;
     flex-direction: column;
     align-items: flex-start;
-    gap: 8px;
+    gap: 0.5rem;
   }
-  
+
+  .shortcut-item span {
+    text-align: left;
+    margin-left: 0;
+    font-size: 0.85rem;
+  }
+
+  .shortcut-item kbd {
+    font-size: 0.75rem;
+    padding: 0.2rem 0.4rem;
+  }
+
+  .markdown-reference {
+    grid-template-columns: 1fr;
+    gap: 0.4rem;
+  }
+
+  .ref-item {
+    padding: 0.5rem;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.4rem;
+  }
+
+  .ref-item span {
+    text-align: left;
+    margin-left: 0;
+    font-size: 0.8rem;
+  }
+
   .ref-item code {
+    font-size: 0.8rem;
     min-width: auto;
     width: 100%;
+  }
+
+  .tips-list li {
+    padding: 0.5rem 0;
+    font-size: 0.9rem;
+  }
+
+  /* Stats Modal */
+  #stats-modal .modal-content {
+    padding: 1rem;
+  }
+
+  .stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.75rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .stat-card {
+    padding: 1rem 0.5rem;
+  }
+
+  .stat-number {
+    font-size: 1.5rem;
+  }
+
+  .stat-label {
+    font-size: 0.8rem;
+  }
+
+  .stats-details {
+    grid-template-columns: 1fr;
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .detail-item {
+    padding: 0.5rem;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.4rem;
+  }
+
+  .detail-value {
+    margin-left: 0;
+  }
+
+  .readability-score {
+    padding: 1rem;
+  }
+
+  .readability-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+  }
+  
+  /* Notifications */
+  .notification-container {
+    top: 10px;
+    right: 10px;
+    left: 10px;
+    max-width: none;
+  }
+  
+  .notification {
+    transform: translateY(-100%);
+  }
+  
+  .notification-show {
+    transform: translateY(0);
+  }
+  
+  .notification-hide {
+    transform: translateY(-100%);
+  }
+  
+  /* Dark Mode Mobile Specific Styles */
+  body.dark-mode .navbar-menu {
+    background: linear-gradient(135deg, #0d47a1, #1565c0);
+  }
+  
+  body.dark-mode .dropdown-menu {
+    background: rgba(45, 45, 45, 0.95);
+    border-color: rgba(255, 255, 255, 0.1);
   }
 }
 }
