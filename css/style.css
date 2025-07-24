@@ -64,9 +64,9 @@ body.dark-mode ::-webkit-scrollbar-thumb:hover {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0.75rem 2rem; /* Better padding for desktop */
-  gap: 1.5rem; /* Increased gap for better spacing */
-  min-height: 60px; /* Restored better height */
+  padding: 0.5rem 1.5rem; /* Reduced padding for smaller navbar */
+  gap: 1rem; /* Reduced gap */
+  min-height: 48px; /* Reduced height from 60px */
 }
 
 .navbar-brand {
@@ -76,7 +76,7 @@ body.dark-mode ::-webkit-scrollbar-thumb:hover {
 }
 
 .logo {
-  font-size: 1.5rem;
+  font-size: 1.3rem; /* Reduced from 1.5rem */
   font-weight: 800;
   color: white;
   text-decoration: none;
@@ -89,7 +89,7 @@ body.dark-mode ::-webkit-scrollbar-thumb:hover {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 0.4rem; /* Reduced gap */
   transition: all 0.3s ease;
 }
 
@@ -118,6 +118,8 @@ body.dark-mode ::-webkit-scrollbar-thumb:hover {
   border: 1px solid rgba(255, 255, 255, 0.3);
   backdrop-filter: blur(10px);
   transition: all 0.3s ease;
+  padding: 0.4rem 0.6rem; /* Reduced padding */
+  font-size: 0.8rem; /* Smaller font size */
 }
 
 .navbar-btn:hover {
@@ -133,14 +135,14 @@ body.dark-mode ::-webkit-scrollbar-thumb:hover {
 }
 
 .navbar-input {
-  padding: 0.5rem 0.75rem;
+  padding: 0.4rem 0.6rem; /* Reduced padding */
   border: 1px solid rgba(255, 255, 255, 0.3);
   border-radius: 4px;
   background: rgba(255, 255, 255, 0.9);
   color: #333;
-  font-size: 0.875rem;
+  font-size: 0.8rem; /* Smaller font size */
   transition: all 0.3s ease;
-  min-width: 120px;
+  min-width: 100px; /* Reduced min-width */
 }
 
 .navbar-input:focus {
@@ -158,11 +160,11 @@ body.dark-mode ::-webkit-scrollbar-thumb:hover {
   background: rgba(255, 255, 255, 0.2);
   color: white;
   border: 1px solid rgba(255, 255, 255, 0.3);
-  padding: 0.5rem 0.75rem;
+  padding: 0.4rem 0.6rem; /* Reduced padding */
   border-radius: 4px;
   cursor: pointer;
   transition: all 0.3s ease;
-  font-size: 0.875rem;
+  font-size: 0.8rem; /* Smaller font size */
   backdrop-filter: blur(10px);
 }
 
@@ -533,8 +535,8 @@ body.dark-mode ::-webkit-scrollbar-thumb:hover {
 .formatting-toolbar {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.5rem; /* Better spacing between buttons */
-  padding: 1rem;
+  gap: 0.4rem; /* Slightly reduced spacing */
+  padding: 0.8rem; /* Reduced padding */
   background: linear-gradient(135deg, #f8f9fa, #e9ecef);
   border: 1px solid #dee2e6;
   border-radius: 8px;
@@ -1150,13 +1152,13 @@ body.dark-mode .tools-toggle:hover {
 .primary-btn:hover { background: #115293; }
 
 .format-btn {
-  padding: 0.5rem 0.75rem; /* Better padding */
+  padding: 0.4rem 0.6rem; /* Reduced padding */
   border: 1px solid #dee2e6;
   border-radius: 6px; /* Rounded corners */
   background: white;
   color: #495057;
   cursor: pointer;
-  font-size: 0.875rem; /* Slightly larger */
+  font-size: 0.8rem; /* Reduced font size */
   font-weight: 500; /* Medium weight for better visibility */
   transition: all 0.3s ease;
   box-shadow: 0 1px 3px rgba(0,0,0,0.1);
@@ -1233,6 +1235,13 @@ body.dark-mode .tools-toggle:hover {
 
 .format-dropdown-item:active {
   background: #e9ecef;
+}
+
+/* Sub-item indentation in dropdown */
+.format-dropdown-item.sub-item {
+  padding-left: 2rem;
+  font-style: italic;
+  color: #6c757d;
 }
 
 /* Export Dropdown */
@@ -1334,6 +1343,35 @@ body.dark-mode .tools-toggle:hover {
 .preview blockquote { border-left: 4px solid #90a4ae; padding-left: 1rem; color: #546e7a; font-style: italic; }
 .preview pre { background: #263238; color: #eceff1; padding: 0.75rem; border-radius: 4px; overflow-x: auto; }
 .preview code { background: #eceff1; padding: 0.2em 0.4em; border-radius: 3px; }
+
+/* Enhanced list styling with proper indentation */
+.preview ul, .preview ol {
+  margin: 1em 0;
+  padding-left: 0;
+}
+
+.preview li {
+  margin: 0.5em 0;
+  margin-left: 2rem; /* Base indentation for all list items */
+}
+
+/* Nested lists with progressive indentation */
+.preview ul ul, .preview ol ol, .preview ul ol, .preview ol ul {
+  margin: 0.25em 0;
+  margin-left: 1.5rem; /* Additional indentation for nested lists */
+}
+
+/* Third level nesting */
+.preview ul ul ul, .preview ol ol ol, 
+.preview ul ol ul, .preview ol ul ol,
+.preview ul ul ol, .preview ol ol ul {
+  margin-left: 1.5rem; /* Further indentation for deeply nested lists */
+}
+
+/* Make sure nested list items have appropriate spacing */
+.preview li li {
+  margin-left: 0; /* Reset since parent ul/ol already provides indentation */
+}
 
 /* Enhanced table styling */
 .preview table,
@@ -1537,6 +1575,11 @@ body.dark-mode .format-dropdown-item:hover {
 
 body.dark-mode .format-dropdown-item:active {
   background: #555;
+}
+
+/* Dark mode sub-items */
+body.dark-mode .format-dropdown-item.sub-item {
+  color: #aaa;
 }
 
 body.dark-mode .input-field {
