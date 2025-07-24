@@ -1,6 +1,7 @@
 /* Global & Layout */
 * { box-sizing: border-box; margin: 0; padding: 0; }
 html, body { height: 100%; width: 100%; }
+html { scroll-behavior: smooth; }
 body { 
   font-family: 'Segoe UI', sans-serif; 
   background: #f0f4f8; 
@@ -8,6 +9,40 @@ body {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
+}
+
+/* Enhanced scrollbar styling */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 4px;
+  transition: background 0.3s ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #a8a8a8;
+}
+
+/* Dark mode scrollbar */
+body.dark-mode ::-webkit-scrollbar-track {
+  background: #2d2d2d;
+}
+
+body.dark-mode ::-webkit-scrollbar-thumb {
+  background: #555;
+}
+
+body.dark-mode ::-webkit-scrollbar-thumb:hover {
+  background: #777;
 }
 
 /* ===================== */
@@ -62,7 +97,7 @@ body {
   align-items: center;
   gap: 1rem;
   flex: 1;
-  justify-content: flex-end;
+  justify-content: flex-start;
   flex-wrap: wrap;
 }
 
@@ -327,12 +362,23 @@ body {
     box-shadow: 0 8px 24px rgba(0,0,0,0.15);
     backdrop-filter: blur(10px);
     border-top: 1px solid rgba(255, 255, 255, 0.1);
+    z-index: 1000;
+    max-height: 0;
+    overflow: hidden;
   }
   
   .navbar-menu.active {
     opacity: 1;
     visibility: visible;
     transform: translateY(0);
+    max-height: 100vh;
+  }
+  
+  /* Hide all navbar items when menu is not active */
+  .navbar-menu:not(.active) .navbar-item,
+  .navbar-menu:not(.active) .dropdown-menu,
+  .navbar-menu:not(.active) .export-menu {
+    display: none !important;
   }
   
   .navbar-item {
@@ -368,17 +414,22 @@ body {
     position: static;
     width: 100%;
     margin-top: 0.5rem;
-    opacity: 1;
-    visibility: visible;
+    opacity: 0;
+    visibility: hidden;
     transform: none;
     box-shadow: 0 4px 12px rgba(0,0,0,0.1);
     border-radius: 8px;
     overflow: hidden;
+    max-height: 0;
+    transition: all 0.3s ease;
   }
   
   .dropdown:hover .dropdown-menu,
   .dropdown.active .dropdown-menu {
     display: block;
+    opacity: 1;
+    visibility: visible;
+    max-height: 300px;
   }
   
   .export-dropdown {
@@ -389,11 +440,21 @@ body {
     position: static;
     width: 100%;
     margin-top: 0.5rem;
-    opacity: 1;
-    visibility: visible;
+    opacity: 0;
+    visibility: hidden;
     transform: none;
     box-shadow: 0 4px 12px rgba(0,0,0,0.1);
     border-radius: 8px;
+    max-height: 0;
+    overflow: hidden;
+    transition: all 0.3s ease;
+  }
+  
+  .export-dropdown:hover .export-menu,
+  .export-dropdown.active .export-menu {
+    opacity: 1;
+    visibility: visible;
+    max-height: 300px;
   }
   
   .navbar-input {
@@ -429,8 +490,11 @@ body {
   }
   
   .footer {
-    position: relative; /* Not sticky on mobile */
-    margin-top: 1rem;
+    position: fixed; /* Fixed at bottom on mobile */
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin-top: 0;
   }
   
   .footer-left p {
@@ -443,10 +507,10 @@ body {
 /* ===================== */
 #app { 
   display: flex; 
-  flex-wrap: wrap; 
+  flex-wrap: nowrap; /* Prevent wrapping on large screens */
   flex: 1;
   min-height: calc(100vh - 120px); /* Account for navbar (60px) + footer (60px) */
-  max-width: 1600px; /* Maximum width for ultra-wide screens */
+  max-width: 1920px; /* Maximum width for ultra-wide screens */
   margin: 0 auto; /* Center the app */
   padding: 0 1rem; /* Side padding for better appearance */
   overflow-x: hidden; /* Prevent horizontal scrolling */
@@ -1873,13 +1937,13 @@ body.dark-mode a:hover {
 /* Ultra-wide screens: optimized layout */
 @media (min-width: 1400px) {
   .navbar-container {
-    max-width: 1600px;
+    max-width: 1920px;
     padding: 1rem 3rem;
     gap: 2rem;
   }
   
   #app {
-    max-width: 1600px;
+    max-width: 1920px;
     padding: 0 2rem;
   }
   
@@ -1908,78 +1972,6 @@ body.dark-mode a:hover {
     min-width: 140px;
     padding: 0.6rem 0.9rem;
   }
-}
-
-/* Base Modal Styles */
-.modal {
-  display: none;
-  position: fixed;
-  z-index: 1000;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  overflow: auto;
-  background-color: rgba(0, 0, 0, 0.5);
-  animation: fadeIn 0.3s ease;
-}
-
-.modal.show {
-  display: block;
-}
-
-.modal-content {
-  background-color: #fff;
-  margin: 2% auto;
-  padding: 2rem;
-  border: none;
-  border-radius: 8px;
-  width: 90%;
-  max-width: 600px;
-  max-height: 85vh;
-  overflow-y: auto;
-  position: relative;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-  animation: slideIn 0.3s ease;
-}
-
-.close {
-  color: #999;
-  float: right;
-  font-size: 2rem;
-  font-weight: bold;
-  position: absolute;
-  top: 1rem;
-  right: 1.5rem;
-  cursor: pointer;
-  transition: color 0.2s ease;
-  z-index: 1001;
-}
-
-.close:hover,
-.close:focus {
-  color: #333;
-  text-decoration: none;
-}
-
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
-
-@keyframes slideIn {
-  from { transform: translateY(-50px); opacity: 0; }
-  to { transform: translateY(0); opacity: 1; }
-}
-
-@keyframes slideInRight {
-  from { transform: translateX(100%); opacity: 0; }
-  to { transform: translateX(0); opacity: 1; }
-}
-
-@keyframes slideOutRight {
-  from { transform: translateX(0); opacity: 1; }
-  to { transform: translateX(100%); opacity: 0; }
 }
 
 /* Help Modal Enhancements */
