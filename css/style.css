@@ -617,62 +617,99 @@ body.dark-mode ::-webkit-scrollbar-thumb:hover {
   flex-direction: column; 
   padding: 1.5rem; /* Increased padding for better spacing */
   overflow: hidden; 
-  background: #fff; 
-  transition: background 0.3s, flex 0.3s ease; /* Added flex transition for smooth resizing */
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-  border-radius: 8px; /* Add border radius for modern look */
-  margin: 0.25rem; /* Reduced margin for better space utilization */ 
+  background: linear-gradient(135deg, #ffffff, #fafbfc); 
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); /* Enhanced transition */
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08), 0 2px 4px rgba(0,0,0,0.04);
+  border-radius: 12px; /* Increased border radius for modern look */
+  margin: 0.25rem; /* Reduced margin for better space utilization */
+  border: 1px solid rgba(25, 118, 210, 0.08);
 }
 
-/* Editor Panel */
+/* Editor Panel - Enhanced styling */
 #editor-panel {
   flex: 0 0 55%; /* Default 55% width */
   margin-right: 0.125rem; /* Half margin on right */
+  background: linear-gradient(135deg, #ffffff, #f8f9fa);
+  border: 1px solid rgba(25, 118, 210, 0.12);
 }
 
-/* Preview Panel */  
+#editor-panel:hover {
+  box-shadow: 0 6px 20px rgba(0,0,0,0.12), 0 3px 6px rgba(0,0,0,0.06);
+  border-color: rgba(25, 118, 210, 0.2);
+  transform: translateY(-1px);
+}
+
+/* Preview Panel - Enhanced styling */  
 #preview-panel {
   flex: 0 0 45%; /* Default 45% width */
   margin-left: 0.125rem; /* Half margin on left */
+  background: linear-gradient(135deg, #ffffff, #f0f4f8);
+  border: 1px solid rgba(25, 118, 210, 0.08);
 }
 
-/* Panel Resizer */
+#preview-panel:hover {
+  box-shadow: 0 6px 20px rgba(0,0,0,0.12), 0 3px 6px rgba(0,0,0,0.06);
+  border-color: rgba(25, 118, 210, 0.15);
+  transform: translateY(-1px);
+}
+
+/* Panel Resizer - Enhanced with better colors and transitions */
 .panel-resizer {
   width: 10px;
-  background: transparent;
+  background: linear-gradient(180deg, rgba(25, 118, 210, 0.1), rgba(25, 118, 210, 0.05));
   cursor: col-resize;
   position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  transition: background 0.2s ease;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  border-radius: 3px;
+  margin: 0 2px;
 }
 
 .panel-resizer:hover {
-  background: rgba(25, 118, 210, 0.1);
+  background: linear-gradient(180deg, rgba(25, 118, 210, 0.2), rgba(25, 118, 210, 0.1));
+  transform: scaleX(1.2);
+  box-shadow: 0 0 12px rgba(25, 118, 210, 0.15);
 }
 
 .panel-resizer::before {
-  content: "⋮";
-  font-size: 18px;
-  color: #999;
+  content: "|||";
+  font-size: 12px;
+  color: rgba(25, 118, 210, 0.6);
   font-weight: bold;
-  transform: rotate(90deg);
-  transition: color 0.2s ease;
+  letter-spacing: 1px;
+  transition: all 0.3s ease;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
 }
 
 .panel-resizer:hover::before {
-  color: #1976d2;
+  color: rgba(25, 118, 210, 0.9);
+  text-shadow: 0 2px 4px rgba(25, 118, 210, 0.3);
+  transform: scale(1.1);
 }
 
-/* Active resizing state */
+/* Active resizing state with enhanced visual feedback */
 .panel-resizer.resizing {
-  background: rgba(25, 118, 210, 0.2);
+  background: linear-gradient(180deg, rgba(25, 118, 210, 0.3), rgba(25, 118, 210, 0.15));
+  transform: scaleX(1.3);
+  box-shadow: 0 0 20px rgba(25, 118, 210, 0.25);
 }
 
 .panel-resizer.resizing::before {
-  color: #1976d2;
+  color: rgba(25, 118, 210, 1);
+  transform: scale(1.2);
+  text-shadow: 0 2px 6px rgba(25, 118, 210, 0.4);
+}
+
+/* Smooth transitions for panels during resize */
+.panel.resizing {
+  transition: none !important; /* Disable transitions during active resize for performance */
+}
+
+.panel:not(.resizing) {
+  transition: flex 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 #editor-panel { 
   padding: 1.5rem; /* Match panel padding */
@@ -1868,9 +1905,65 @@ body.dark-mode .preview {
   border-color: #404040;
 }
 
+/* Dark Mode Support for Enhanced Panels and Resizer */
+body.dark-mode .panel {
+  background: linear-gradient(135deg, #2d2d2d, #262626);
+  border-color: rgba(100, 181, 246, 0.15);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.25), 0 2px 4px rgba(0,0,0,0.15);
+}
+
+body.dark-mode #editor-panel {
+  background: linear-gradient(135deg, #2d2d2d, #2a2a2a);
+  border-color: rgba(100, 181, 246, 0.2);
+}
+
+body.dark-mode #editor-panel:hover {
+  box-shadow: 0 6px 20px rgba(0,0,0,0.35), 0 3px 6px rgba(0,0,0,0.2);
+  border-color: rgba(100, 181, 246, 0.3);
+}
+
+body.dark-mode #preview-panel {
+  background: linear-gradient(135deg, #2d2d2d, #252525);
+  border-color: rgba(100, 181, 246, 0.15);
+}
+
+body.dark-mode #preview-panel:hover {
+  box-shadow: 0 6px 20px rgba(0,0,0,0.35), 0 3px 6px rgba(0,0,0,0.2);
+  border-color: rgba(100, 181, 246, 0.25);
+}
+
+body.dark-mode .panel-resizer {
+  background: linear-gradient(180deg, rgba(100, 181, 246, 0.15), rgba(100, 181, 246, 0.08));
+}
+
+body.dark-mode .panel-resizer:hover {
+  background: linear-gradient(180deg, rgba(100, 181, 246, 0.25), rgba(100, 181, 246, 0.15));
+  box-shadow: 0 0 12px rgba(100, 181, 246, 0.2);
+}
+
+body.dark-mode .panel-resizer::before {
+  color: rgba(100, 181, 246, 0.7);
+}
+
+body.dark-mode .panel-resizer:hover::before {
+  color: rgba(100, 181, 246, 1);
+  text-shadow: 0 2px 4px rgba(100, 181, 246, 0.4);
+}
+
+body.dark-mode .panel-resizer.resizing {
+  background: linear-gradient(180deg, rgba(100, 181, 246, 0.35), rgba(100, 181, 246, 0.2));
+  box-shadow: 0 0 20px rgba(100, 181, 246, 0.3);
+}
+
+body.dark-mode .panel-resizer.resizing::before {
+  color: rgba(100, 181, 246, 1);
+  text-shadow: 0 2px 6px rgba(100, 181, 246, 0.5);
+}
+
 body.dark-mode .darkable {
-  background: #2d2d2d;
+  background: linear-gradient(135deg, #2d2d2d, #262626);
   color: #e8e8e8;
+  transition: all 0.3s ease;
 }
 
 body.dark-mode .darkable h2 {
