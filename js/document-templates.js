@@ -54,57 +54,88 @@ Brief overview of the report contents and key findings.
 Description of how the analysis was conducted.
 
 ## Key Findings
-- Finding 1
-- Finding 2
-- Finding 3
+- **Finding 1**: Description of first key finding with supporting data
+- **Finding 2**: Description of second key finding with supporting data  
+- **Finding 3**: Description of third key finding with supporting data
 
 ## Recommendations
-1. Recommendation 1
-2. Recommendation 2
-3. Recommendation 3
+1. **Priority Recommendation**: Detailed description and expected impact
+2. **Secondary Recommendation**: Detailed description and timeline
+3. **Long-term Recommendation**: Detailed description and resource requirements
 
 ## Conclusion
 Summary of conclusions and next steps.
 
+## Appendix
+- Data sources
+- Methodology details
+- Supporting documentation
+
 ---
 
-*Report prepared on ${new Date().toLocaleDateString()}*`
+*Report prepared on ${new Date().toLocaleDateString()}*  
+*Document Classification: [Internal/Confidential/Public]*`
       },
 
       meeting: {
         name: '🤝 Meeting Notes',
+        description: 'Structured meeting documentation template',
+        category: 'business',
         content: `# Meeting Notes
 
-**Date:** ${new Date().toLocaleDateString()}
-**Time:** 
-**Attendees:** 
-**Meeting Chair:** 
+**Date:** ${new Date().toLocaleDateString()}  
+**Time:** [Start Time] - [End Time]  
+**Location:** [Physical/Virtual Location]  
+**Meeting Type:** [Regular/Ad-hoc/Emergency]  
+
+## Attendees
+- **Chair:** [Name, Title]
+- **Attendees:**
+    - [Name, Title, Department]
+    - [Name, Title, Department]
+    - [Name, Title, Department]
+- **Absent:** [Names if applicable]
 
 ## Agenda
-1. Item 1
-2. Item 2
-3. Item 3
+1. **Review of Previous Action Items** *(10 min)*
+2. **[Agenda Item 1]** *(15 min)*
+3. **[Agenda Item 2]** *(20 min)*
+4. **[Agenda Item 3]** *(15 min)*
+5. **Next Steps & Action Items** *(10 min)*
 
 ## Discussion Points
 
-### Topic 1
-- Discussion notes
-- Key points raised
+### [Topic 1]
+- **Discussion:** Key points discussed
+- **Decisions Made:** 
+    - Decision 1 with rationale
+    - Decision 2 with rationale
+- **Concerns Raised:** Any unresolved issues
 
-### Topic 2
-- Discussion notes
-- Decisions made
+### [Topic 2]
+- **Discussion:** Key points discussed
+- **Decisions Made:** 
+    - Decision 1 with rationale
+- **Follow-up Required:** Next steps needed
 
 ## Action Items
-| Action | Owner | Due Date |
-|--------|-------|----------|
-| Action 1 | Name | Date |
-| Action 2 | Name | Date |
+| Action Item | Owner | Due Date | Priority | Status |
+|-------------|-------|----------|----------|--------|
+| [Specific action item] | [Name] | [Date] | [High/Medium/Low] | [Not Started] |
+| [Specific action item] | [Name] | [Date] | [High/Medium/Low] | [Not Started] |
+| [Specific action item] | [Name] | [Date] | [High/Medium/Low] | [Not Started] |
 
 ## Next Meeting
-**Date:** 
-**Time:** 
-**Location:** `
+**Date:** [Date]  
+**Time:** [Time]  
+**Location:** [Location]  
+**Agenda Items:** 
+- Review action items from this meeting
+- [Planned agenda items]
+
+---
+*Minutes prepared by: [Name]*  
+*Document Status: [Draft/Final]*`
       },
 
       proposal: {
@@ -147,47 +178,172 @@ Summary and call to action.`
 
       readme: {
         name: '📖 README Documentation',
+        description: 'Comprehensive project documentation template',
+        category: 'technical',
         content: `# Project Name
 
-Brief description of what this project does.
+[![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+[![Version](https://img.shields.io/badge/version-1.0.0-green.svg)](https://github.com/user/repo/releases)
+[![Build Status](https://img.shields.io/badge/build-passing-brightgreen.svg)](https://github.com/user/repo/actions)
 
-## Features
-- Feature 1
-- Feature 2
-- Feature 3
+> Brief, compelling description of what this project does and why it matters.
 
-## Installation
+## ✨ Features
+
+- 🚀 **Feature 1**: Description of key feature with benefits
+- 📦 **Feature 2**: Description of second feature
+- 🔧 **Feature 3**: Description of third feature
+- 🎯 **Feature 4**: Description of fourth feature
+
+## 🚀 Quick Start
+
+### Prerequisites
+
+- Node.js 16+ or Python 3.8+
+- Git
+- [Other specific requirements]
+
+### Installation
 
 \`\`\`bash
-npm install project-name
+# Clone the repository
+git clone https://github.com/username/project-name.git
+
+# Navigate to project directory
+cd project-name
+
+# Install dependencies
+npm install
+# or
+pip install -r requirements.txt
 \`\`\`
 
-## Usage
+### Basic Usage
 
 \`\`\`javascript
+// JavaScript example
 const project = require('project-name');
-project.doSomething();
+
+// Initialize and use
+const instance = new project.ClassName({
+    option1: 'value1',
+    option2: 'value2'
+});
+
+const result = instance.doSomething();
+console.log(result);
 \`\`\`
 
-## API Reference
+\`\`\`python
+# Python example
+from project_name import ClassName
 
-### Method 1
-Description of method 1.
+# Initialize and use
+instance = ClassName(
+    option1='value1',
+    option2='value2'
+)
+
+result = instance.do_something()
+print(result)
+\`\`\`
+
+## 📚 Documentation
+
+### API Reference
+
+#### \`ClassName(options)\`
+Creates a new instance of the main class.
 
 **Parameters:**
-- \`param1\` (string): Description
-- \`param2\` (number): Description
+- \`options\` (Object): Configuration options
+  - \`option1\` (string): Description of option 1
+  - \`option2\` (number): Description of option 2
 
-**Returns:** Description of return value
+**Returns:** \`ClassName\` instance
 
-### Method 2
-Description of method 2.
+**Example:**
+\`\`\`javascript
+const instance = new ClassName({
+    option1: 'example',
+    option2: 42
+});
+\`\`\`
 
-## Contributing
-Guidelines for contributing to this project.
+#### \`instance.doSomething(input)\`
+Performs the main operation.
 
-## License
-This project is licensed under the MIT License.`
+**Parameters:**
+- \`input\` (string): Input data to process
+
+**Returns:** \`Promise<Object>\` - Processing result
+
+### Configuration
+
+Create a \`.env\` file in the root directory:
+
+\`\`\`env
+API_KEY=your_api_key_here
+DEBUG=true
+PORT=3000
+\`\`\`
+
+## 🧪 Testing
+
+\`\`\`bash
+# Run all tests
+npm test
+
+# Run tests with coverage
+npm run test:coverage
+
+# Run specific test file
+npm test -- tests/specific-test.js
+\`\`\`
+
+## 🤝 Contributing
+
+We welcome contributions! Please see our [Contributing Guide](CONTRIBUTING.md) for details.
+
+### Development Setup
+
+1. Fork the repository
+2. Clone your fork: \`git clone https://github.com/yourusername/project-name.git\`
+3. Create a feature branch: \`git checkout -b feature/amazing-feature\`
+4. Install dependencies: \`npm install\`
+5. Make your changes
+6. Run tests: \`npm test\`
+7. Commit your changes: \`git commit -m 'Add amazing feature'\`
+8. Push to the branch: \`git push origin feature/amazing-feature\`
+9. Open a Pull Request
+
+### Code Style
+
+- Follow existing code style
+- Run \`npm run lint\` before committing
+- Write tests for new features
+- Update documentation as needed
+
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## 🙏 Acknowledgments
+
+- [Library/Tool Name](https://example.com) - Description of what it provides
+- [Contributor Name](https://github.com/username) - Specific contribution
+- [Resource Name](https://example.com) - Inspiration or guidance
+
+## 📞 Support
+
+- 📖 [Documentation](https://docs.example.com)
+- 🐛 [Issue Tracker](https://github.com/username/project-name/issues)
+- 💬 [Discussions](https://github.com/username/project-name/discussions)
+- 📧 [Email Support](mailto:support@example.com)
+
+---
+
+**Made with ❤️ by [Your Name](https://github.com/yourusername)**`
       },
 
       tutorial: {
@@ -501,56 +657,17 @@ Create a new user.
         const templateKey = e.target.value;
         const template = this.getTemplate(templateKey);
         
-        // Add confirmation for non-empty editor using custom modal
-        const currentContent = document.getElementById('markdown-input')?.value?.trim();
-        if (currentContent && currentContent.length > 50) {
-          // Use the existing custom confirmation modal instead of window.confirm()
-          if (typeof showCustomConfirm === 'function') {
-            showCustomConfirm(
-              '📋 Replace Content',
-              'Replace current content with template? This action cannot be undone.',
-              (confirmed) => {
-                if (confirmed) {
-                  onSelect(template.content);
-                  this.showTemplateNotification(`✅ Applied ${template.name} template`);
-                  // Trigger preview update
-                  const input = document.getElementById('markdown-input');
-                  if (input) {
-                    input.dispatchEvent(new Event('input', { bubbles: true }));
-                  }
-                }
-                // Always reset selector after confirmation
-                select.value = '';
-              }
-            );
-          } else {
-            // Fallback for custom confirmation
-            const proceed = window.confirm('Replace current content with template? This action cannot be undone.');
-            if (!proceed) {
-              select.value = ''; // Reset selector
-              return;
-            }
-            onSelect(template.content);
-            this.showTemplateNotification(`✅ Applied ${template.name} template`);
-            // Trigger preview update
-            const input = document.getElementById('markdown-input');
-            if (input) {
-              input.dispatchEvent(new Event('input', { bubbles: true }));
-            }
-            select.value = ''; // Reset selector
-          }
-        } else {
-          onSelect(template.content);
-          // Trigger preview update
-          const input = document.getElementById('markdown-input');
-          if (input) {
-            input.dispatchEvent(new Event('input', { bubbles: true }));
-          }
-          
-          // Show success notification
-          this.showTemplateNotification(`✅ Applied ${template.name} template`);
-          select.value = ''; // Reset selector
-        }
+        // Call the onSelect callback with template content
+        // The main script (script.js) will handle confirmation logic
+        onSelect(template.content);
+        
+        // Show success notification
+        this.showTemplateNotification(`✅ Applied ${template.name} template`);
+        
+        // Reset selector to default state
+        setTimeout(() => {
+          select.value = '';
+        }, 100);
       }
     });
 
