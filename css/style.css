@@ -362,12 +362,23 @@ body.dark-mode ::-webkit-scrollbar-thumb:hover {
     box-shadow: 0 8px 24px rgba(0,0,0,0.15);
     backdrop-filter: blur(10px);
     border-top: 1px solid rgba(255, 255, 255, 0.1);
+    z-index: 1000;
+    max-height: 0;
+    overflow: hidden;
   }
   
   .navbar-menu.active {
     opacity: 1;
     visibility: visible;
     transform: translateY(0);
+    max-height: 100vh;
+  }
+  
+  /* Hide all navbar items when menu is not active */
+  .navbar-menu:not(.active) .navbar-item,
+  .navbar-menu:not(.active) .dropdown-menu,
+  .navbar-menu:not(.active) .export-menu {
+    display: none !important;
   }
   
   .navbar-item {

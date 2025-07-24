@@ -1,22 +1,45 @@
-# 📝 MarkdownConverter - Advanced Markdown to Word Tool
+# 🤖 AI-Powered MarkdownConverter - Smart Document Processing
 
-> **Transform your Markdown into professional documents instantly!**
+> **Transform your Markdown into professional documents with intelligent features!**
 
-A modern, responsive web application that converts Markdown text to Microsoft Word documents with real-time live preview, advanced formatting tools, and comprehensive export capabilities. Optimized for all devices and screen sizes.
+An advanced, AI-enhanced web application that converts Markdown text to Microsoft Word documents with intelligent templates, real-time live preview, smart formatting suggestions, and comprehensive export capabilities. Fully responsive design optimized for all devices and screen sizes.
 
 [![Live Demo](https://img.shields.io/badge/🌐_Live_Demo-Try_Now-blue?style=for-the-badge)](https://chauhan-mukesh.github.io/Markdown_to_Word/)
 [![License](https://img.shields.io/badge/License-GPL--3.0-green?style=for-the-badge)](LICENSE)
 [![GitHub Stars](https://img.shields.io/github/stars/Chauhan-Mukesh/Markdown_to_Word?style=for-the-badge)](https://github.com/Chauhan-Mukesh/Markdown_to_Word/stargazers)
 
+## 📸 Screenshots
+
+### 🖥️ Desktop View (1920px)
+![Desktop View](https://github.com/user-attachments/assets/b7eeb7fd-6ca3-4041-bd7e-1a201ee0a6d8)
+*Ultra-wide desktop layout with side-by-side editor and preview panels*
+
+### 📱 Mobile View
+<img src="https://github.com/user-attachments/assets/cb081e59-1c11-4bde-b90e-0f32a7beba3b" width="300" alt="Mobile View">
+
+*Clean mobile layout with proper stacking*
+
+### 📱 Mobile Menu
+<img src="https://github.com/user-attachments/assets/fad1ff01-9a38-4299-ac40-07e6d5beb825" width="300" alt="Mobile Menu">
+
+*Responsive navigation menu*
+
 ---
 
 ## ✨ Key Features
 
+### 🤖 **AI-Enhanced Intelligence**
+- 🧠 **Smart Templates** - Intelligent document templates with contextual content
+- 🎯 **Auto-formatting** - Intelligent suggestions for document structure
+- 📊 **Content Analysis** - AI-powered readability and structure analysis
+- 🔍 **Smart Preview** - Context-aware live preview with intelligent rendering
+
 ### 📱 **Responsive Design**
-- 🖥️ **Desktop Optimized** - Perfect layout for 1920x1080+ displays
-- 📱 **Mobile Friendly** - Vertical panel stacking on mobile devices
-- 🚫 **No Horizontal Scrolling** - Optimized viewport management
+- 🖥️ **Ultra-wide Support** - Perfect layout for 1920x1080+ and ultra-wide displays
+- 📱 **Mobile Optimized** - Vertical panel stacking with intuitive touch navigation
 - 🔄 **Adaptive Layout** - Seamlessly adjusts to any screen size
+- 🚫 **No Horizontal Scrolling** - Optimized viewport management
+- 🎨 **Modern UI/UX** - Clean, professional interface with smooth animations
 
 ### 📝 **Advanced Editor**
 - ⚡ **Real-time Preview** - See your formatted document as you type
@@ -61,10 +84,11 @@ Visit our [live demo](https://chauhan-mukesh.github.io/Markdown_to_Word/) - work
 ## 📱 Device Compatibility
 
 ### ✅ **Optimized Screen Sizes**
-- **🖥️ Desktop (1920x1080+)**: Enhanced side-by-side layout
-- **💻 Laptop (1366x768+)**: Optimized responsive layout
-- **📱 Tablet (768px-1024px)**: Touch-friendly adaptive design
-- **📱 Mobile (≤768px)**: Vertical stacking, no horizontal scroll
+- **🖥️ Ultra-wide (1920px+)**: Enhanced side-by-side layout with full width utilization
+- **🖥️ Desktop (1366x768+)**: Optimized responsive layout with proper navbar alignment
+- **💻 Laptop (1024px-1365px)**: Touch-friendly adaptive design
+- **📱 Tablet (768px-1024px)**: Responsive layout with collapsible navigation
+- **📱 Mobile (≤768px)**: Vertical stacking with hamburger menu, fixed footer
 
 ### ✅ **Browser Support**
 - **Chrome** 70+ (Recommended)
@@ -207,7 +231,19 @@ We welcome contributions from the community!
 
 ## 📊 Recent Improvements
 
-### 🔧 **Version 3.0 Updates**
+### 🔧 **Version 2.1 Updates (Latest)**
+- ✅ **Fixed template selection bug** - Content now updates properly when switching templates
+- ✅ **Improved navbar alignment** - Tools and Preview now align properly with File menu in large screens
+- ✅ **Fixed mobile menu behavior** - Dropdowns no longer show open by default on mobile
+- ✅ **Enhanced footer positioning** - Fixed footer placement in mobile view
+- ✅ **Optimized large screen layout** - Editor and preview panels now display side-by-side on large screens
+- ✅ **Full width utilization** - Content now properly utilizes full screen width up to 1920px
+- ✅ **Improved scroll behavior** - Added smooth scrolling and custom scrollbar styling
+- ✅ **Removed duplicate CSS** - Cleaned up conflicting and duplicate code
+- ✅ **Enhanced SEO optimization** - AI-focused meta tags and improved discoverability
+- ✅ **Updated branding** - Enhanced with AI-powered messaging and modern design
+
+### 🔧 **Version 3.0 Previous Updates**
 - ✅ **Fixed mobile responsive layout** - Panels now stack vertically on mobile
 - ✅ **Improved footer positioning** - Sticky footer without content overlap
 - ✅ **Enhanced session management** - Smart data clearing when browser closes
