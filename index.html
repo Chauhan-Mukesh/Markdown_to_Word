@@ -13,10 +13,10 @@
   <meta name="revisit-after" content="7 days">
   <meta name="theme-color" content="#1976d2">
   <meta name="msapplication-TileColor" content="#1976d2">
-  <meta name="application-name" content="MarkdownConverter">
+  <meta name="application-name" content="MarkdownForge">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
-  <meta name="apple-mobile-web-app-title" content="MarkdownConverter">
+  <meta name="apple-mobile-web-app-title" content="MarkdownForge">
   <meta name="format-detection" content="telephone=no">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="msapplication-config" content="browserconfig.xml">
@@ -111,7 +111,7 @@
   
   <!-- Favicon as inline SVG emoji (no external link) -->
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='0.9em' font-size='90'%3E🚀%3C/text%3E%3C/svg%3E" />
-  <title>🤖 AI-Powered Markdown → Word Converter | Smart Document Processing</title>
+  <title>🚀 MarkdownForge - Smart Document Processing | Convert Markdown to Word</title>
   
   <!-- Stylesheets -->
   <link rel="stylesheet" href="css/style.css">
@@ -246,7 +246,7 @@
     <div class="navbar-container">
       <!-- Logo and Brand -->
       <div class="navbar-brand">
-        <span class="logo">📝 MarkdownConverter</span>
+        <span class="logo">🚀 MarkdownForge</span>
       </div>
 
       <!-- Hamburger Menu for Mobile -->
@@ -324,11 +324,33 @@
       <div id="formatting-toolbar" class="formatting-toolbar">
         <button class="format-btn" id="bold-btn" title="Bold (Ctrl+B)">**B**</button>
         <button class="format-btn" id="italic-btn" title="Italic (Ctrl+I)">*I*</button>
+        <button class="format-btn" id="underline-btn" title="Underline">U</button>
+        <button class="format-btn" id="strikethrough-btn" title="Strikethrough">~~S~~</button>
         <button class="format-btn" id="code-btn" title="Code (Ctrl+`)">{ }</button>
+        <button class="format-btn" id="code-block-btn" title="Code Block">```</button>
         <button class="format-btn" id="link-btn" title="Link (Ctrl+K)">🔗</button>
+        <button class="format-btn" id="image-btn" title="Image">🖼️</button>
 
-        <button class="format-btn" id="header-btn" title="Header">#</button>
-        <button class="format-btn" id="list-btn" title="List">• List</button>
+        <div class="format-dropdown" id="header-dropdown">
+          <button class="format-btn dropdown-toggle" id="header-btn" title="Headers"># Header ▼</button>
+          <div class="format-dropdown-menu" id="header-menu">
+            <button class="format-dropdown-item" id="h1-btn" title="Header 1"># Header 1</button>
+            <button class="format-dropdown-item" id="h2-btn" title="Header 2">## Header 2</button>
+            <button class="format-dropdown-item" id="h3-btn" title="Header 3">### Header 3</button>
+            <button class="format-dropdown-item" id="h4-btn" title="Header 4">#### Header 4</button>
+            <button class="format-dropdown-item" id="h5-btn" title="Header 5">##### Header 5</button>
+            <button class="format-dropdown-item" id="h6-btn" title="Header 6">###### Header 6</button>
+          </div>
+        </div>
+        <div class="format-dropdown" id="list-dropdown">
+          <button class="format-btn dropdown-toggle" id="list-btn" title="Lists">• List ▼</button>
+          <div class="format-dropdown-menu" id="list-menu">
+            <button class="format-dropdown-item" id="unordered-list-btn" title="Unordered List">• Bullet List</button>
+            <button class="format-dropdown-item" id="ordered-list-btn" title="Ordered List">1. Numbered List</button>
+            <button class="format-dropdown-item" id="sub-unordered-list-btn" title="Sub Unordered List">  • Sub Bullet</button>
+            <button class="format-dropdown-item" id="sub-ordered-list-btn" title="Sub Ordered List">  1. Sub Numbered</button>
+          </div>
+        </div>
         <button class="format-btn" id="quote-btn" title="Quote">" Quote</button>
         <button class="format-btn" id="table-btn" title="Table">⚏ Table</button>
         <button class="format-btn" id="hr-btn" title="Horizontal Rule">─</button>

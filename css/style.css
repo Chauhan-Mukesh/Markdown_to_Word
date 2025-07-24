@@ -76,20 +76,26 @@ body.dark-mode ::-webkit-scrollbar-thumb:hover {
 }
 
 .logo {
-  font-size: 1.4rem;
-  font-weight: 700;
+  font-size: 1.5rem;
+  font-weight: 800;
   color: white;
   text-decoration: none;
-  text-shadow: 0 2px 4px rgba(0,0,0,0.3);
-  background: linear-gradient(45deg, #ffffff, #e3f2fd);
+  text-shadow: 0 2px 6px rgba(0,0,0,0.4);
+  background: linear-gradient(45deg, #ffffff, #64b5f6, #e3f2fd);
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
-  letter-spacing: -0.5px;
+  letter-spacing: -0.3px;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   display: flex;
   align-items: center;
   gap: 0.5rem;
+  transition: all 0.3s ease;
+}
+
+.logo:hover {
+  transform: scale(1.05);
+  text-shadow: 0 3px 8px rgba(0,0,0,0.5);
 }
 
 .navbar-menu {
@@ -263,7 +269,7 @@ body.dark-mode ::-webkit-scrollbar-thumb:hover {
 .footer {
   background: linear-gradient(135deg, #2c3e50, #34495e);
   color: white;
-  padding: 1rem 0;
+  padding: 1.25rem 0;
   margin-top: auto;
   position: sticky;
   bottom: 0;
@@ -271,23 +277,25 @@ body.dark-mode ::-webkit-scrollbar-thumb:hover {
   right: 0;
   width: 100%;
   z-index: 999; /* Lower than modals but high enough */
-  box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+  box-shadow: 0 -3px 15px rgba(0,0,0,0.15);
   flex-shrink: 0; /* Prevent shrinking */
+  backdrop-filter: blur(10px);
 }
 
 .footer-container {
-  width: 100%;
+  max-width: 1400px;
   margin: 0 auto;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 1rem;
-  gap: 1rem;
+  padding: 0 2rem;
+  gap: 1.5rem;
 }
 
 .footer-left p {
-  font-size: 0.875rem;
-  line-height: 1.4;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  font-weight: 500;
 }
 
 .github-link {
@@ -311,21 +319,26 @@ body.dark-mode ::-webkit-scrollbar-thumb:hover {
 }
 
 .footer-btn {
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.12);
   color: white;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  padding: 0.5rem 0.75rem;
-  border-radius: 4px;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  padding: 0.6rem 1rem;
+  border-radius: 6px;
   cursor: pointer;
   transition: all 0.3s ease;
   font-size: 0.875rem;
+  font-weight: 500;
   backdrop-filter: blur(10px);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
 }
 
 .footer-btn:hover {
   background: rgba(255, 255, 255, 0.2);
-  transform: translateY(-1px);
-  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+  border-color: rgba(255, 255, 255, 0.4);
 }
 
 /* ===================== */
@@ -1163,6 +1176,65 @@ body.dark-mode .tools-toggle:hover {
   box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 }
 
+/* Format Dropdown Styles */
+.format-dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.format-dropdown-menu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background: white;
+  border: 1px solid #dee2e6;
+  border-radius: 6px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  z-index: 1000;
+  min-width: 180px;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-10px);
+  transition: all 0.3s ease;
+  max-height: 0;
+  overflow: hidden;
+}
+
+.format-dropdown:hover .format-dropdown-menu,
+.format-dropdown.active .format-dropdown-menu {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+  max-height: 300px;
+}
+
+.format-dropdown-item {
+  display: block;
+  width: 100%;
+  padding: 0.5rem 0.75rem;
+  border: none;
+  background: transparent;
+  color: #495057;
+  text-align: left;
+  cursor: pointer;
+  font-size: 0.875rem;
+  transition: background-color 0.2s ease;
+  border-bottom: 1px solid #f8f9fa;
+}
+
+.format-dropdown-item:last-child {
+  border-bottom: none;
+}
+
+.format-dropdown-item:hover {
+  background: #f8f9fa;
+  color: #1976d2;
+}
+
+.format-dropdown-item:active {
+  background: #e9ecef;
+}
+
 /* Export Dropdown */
 .export-dropdown {
   position: relative;
@@ -1445,6 +1517,26 @@ body.dark-mode .format-btn.active {
   background: #1976d2;
   color: #ffffff;
   border-color: #1976d2;
+}
+
+/* Dark mode dropdown styles */
+body.dark-mode .format-dropdown-menu {
+  background: #3a3a3a;
+  border-color: #555;
+}
+
+body.dark-mode .format-dropdown-item {
+  color: #e8e8e8;
+  border-bottom-color: #555;
+}
+
+body.dark-mode .format-dropdown-item:hover {
+  background: #4a4a4a;
+  color: #1976d2;
+}
+
+body.dark-mode .format-dropdown-item:active {
+  background: #555;
 }
 
 body.dark-mode .input-field {
@@ -1857,11 +1949,22 @@ body.dark-mode a:hover {
   }
   
   .panel { 
-    flex: 1 1 50%; 
     margin: 0; /* Remove margin, use gap instead */
     padding: 1.5rem; /* Increased padding for better touch experience */
     border-radius: 12px; /* Larger border radius for modern look */
     box-shadow: 0 4px 12px rgba(0,0,0,0.1); /* Enhanced shadow */
+  }
+
+  /* Apply 55-45% split for tablet screens */
+  #editor-panel {
+    flex: 1 1 55%; /* 55% editor width for tablets */
+    max-width: 60%;
+  }
+  
+  #preview-panel {
+    flex: 1 1 45%; /* 45% preview width for tablets */
+    max-width: 45%;
+    min-width: 280px; /* Adjust minimum width for tablets */
   }
   
   .formatting-toolbar {
@@ -1941,16 +2044,16 @@ body.dark-mode a:hover {
     box-shadow: 0 4px 16px rgba(0,0,0,0.1);
   }
   
-  /* Editor panel should be larger for better typing comfort */
+  /* Editor panel optimized for tablet/desktop - 55% split */
   #editor-panel {
-    flex: 1 1 65%; /* Increased editor width for better productivity */
-    max-width: 70%; /* Allow more space for complex documents */
+    flex: 1 1 55%; /* 55% editor width as per requirements */
+    max-width: 60%; /* Allow some flexibility for complex documents */
   }
   
-  /* Preview panel optimized for reading */
+  /* Preview panel optimized for reading - 45% split */
   #preview-panel {
-    flex: 1 1 35%; /* Reduced preview width for more editor space */
-    max-width: 35%; /* Prevent from getting too wide */
+    flex: 1 1 45%; /* 45% preview width as per requirements */
+    max-width: 45%; /* Maintain proportional width */
     min-width: 300px; /* Ensure minimum readable width */
   }
   
@@ -1983,16 +2086,16 @@ body.dark-mode a:hover {
     margin: 0; /* Remove centering for full width utilization */
   }
   
-  /* Dynamic panel sizing for ultra-wide screens */
+  /* Dynamic panel sizing for ultra-wide screens - maintain 55-45% ratio */
   #editor-panel {
-    flex: 1 1 65%; /* Larger editor on ultra-wide */
-    max-width: 70%; /* Comfortable typing area */
+    flex: 1 1 55%; /* Maintain 55% on ultra-wide as well */
+    max-width: 60%; /* Comfortable typing area */
     min-width: 600px; /* Minimum comfortable width */
   }
   
   #preview-panel {
-    flex: 1 1 35%; /* Proportional preview */
-    max-width: 30%; /* Optimized preview width for ultra-wide */
+    flex: 1 1 45%; /* Maintain 45% on ultra-wide */
+    max-width: 45%; /* Optimized preview width for ultra-wide */
     min-width: 400px; /* Minimum readable width */
   }
   

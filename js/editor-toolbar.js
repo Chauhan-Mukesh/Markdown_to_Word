@@ -154,6 +154,20 @@ class EditorToolbar {
   }
 
   /**
+   * Format selected text as underline (using HTML)
+   */
+  makeUnderline() {
+    this.insertText('<u>', '</u>', 'underlined text');
+  }
+
+  /**
+   * Format selected text as strikethrough
+   */
+  makeStrikethrough() {
+    this.insertText('~~', '~~', 'strikethrough text');
+  }
+
+  /**
    * Format selected text as inline code
    */
   makeCode() {
@@ -190,6 +204,48 @@ class EditorToolbar {
   }
 
   /**
+   * Insert Header 1
+   */
+  insertH1() {
+    this.insertHeader(1);
+  }
+
+  /**
+   * Insert Header 2
+   */
+  insertH2() {
+    this.insertHeader(2);
+  }
+
+  /**
+   * Insert Header 3
+   */
+  insertH3() {
+    this.insertHeader(3);
+  }
+
+  /**
+   * Insert Header 4
+   */
+  insertH4() {
+    this.insertHeader(4);
+  }
+
+  /**
+   * Insert Header 5
+   */
+  insertH5() {
+    this.insertHeader(5);
+  }
+
+  /**
+   * Insert Header 6
+   */
+  insertH6() {
+    this.insertHeader(6);
+  }
+
+  /**
    * Insert a bulleted list
    */
   insertList() {
@@ -201,6 +257,20 @@ class EditorToolbar {
    */
   insertNumberedList() {
     this.insertAtLineStart('1. ');
+  }
+
+  /**
+   * Insert a sub bulleted list (indented)
+   */
+  insertSubList() {
+    this.insertAtLineStart('  - ');
+  }
+
+  /**
+   * Insert a sub numbered list (indented)
+   */
+  insertSubNumberedList() {
+    this.insertAtLineStart('  1. ');
   }
 
   /**
