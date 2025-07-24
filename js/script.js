@@ -309,6 +309,7 @@ function initializeNewFeatures() {
   // Help functionality
   document.getElementById('help-btn').onclick = () => {
     showModal(document.getElementById('help-modal'));
+    initializeHelpTabs();
   };
   
   // Additional export options
@@ -1934,4 +1935,48 @@ if (!document.querySelector('#ripple-style')) {
     }
   `;
   document.head.appendChild(style);
+}
+
+/**
+ * Initialize help modal tabs functionality
+ * @description Sets up tab switching and content display for the enhanced help modal
+ * @since 2.3.0
+ * @returns {void}
+ */
+function initializeHelpTabs() {
+  const helpTabs = document.querySelectorAll('.help-tab');
+  const helpTabContents = document.querySelectorAll('.help-tab-content');
+  
+  // Remove any existing event listeners and reset state
+  helpTabs.forEach(tab => {
+    tab.replaceWith(tab.cloneNode(true));
+  });
+  
+  // Get fresh references after cloning
+  const freshHelpTabs = document.querySelectorAll('.help-tab');
+  
+  freshHelpTabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      const targetTab = tab.getAttribute('data-tab');
+      
+      // Remove active class from all tabs and contents
+      freshHelpTabs.forEach(t => t.classList.remove('active'));
+      helpTabContents.forEach(content => content.classList.remove('active'));
+      
+      // Add active class to clicked tab
+      tab.classList.add('active');
+      
+      // Show corresponding content
+      const targetContent = document.getElementById(`${targetTab}-tab`);
+      if (targetContent) {
+        targetContent.classList.add('active');
+      }
+    });
+  });
+  
+  // Ensure first tab is active by default
+  if (freshHelpTabs.length > 0) {
+    freshHelpTabs[0].classList.add('active');
+    helpTabContents[0]?.classList.add('active');
+  }
 }

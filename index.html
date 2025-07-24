@@ -369,123 +369,265 @@
     </section>
   </div>
 
-  <!-- Help Modal -->
+  <!-- Enhanced Help Modal -->
   <div id="help-modal" class="modal">
     <div class="modal-content">
       <span class="close" id="help-close">&times;</span>
-      <h2>📚 Keyboard Shortcuts & Help</h2>
+      <h2>📚 MarkdownForge Help & Documentation</h2>
       
-      <div class="help-section">
+      <div class="help-tabs">
+        <button class="help-tab active" data-tab="shortcuts">⌨️ Shortcuts</button>
+        <button class="help-tab" data-tab="markdown">📝 Markdown</button>
+        <button class="help-tab" data-tab="features">🎯 Features</button>
+        <button class="help-tab" data-tab="troubleshooting">🔧 Troubleshooting</button>
+      </div>
+
+      <div id="shortcuts-tab" class="help-tab-content active">
         <h3>⌨️ Keyboard Shortcuts</h3>
         <div class="shortcuts-grid">
-          <div class="shortcut-item">
-            <kbd>Ctrl</kbd> + <kbd>B</kbd>
-            <span>Bold text</span>
+          <div class="shortcut-category">
+            <h4>📝 Text Formatting</h4>
+            <div class="shortcut-item">
+              <kbd>Ctrl</kbd> + <kbd>B</kbd>
+              <span>Bold text</span>
+            </div>
+            <div class="shortcut-item">
+              <kbd>Ctrl</kbd> + <kbd>I</kbd>
+              <span>Italic text</span>
+            </div>
+            <div class="shortcut-item">
+              <kbd>Ctrl</kbd> + <kbd>U</kbd>
+              <span>Underline text</span>
+            </div>
+            <div class="shortcut-item">
+              <kbd>Ctrl</kbd> + <kbd>K</kbd>
+              <span>Insert link</span>
+            </div>
+            <div class="shortcut-item">
+              <kbd>Ctrl</kbd> + <kbd>`</kbd>
+              <span>Inline code</span>
+            </div>
           </div>
-          <div class="shortcut-item">
-            <kbd>Ctrl</kbd> + <kbd>I</kbd>
-            <span>Italic text</span>
+          
+          <div class="shortcut-category">
+            <h4>📄 File Operations</h4>
+            <div class="shortcut-item">
+              <kbd>Ctrl</kbd> + <kbd>N</kbd>
+              <span>New document</span>
+            </div>
+            <div class="shortcut-item">
+              <kbd>Ctrl</kbd> + <kbd>O</kbd>
+              <span>Open file</span>
+            </div>
+            <div class="shortcut-item">
+              <kbd>Ctrl</kbd> + <kbd>S</kbd>
+              <span>Save document</span>
+            </div>
+            <div class="shortcut-item">
+              <kbd>Ctrl</kbd> + <kbd>P</kbd>
+              <span>Print/Preview</span>
+            </div>
           </div>
-          <div class="shortcut-item">
-            <kbd>Ctrl</kbd> + <kbd>K</kbd>
-            <span>Insert link</span>
-          </div>
-          <div class="shortcut-item">
-            <kbd>Ctrl</kbd> + <kbd>`</kbd>
-            <span>Inline code</span>
-          </div>
-          <div class="shortcut-item">
-            <kbd>Ctrl</kbd> + <kbd>F</kbd>
-            <span>Find & Replace</span>
-          </div>
-          <div class="shortcut-item">
-            <kbd>Ctrl</kbd> + <kbd>P</kbd>
-            <span>Preview document</span>
-          </div>
-          <div class="shortcut-item">
-            <kbd>Ctrl</kbd> + <kbd>S</kbd>
-            <span>Save document</span>
-          </div>
-          <div class="shortcut-item">
-            <kbd>Ctrl</kbd> + <kbd>Enter</kbd>
-            <span>Export to Word</span>
-          </div>
-          <div class="shortcut-item">
-            <kbd>Ctrl</kbd> + <kbd>E</kbd>
-            <span>Show statistics</span>
-          </div>
-          <div class="shortcut-item">
-            <kbd>Ctrl</kbd> + <kbd>T</kbd>
-            <span>Toggle toolbar</span>
-          </div>
-          <div class="shortcut-item">
-            <kbd>F1</kbd>
-            <span>Show this help</span>
-          </div>
-          <div class="shortcut-item">
-            <kbd>Esc</kbd>
-            <span>Close modals</span>
-          </div>
-        </div>
-      </div>
-
-      <div class="help-section">
-        <h3>📝 Markdown Quick Reference</h3>
-        <div class="markdown-reference">
-          <div class="ref-item">
-            <code># Header 1</code>
-            <span>Large heading</span>
-          </div>
-          <div class="ref-item">
-            <code>## Header 2</code>
-            <span>Medium heading</span>
-          </div>
-          <div class="ref-item">
-            <code>**bold**</code>
-            <span>Bold text</span>
-          </div>
-          <div class="ref-item">
-            <code>*italic*</code>
-            <span>Italic text</span>
-          </div>
-          <div class="ref-item">
-            <code>`code`</code>
-            <span>Inline code</span>
-          </div>
-          <div class="ref-item">
-            <code>[text](url)</code>
-            <span>Link</span>
-          </div>
-          <div class="ref-item">
-            <code>- item</code>
-            <span>Bullet list</span>
-          </div>
-          <div class="ref-item">
-            <code>1. item</code>
-            <span>Numbered list</span>
-          </div>
-          <div class="ref-item">
-            <code>> quote</code>
-            <span>Blockquote</span>
-          </div>
-          <div class="ref-item">
-            <code>---</code>
-            <span>Horizontal rule</span>
+          
+          <div class="shortcut-category">
+            <h4>🔧 Tools & Navigation</h4>
+            <div class="shortcut-item">
+              <kbd>Ctrl</kbd> + <kbd>F</kbd>
+              <span>Find & Replace</span>
+            </div>
+            <div class="shortcut-item">
+              <kbd>Ctrl</kbd> + <kbd>Enter</kbd>
+              <span>Export to Word</span>
+            </div>
+            <div class="shortcut-item">
+              <kbd>Ctrl</kbd> + <kbd>E</kbd>
+              <span>Show statistics</span>
+            </div>
+            <div class="shortcut-item">
+              <kbd>F1</kbd>
+              <span>Show this help</span>
+            </div>
+            <div class="shortcut-item">
+              <kbd>Esc</kbd>
+              <span>Close modals</span>
+            </div>
           </div>
         </div>
       </div>
 
-      <div class="help-section">
-        <h3>🎯 Tips & Tricks</h3>
-        <ul class="tips-list">
-          <li><strong>Auto-save:</strong> Your work is automatically saved locally every few seconds</li>
-          <li><strong>Templates:</strong> Use the template dropdown to start with pre-formatted documents</li>
-          <li><strong>Dark Mode:</strong> Toggle between light and dark themes for comfortable editing</li>
-          <li><strong>Export Options:</strong> Choose from Word, HTML, PDF, or plain text formats</li>
-          <li><strong>Live Preview:</strong> See your formatted document in real-time as you type</li>
-          <li><strong>Responsive:</strong> Works great on desktop, tablet, and mobile devices</li>
-          <li><strong>Large Documents:</strong> No size restrictions - save documents of any size</li>
-        </ul>
+      <div id="markdown-tab" class="help-tab-content">
+        <h3>📝 Markdown Syntax Reference</h3>
+        <div class="markdown-categories">
+          
+          <div class="markdown-category">
+            <h4>📰 Headers</h4>
+            <div class="ref-item">
+              <code># Header 1</code>
+              <span>Main title (largest)</span>
+            </div>
+            <div class="ref-item">
+              <code>## Header 2</code>
+              <span>Section heading</span>
+            </div>
+            <div class="ref-item">
+              <code>### Header 3</code>
+              <span>Subsection heading</span>
+            </div>
+          </div>
+
+          <div class="markdown-category">
+            <h4>✨ Text Formatting</h4>
+            <div class="ref-item">
+              <code>**bold text**</code>
+              <span>Bold formatting</span>
+            </div>
+            <div class="ref-item">
+              <code>*italic text*</code>
+              <span>Italic formatting</span>
+            </div>
+            <div class="ref-item">
+              <code>~~strikethrough~~</code>
+              <span>Strikethrough text</span>
+            </div>
+            <div class="ref-item">
+              <code>`inline code`</code>
+              <span>Monospace code</span>
+            </div>
+            <div class="ref-item">
+              <code>```<br>code block<br>```</code>
+              <span>Multi-line code</span>
+            </div>
+          </div>
+
+          <div class="markdown-category">
+            <h4>📋 Lists & Structure</h4>
+            <div class="ref-item">
+              <code>- Bullet item</code>
+              <span>Unordered list</span>
+            </div>
+            <div class="ref-item">
+              <code>1. Numbered item</code>
+              <span>Ordered list</span>
+            </div>
+            <div class="ref-item">
+              <code>    - Sub item</code>
+              <span>Nested list (4 spaces)</span>
+            </div>
+            <div class="ref-item">
+              <code>> Blockquote</code>
+              <span>Quoted text</span>
+            </div>
+            <div class="ref-item">
+              <code>---</code>
+              <span>Horizontal divider</span>
+            </div>
+          </div>
+
+          <div class="markdown-category">
+            <h4>🔗 Links & Media</h4>
+            <div class="ref-item">
+              <code>[Link text](URL)</code>
+              <span>Hyperlink</span>
+            </div>
+            <div class="ref-item">
+              <code>![Alt text](image.jpg)</code>
+              <span>Embedded image</span>
+            </div>
+            <div class="ref-item">
+              <code>| Col 1 | Col 2 |<br>|-------|-------|<br>| Data  | Data  |</code>
+              <span>Table structure</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div id="features-tab" class="help-tab-content">
+        <h3>🎯 Features & Tips</h3>
+        
+        <div class="feature-section">
+          <h4>🚀 Getting Started</h4>
+          <ul class="features-list">
+            <li><strong>Choose a Template:</strong> Start with pre-built templates for reports, meetings, documentation, etc.</li>
+            <li><strong>Live Preview:</strong> See your formatted document update in real-time as you type</li>
+            <li><strong>Auto-save:</strong> Your work is automatically saved locally every few seconds</li>
+            <li><strong>Multiple Export:</strong> Export to Word (.docx), HTML, PDF, or plain text</li>
+          </ul>
+        </div>
+
+        <div class="feature-section">
+          <h4>✨ Advanced Features</h4>
+          <ul class="features-list">
+            <li><strong>Smart Templates:</strong> Professional templates with proper formatting and structure</li>
+            <li><strong>Find & Replace:</strong> Powerful search functionality with regex support</li>
+            <li><strong>Document Statistics:</strong> Get detailed word count, reading time, and analysis</li>
+            <li><strong>Dark/Light Mode:</strong> Choose your preferred theme for comfortable editing</li>
+            <li><strong>Responsive Design:</strong> Works seamlessly on desktop, tablet, and mobile</li>
+            <li><strong>Keyboard Shortcuts:</strong> Speed up your workflow with comprehensive shortcuts</li>
+          </ul>
+        </div>
+
+        <div class="feature-section">
+          <h4>🎨 Customization</h4>
+          <ul class="features-list">
+            <li><strong>Document Metadata:</strong> Set title, author, and date for your documents</li>
+            <li><strong>Theme Toggle:</strong> Switch between light and dark modes anytime</li>
+            <li><strong>Export Options:</strong> Choose format and styling for your exports</li>
+            <li><strong>Auto-formatting:</strong> Smart table formatting and list continuation</li>
+          </ul>
+        </div>
+      </div>
+
+      <div id="troubleshooting-tab" class="help-tab-content">
+        <h3>🔧 Troubleshooting & FAQ</h3>
+        
+        <div class="faq-section">
+          <h4>❓ Common Issues</h4>
+          
+          <div class="faq-item">
+            <h5>Template not applying correctly?</h5>
+            <p>Make sure to confirm the template replacement dialog. If the dropdown stays selected, try refreshing the page and selecting the template again.</p>
+          </div>
+          
+          <div class="faq-item">
+            <h5>Export not working?</h5>
+            <p>Ensure your document has content and try a different export format. Check that pop-ups are not blocked in your browser.</p>
+          </div>
+          
+          <div class="faq-item">
+            <h5>Preview not updating?</h5>
+            <p>Click the "Preview" button manually or try refreshing the preview. For large documents, there may be a slight delay.</p>
+          </div>
+          
+          <div class="faq-item">
+            <h5>Auto-save not working?</h5>
+            <p>Auto-save uses local storage. Ensure your browser allows local storage and you're not in private/incognito mode.</p>
+          </div>
+          
+          <div class="faq-item">
+            <h5>Lists not formatting correctly?</h5>
+            <p>For nested lists, use 4 spaces (not tabs) for proper indentation. Check the Markdown tab for correct syntax.</p>
+          </div>
+        </div>
+
+        <div class="faq-section">
+          <h4>💡 Performance Tips</h4>
+          <ul class="features-list">
+            <li><strong>Large Documents:</strong> For documents over 50KB, disable live preview for better performance</li>
+            <li><strong>Browser Support:</strong> Works best in Chrome, Firefox, Safari, and Edge (latest versions)</li>
+            <li><strong>Memory Usage:</strong> Clear document cache if you experience slowdowns</li>
+            <li><strong>Mobile Usage:</strong> Use landscape orientation for better editing experience</li>
+          </ul>
+        </div>
+
+        <div class="faq-section">
+          <h4>🔒 Privacy & Security</h4>
+          <ul class="features-list">
+            <li><strong>Local Processing:</strong> All document processing happens in your browser</li>
+            <li><strong>No Data Collection:</strong> We don't track, store, or analyze your content</li>
+            <li><strong>Offline Capable:</strong> Works without internet connection once loaded</li>
+            <li><strong>Secure Storage:</strong> Documents are stored locally on your device only</li>
+          </ul>
+        </div>
       </div>
     </div>
   </div>

@@ -2912,4 +2912,274 @@ body.dark-mode .notification-info {
     transform: translateY(-100%);
   }
 }
+
+/* Enhanced Help Modal Styles */
+.help-tabs {
+  display: flex;
+  border-bottom: 2px solid #e0e0e0;
+  margin-bottom: 20px;
+  gap: 5px;
+}
+
+.help-tab {
+  background: none;
+  border: none;
+  padding: 12px 20px;
+  cursor: pointer;
+  border-radius: 8px 8px 0 0;
+  font-weight: 500;
+  color: #666;
+  transition: all 0.3s ease;
+  font-size: 14px;
+}
+
+.help-tab:hover {
+  background: #f5f5f5;
+  color: #1976d2;
+}
+
+.help-tab.active {
+  background: #1976d2;
+  color: white;
+  font-weight: 600;
+}
+
+.help-tab-content {
+  display: none;
+  animation: fadeIn 0.3s ease;
+}
+
+.help-tab-content.active {
+  display: block;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Shortcut Categories */
+.shortcut-category {
+  margin-bottom: 25px;
+  padding: 15px;
+  background: #f8f9fa;
+  border-radius: 8px;
+  border-left: 4px solid #1976d2;
+}
+
+.shortcut-category h4 {
+  margin: 0 0 15px 0;
+  color: #1976d2;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.shortcuts-grid {
+  display: grid;
+  gap: 20px;
+}
+
+/* Markdown Categories */
+.markdown-categories {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 20px;
+}
+
+.markdown-category {
+  padding: 15px;
+  background: #f8f9fa;
+  border-radius: 8px;
+  border-left: 4px solid #4caf50;
+}
+
+.markdown-category h4 {
+  margin: 0 0 15px 0;
+  color: #4caf50;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+/* Feature Sections */
+.feature-section {
+  margin-bottom: 25px;
+  padding: 15px;
+  background: #f8f9fa;
+  border-radius: 8px;
+  border-left: 4px solid #ff9800;
+}
+
+.feature-section h4 {
+  margin: 0 0 15px 0;
+  color: #ff9800;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.features-list {
+  margin: 0;
+  padding-left: 20px;
+}
+
+.features-list li {
+  margin-bottom: 8px;
+  line-height: 1.6;
+}
+
+/* FAQ Sections */
+.faq-section {
+  margin-bottom: 25px;
+}
+
+.faq-section h4 {
+  margin: 0 0 15px 0;
+  color: #e91e63;
+  font-size: 16px;
+  font-weight: 600;
+  padding-bottom: 8px;
+  border-bottom: 2px solid #e91e63;
+}
+
+.faq-item {
+  margin-bottom: 20px;
+  padding: 15px;
+  background: #fff3e0;
+  border-radius: 8px;
+  border-left: 4px solid #e91e63;
+}
+
+.faq-item h5 {
+  margin: 0 0 10px 0;
+  color: #d32f2f;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.faq-item p {
+  margin: 0;
+  color: #666;
+  line-height: 1.6;
+  font-size: 14px;
+}
+
+/* Improved Reference Items */
+.ref-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 12px;
+  margin-bottom: 8px;
+  background: white;
+  border-radius: 6px;
+  border: 1px solid #e0e0e0;
+  transition: all 0.2s ease;
+}
+
+.ref-item:hover {
+  background: #f0f7ff;
+  border-color: #1976d2;
+  transform: translateX(5px);
+}
+
+.ref-item code {
+  background: #f5f5f5;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-family: 'Courier New', monospace;
+  font-size: 13px;
+  color: #d32f2f;
+  border: 1px solid #e0e0e0;
+  min-width: 150px;
+  text-align: left;
+}
+
+.ref-item span {
+  color: #666;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+/* Dark Mode Support for Help Modal */
+body.dark-mode .help-tab {
+  color: #ccc;
+}
+
+body.dark-mode .help-tab:hover {
+  background: #444;
+  color: #64b5f6;
+}
+
+body.dark-mode .help-tab.active {
+  background: #1976d2;
+  color: white;
+}
+
+body.dark-mode .shortcut-category,
+body.dark-mode .markdown-category,
+body.dark-mode .feature-section {
+  background: #2d2d30;
+}
+
+body.dark-mode .faq-item {
+  background: #2d2d30;
+  color: #ccc;
+}
+
+body.dark-mode .faq-item p {
+  color: #ccc;
+}
+
+body.dark-mode .ref-item {
+  background: #2d2d30;
+  border-color: #444;
+}
+
+body.dark-mode .ref-item:hover {
+  background: #333;
+  border-color: #64b5f6;
+}
+
+body.dark-mode .ref-item code {
+  background: #444;
+  color: #ff6b6b;
+  border-color: #555;
+}
+
+body.dark-mode .ref-item span {
+  color: #ccc;
+}
+
+/* Mobile Responsive Help Modal */
+@media (max-width: 768px) {
+  .help-tabs {
+    flex-wrap: wrap;
+    gap: 2px;
+  }
+  
+  .help-tab {
+    padding: 8px 12px;
+    font-size: 12px;
+    flex: 1;
+    min-width: calc(50% - 1px);
+  }
+  
+  .markdown-categories {
+    grid-template-columns: 1fr;
+  }
+  
+  .shortcuts-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .ref-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+  
+  .ref-item code {
+    min-width: auto;
+    width: 100%;
+  }
+}
 }
