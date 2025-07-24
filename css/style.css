@@ -744,7 +744,8 @@ body.dark-mode ::-webkit-scrollbar-thumb:hover {
   height: calc(100vh - 200px); /* Dynamic height based on viewport */
   transition: border-color 0.3s, background 0.3s;
   order: 2; /* Ensure it appears after the toolbar */
-  margin-bottom: 8px; /* Added responsive bottom margin as requested */
+  margin-bottom: 16px; /* Enhanced bottom margin for better spacing */
+  padding-bottom: 2rem; /* Additional internal padding at bottom for comfortable editing */
 }
 
 .editor:focus { border-color: #1976d2; }
@@ -1658,11 +1659,91 @@ body.dark-mode .tools-toggle:hover {
   transition: background-color 0.2s ease;
 }
 
-/* Enhanced Dark Theme with Better Contrast & Accessibility */
+/* Enhanced Dark Theme with Better Contrast & Accessibility and Smooth Transitions */
 body.dark-mode {
   background: #1a1a1a;
   color: #e8e8e8;
-  transition: background-color 0.3s ease, color 0.3s ease;
+  transition: background-color 0.4s cubic-bezier(0.4, 0, 0.2, 1), color 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Smooth transitions for all theme-sensitive elements */
+body {
+  transition: background-color 0.4s cubic-bezier(0.4, 0, 0.2, 1), color 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.panel, .navbar, .footer, .modal-content, .formatting-toolbar {
+  transition: background-color 0.4s cubic-bezier(0.4, 0, 0.2, 1), 
+              color 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+              border-color 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+              box-shadow 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.editor, .preview, .btn, .format-btn, .navbar-input, .dropdown-menu {
+  transition: background-color 0.4s cubic-bezier(0.4, 0, 0.2, 1), 
+              color 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+              border-color 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Enhanced theme button feedback */
+button[id="theme-btn"] {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+button[id="theme-btn"]:active {
+  transform: scale(0.95);
+}
+
+button[id="theme-btn"]::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  transition: width 0.6s ease, height 0.6s ease;
+}
+
+button[id="theme-btn"]:active::after {
+  width: 200%;
+  height: 200%;
+}
+
+/* Theme transitioning state for enhanced effects */
+body.theme-transitioning * {
+  transition-duration: 0.4s !important;
+}
+
+/* Enhanced notification system for theme feedback */
+.theme-notification {
+  position: fixed;
+  top: 80px;
+  right: 20px;
+  background: linear-gradient(135deg, #4caf50, #45a049);
+  color: white;
+  padding: 0.75rem 1.25rem;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  z-index: 1001;
+  box-shadow: 0 4px 15px rgba(76, 175, 80, 0.3);
+  animation: slideInFromRight 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  backdrop-filter: blur(10px);
+}
+
+@keyframes slideInFromRight {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
 }
 
 /* Dark Mode Navbar */
@@ -1961,6 +2042,29 @@ body.dark-mode .panel-resizer.resizing::before {
   text-shadow: 0 2px 6px rgba(100, 181, 246, 0.5);
 }
 
+/* Dark mode support for tablet-specific resizer enhancements */
+@media (min-width: 769px) and (max-width: 1024px) {
+  body.dark-mode .panel-resizer {
+    background: linear-gradient(180deg, rgba(100, 181, 246, 0.2), rgba(100, 181, 246, 0.1));
+  }
+  
+  body.dark-mode .panel-resizer:hover, 
+  body.dark-mode .panel-resizer:active {
+    background: linear-gradient(180deg, rgba(100, 181, 246, 0.35), rgba(100, 181, 246, 0.2));
+    box-shadow: 0 0 15px rgba(100, 181, 246, 0.25);
+  }
+  
+  body.dark-mode .panel-resizer::before {
+    color: rgba(100, 181, 246, 0.8);
+  }
+  
+  body.dark-mode .panel-resizer:hover::before, 
+  body.dark-mode .panel-resizer:active::before {
+    color: rgba(100, 181, 246, 1);
+    text-shadow: 0 2px 6px rgba(100, 181, 246, 0.4);
+  }
+}
+
 body.dark-mode .darkable {
   background: linear-gradient(135deg, #2d2d2d, #262626);
   color: #e8e8e8;
@@ -2159,7 +2263,8 @@ body.dark-mode a:hover {
     border-radius: 8px;
     resize: none; /* Disable manual resize on mobile */
     overflow-y: auto; /* Enable vertical scrolling for long content */
-    margin-bottom: 8px; /* Maintain bottom margin on mobile */
+    margin-bottom: 20px; /* Enhanced bottom margin for mobile for better touch spacing */
+    padding-bottom: 2.5rem; /* Extra internal padding at bottom for mobile editing comfort */
   }
   
   .export-dropdown {
@@ -2340,6 +2445,48 @@ body.dark-mode a:hover {
     min-width: 280px; /* Adjust minimum width for tablets */
   }
   
+  /* Enhanced panel resizer for tablet touch interactions */
+  .panel-resizer {
+    width: 16px; /* Wider resizer for better touch targets */
+    background: linear-gradient(180deg, rgba(25, 118, 210, 0.15), rgba(25, 118, 210, 0.08));
+    cursor: col-resize;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    border-radius: 6px; /* Larger border radius for touch */
+    margin: 0 4px; /* More margin for better separation */
+    /* Improve touch target */
+    touch-action: pan-x;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    user-select: none;
+  }
+  
+  .panel-resizer:hover, .panel-resizer:active {
+    background: linear-gradient(180deg, rgba(25, 118, 210, 0.25), rgba(25, 118, 210, 0.15));
+    transform: scaleX(1.2);
+    box-shadow: 0 0 12px rgba(25, 118, 210, 0.2);
+  }
+  
+  .panel-resizer::before {
+    content: "⋮⋮⋮";
+    font-size: 14px;
+    color: rgba(25, 118, 210, 0.7);
+    font-weight: bold;
+    line-height: 1;
+    transition: all 0.3s ease;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  }
+  
+  .panel-resizer:hover::before, .panel-resizer:active::before {
+    color: rgba(25, 118, 210, 1);
+    text-shadow: 0 2px 4px rgba(25, 118, 210, 0.3);
+    transform: scale(1.1);
+  }
+  
   .formatting-toolbar {
     gap: 0.5rem; /* Better spacing between buttons */
     padding: 1rem; /* Increased padding */
@@ -2364,6 +2511,8 @@ body.dark-mode a:hover {
     padding: 1.25rem; /* Better padding */
     border-radius: 10px; /* Consistent with other elements */
     line-height: 1.7; /* Better line spacing for readability */
+    margin-bottom: 18px; /* Enhanced bottom margin for tablets */
+    padding-bottom: 2rem; /* Comfortable bottom padding for touch editing */
   }
   
   .btn, .input-field {

@@ -479,11 +479,40 @@ clearBtn.addEventListener('click', () => {
 });
 
 /**
- * Toggle dark/light theme
+ * Enhanced theme toggle with smooth transitions and user feedback
  */
 themeBtn.addEventListener('click', () => {
+  const isDarkMode = document.body.classList.contains('dark-mode');
+  
+  // Add loading state with visual feedback
+  themeBtn.style.transform = 'scale(0.95)';
+  themeBtn.style.opacity = '0.7';
+  
+  // Apply theme change with smooth animation
   document.body.classList.toggle('dark-mode');
+  const newTheme = document.body.classList.contains('dark-mode') ? 'dark' : 'light';
+  
+  // Save theme preference
   localStorage.setItem('dark-mode', document.body.classList.contains('dark-mode'));
+  
+  // Restore button state and show feedback
+  setTimeout(() => {
+    themeBtn.style.transform = '';
+    themeBtn.style.opacity = '';
+    
+    // Show theme change notification
+    showNotification(
+      `🎨 Switched to ${newTheme} mode`, 
+      'success', 
+      2000
+    );
+  }, 150);
+  
+  // Add temporary class for enhanced transition effects
+  document.body.classList.add('theme-transitioning');
+  setTimeout(() => {
+    document.body.classList.remove('theme-transitioning');
+  }, 400);
 });
 
 // Restore theme preference

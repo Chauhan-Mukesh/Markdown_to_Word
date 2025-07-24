@@ -44,10 +44,11 @@ class PanelResizer {
     document.addEventListener('mousemove', this.resize.bind(this));
     document.addEventListener('mouseup', this.stopResize.bind(this));
     
-    // Touch events for mobile
-    this.resizer.addEventListener('touchstart', this.startResize.bind(this));
-    document.addEventListener('touchmove', this.resize.bind(this));
+    // Enhanced touch events for mobile and tablet
+    this.resizer.addEventListener('touchstart', this.startResize.bind(this), { passive: false });
+    document.addEventListener('touchmove', this.resize.bind(this), { passive: false });
     document.addEventListener('touchend', this.stopResize.bind(this));
+    document.addEventListener('touchcancel', this.stopResize.bind(this));
     
     // Keyboard accessibility
     this.resizer.addEventListener('keydown', this.handleKeyboard.bind(this));
@@ -58,6 +59,19 @@ class PanelResizer {
     
     // Window resize handler
     window.addEventListener('resize', this.handleWindowResize.bind(this));
+    
+    // Enhanced touch support for tablets - add visual feedback
+    this.resizer.addEventListener('touchstart', () => {
+      this.resizer.style.transform = 'scaleX(1.3)';
+      this.resizer.style.boxShadow = '0 0 20px rgba(25, 118, 210, 0.3)';
+    }, { passive: true });
+    
+    this.resizer.addEventListener('touchend', () => {
+      setTimeout(() => {
+        this.resizer.style.transform = '';
+        this.resizer.style.boxShadow = '';
+      }, 150);
+    }, { passive: true });
   }
   
   startResize(e) {
@@ -79,7 +93,18 @@ class PanelResizer {
   resize(e) {
     if (!this.isResizing) return;
     
-    const clientX = e.clientX || (e.touches && e.touches[0].clientX);
+    // Handle both mouse and touch events
+    let clientX;
+    if (e.type === 'touchmove') {
+      if (e.touches && e.touches.length > 0) {
+        clientX = e.touches[0].clientX;
+      } else {
+        return; // No valid touch
+      }
+    } else {
+      clientX = e.clientX;
+    }
+    
     if (!clientX) return;
     
     // Use requestAnimationFrame for smoother resizing
