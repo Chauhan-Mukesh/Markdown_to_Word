@@ -54,12 +54,16 @@ window.addEventListener('DOMContentLoaded', () => {
       backslashEscapesHTMLTags: true,
       emoji: true,
       underline: true,
-      simpleLineBreaks: true,
+      simpleLineBreaks: false, // Disable to allow proper list parsing
       requireSpaceBeforeHeadingText: true,
       parseImgDimensions: true,
       simplifiedAutoLink: true,
       literalMidWordUnderscores: true,
-      metadata: true
+      metadata: true,
+      noHeaderId: true, // Prevents header ID conflicts
+      ghCodeBlocks: true, // Better code block support
+      rawHeaderId: true, // Better header ID handling
+      rawPrefixHeaderId: true
     });
     console.log('✅ Using Showdown.js for markdown conversion');
   } else {
@@ -502,7 +506,20 @@ function renderPreview() {
         
         // Sanitize content - remove potentially dangerous elements
         const sanitizedContent = sanitizeMarkdown(content);
-        const html = converter.makeHtml(sanitizedContent);
+        
+        // Check if content has nested lists and use appropriate converter
+        const hasNestedLists = /^[\s]{2,}[\d+\.\*\+\-]/m.test(sanitizedContent);
+        
+        let html;
+        if (hasNestedLists && window.SimpleMarkdownConverter) {
+          // Use our enhanced converter for better nested list support
+          const customConverter = new SimpleMarkdownConverter();
+          html = customConverter.makeHtml(sanitizedContent);
+        } else {
+          // Preprocess for better list handling with Showdown
+          const processedContent = preprocessLists(sanitizedContent);
+          html = converter.makeHtml(processedContent);
+        }
         
         // Additional HTML sanitization
         const sanitizedHtml = sanitizeHtml(html);
@@ -638,6 +655,44 @@ function processImagePlaceholders() {
       img.parentNode.replaceChild(placeholder, img);
     }
   });
+}
+
+/**
+ * Preprocess markdown to fix nested list formatting for better Showdown compatibility
+ */
+function preprocessLists(content) {
+  const lines = content.split('\n');
+  const result = [];
+  
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i];
+    
+    // Check if this is a list item with indentation
+    const listMatch = line.match(/^(\s*)(\d+\.|\*|\+|\-)\s+(.*)$/);
+    
+    if (listMatch) {
+      const [, indent, marker, text] = listMatch;
+      const indentLevel = Math.floor(indent.length / 4); // Every 4 spaces = 1 level
+      
+      if (indentLevel > 0) {
+        // For nested lists, convert to proper markdown nested format
+        if (marker.match(/^\d+\.$/)) {
+          // Numbered list - add proper spacing and numbering reset
+          result.push(`${'    '.repeat(indentLevel)}1. ${text}`);
+        } else {
+          // Bullet list - add proper spacing
+          result.push(`${'    '.repeat(indentLevel)}* ${text}`);
+        }
+      } else {
+        // Top-level list item
+        result.push(line);
+      }
+    } else {
+      result.push(line);
+    }
+  }
+  
+  return result.join('\n');
 }
 
 /**
@@ -1066,7 +1121,7 @@ class KeyboardShortcuts {
     const headers = (text.match(/^#{1,6}\s+/gm) || []).length;
     const codeBlocks = (text.match(/```[\s\S]*?```/g) || []).length;
     const links = (text.match(/\[([^\]]*)\]\(([^)]*)\)/g) || []).length;
-    const lists = (text.match(/^[\s]*[-*+]\s+/gm) || []).length;
+    const lists = (text.match(/^[\s]*(?:[-*+]|\d+\.)\s+/gm) || []).length;
     
     // Reading time (average 200 words per minute)
     const readingTime = Math.ceil(words / 200);
