@@ -109,9 +109,9 @@
   }
   </script>
   
-  <!-- Favicon as inline SVG emoji (no external link) -->
-  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='0.9em' font-size='90'%3E🚀%3C/text%3E%3C/svg%3E" />
-  <title>🚀 MarkdownForge - Smart Document Processing | Convert Markdown to Word</title>
+  <!-- Professional SVG favicon -->
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%231976d2' d='M14,2H6A2,2 0 0,0 4,4V20A2,2 0 0,0 6,22H18A2,2 0 0,0 20,20V8L14,2M18,20H6V4H13V9H18V20Z'/%3E%3C/svg%3E" />
+  <title>📝 MarkdownForge - Smart Document Processing | Convert Markdown to Word</title>
   
   <!-- Stylesheets -->
   <link rel="stylesheet" href="css/style.css">
@@ -258,24 +258,22 @@
 
       <!-- Navigation Items -->
       <div id="navbar-menu" class="navbar-menu">
-        <!-- Direct Options -->
+        <!-- File Operations (Most Important) -->
+        <div class="navbar-item dropdown">
+          <button class="dropdown-toggle">📁 File ▼</button>
+          <div class="dropdown-menu">
+            <button id="load-btn" class="dropdown-item">📂 Open</button>
+            <button id="save-md-btn" class="dropdown-item">💾 Save</button>
+            <button id="clear-btn" class="dropdown-item">🗑️ New</button>
+            <button id="theme-btn" class="dropdown-item">🎨 Theme</button>
+          </div>
+        </div>
+
+        <!-- Template Selection -->
         <div class="navbar-item">
           <div id="template-container"></div>
         </div>
         
-        <div class="navbar-item">
-          <div class="export-dropdown">
-            <button id="export-btn" class="btn navbar-btn" disabled>📥 Export ▼</button>
-            <div id="export-menu" class="export-menu">
-              <button id="download-word-btn" class="export-option">📄 Word (.docx)</button>
-              <button id="download-html-btn" class="export-option">🌐 HTML</button>
-              <button id="download-standalone-btn" class="export-option">🌐 Standalone HTML</button>
-              <button id="download-txt-btn" class="export-option">📝 Text</button>
-              <button id="download-pdf-btn" class="export-option">📑 PDF</button>
-            </div>
-          </div>
-        </div>
-
         <!-- Document Info Fields -->
         <div class="navbar-item">
           <input id="doc-title" class="navbar-input" placeholder="Document Title" value="My Document" />
@@ -287,29 +285,32 @@
           <input id="doc-date" type="date" class="navbar-input" />
         </div>
 
-        <!-- File Dropdown Menu -->
-        <div class="navbar-item dropdown">
-          <button class="dropdown-toggle">📁 File ▼</button>
-          <div class="dropdown-menu">
-            <button id="load-btn" class="dropdown-item">📁 Load</button>
-            <button id="save-md-btn" class="dropdown-item">💾 Save</button>
-            <button id="clear-btn" class="dropdown-item">🗑️ Clear</button>
-            <button id="theme-btn" class="dropdown-item">🎨 Theme</button>
-          </div>
+        <!-- View & Preview -->
+        <div class="navbar-item">
+          <button id="preview-btn" class="btn navbar-btn" disabled>👁️ Preview</button>
         </div>
 
-        <!-- Tools Dropdown Menu -->
+        <!-- Tools & Utilities -->
         <div class="navbar-item dropdown">
           <button class="dropdown-toggle">🛠️ Tools ▼</button>
           <div class="dropdown-menu">
-            <button id="search-btn" class="dropdown-item">🔍 Find</button>
+            <button id="search-btn" class="dropdown-item">🔍 Find & Replace</button>
             <button id="print-btn" class="dropdown-item">🖨️ Print</button>
           </div>
         </div>
 
-        <!-- Preview Button -->
+        <!-- Export (Final Action) -->
         <div class="navbar-item">
-          <button id="preview-btn" class="btn navbar-btn" disabled>🔍 Preview</button>
+          <div class="export-dropdown">
+            <button id="export-btn" class="btn navbar-btn" disabled>⬇️ Export ▼</button>
+            <div id="export-menu" class="export-menu">
+              <button id="download-word-btn" class="export-option">📄 Word (.docx)</button>
+              <button id="download-html-btn" class="export-option">🌐 HTML</button>
+              <button id="download-standalone-btn" class="export-option">🌐 Standalone HTML</button>
+              <button id="download-txt-btn" class="export-option">📝 Text</button>
+              <button id="download-pdf-btn" class="export-option">📑 PDF</button>
+            </div>
+          </div>
         </div>
       </div>
     </div>
