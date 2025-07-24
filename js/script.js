@@ -95,13 +95,33 @@ function initializeTemplates() {
 function initializeFormattingToolbar() {
   document.getElementById('bold-btn').onclick = () => editorToolbar.makeBold();
   document.getElementById('italic-btn').onclick = () => editorToolbar.makeItalic();
+  document.getElementById('underline-btn').onclick = () => editorToolbar.makeUnderline();
+  document.getElementById('strikethrough-btn').onclick = () => editorToolbar.makeStrikethrough();
   document.getElementById('code-btn').onclick = () => editorToolbar.makeCode();
+  document.getElementById('code-block-btn').onclick = () => editorToolbar.insertCodeBlock();
   document.getElementById('link-btn').onclick = () => editorToolbar.insertLink();
-  document.getElementById('header-btn').onclick = () => editorToolbar.insertHeader();
-  document.getElementById('list-btn').onclick = () => editorToolbar.insertList();
+  document.getElementById('image-btn').onclick = () => editorToolbar.insertImage();
+  
+  // Header dropdown functionality
+  document.getElementById('h1-btn').onclick = () => editorToolbar.insertH1();
+  document.getElementById('h2-btn').onclick = () => editorToolbar.insertH2();
+  document.getElementById('h3-btn').onclick = () => editorToolbar.insertH3();
+  document.getElementById('h4-btn').onclick = () => editorToolbar.insertH4();
+  document.getElementById('h5-btn').onclick = () => editorToolbar.insertH5();
+  document.getElementById('h6-btn').onclick = () => editorToolbar.insertH6();
+  
+  // List dropdown functionality
+  document.getElementById('unordered-list-btn').onclick = () => editorToolbar.insertList();
+  document.getElementById('ordered-list-btn').onclick = () => editorToolbar.insertNumberedList();
+  document.getElementById('sub-unordered-list-btn').onclick = () => editorToolbar.insertSubList();
+  document.getElementById('sub-ordered-list-btn').onclick = () => editorToolbar.insertSubNumberedList();
+  
   document.getElementById('quote-btn').onclick = () => editorToolbar.insertBlockquote();
   document.getElementById('table-btn').onclick = () => editorToolbar.insertTable();
   document.getElementById('hr-btn').onclick = () => editorToolbar.insertHorizontalRule();
+  
+  // Initialize dropdown functionality
+  initializeDropdowns();
 }
 
 /**
@@ -121,6 +141,44 @@ function initializeAutosave() {
   } catch (error) {
     console.error('Auto-save initialization failed:', error);
   }
+}
+
+/**
+ * Initialize dropdown functionality for formatting toolbar
+ */
+function initializeDropdowns() {
+  const dropdowns = document.querySelectorAll('.format-dropdown');
+  
+  dropdowns.forEach(dropdown => {
+    const toggle = dropdown.querySelector('.dropdown-toggle');
+    const menu = dropdown.querySelector('.format-dropdown-menu');
+    
+    // Toggle dropdown on click
+    toggle.addEventListener('click', (e) => {
+      e.stopPropagation();
+      
+      // Close other dropdowns
+      dropdowns.forEach(other => {
+        if (other !== dropdown) {
+          other.classList.remove('active');
+        }
+      });
+      
+      dropdown.classList.toggle('active');
+    });
+    
+    // Close dropdown when clicking menu items
+    menu.addEventListener('click', () => {
+      dropdown.classList.remove('active');
+    });
+  });
+  
+  // Close dropdowns when clicking outside
+  document.addEventListener('click', () => {
+    dropdowns.forEach(dropdown => {
+      dropdown.classList.remove('active');
+    });
+  });
 }
 
 /**
