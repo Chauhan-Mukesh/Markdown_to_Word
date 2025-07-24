@@ -489,9 +489,9 @@ body.dark-mode ::-webkit-scrollbar-thumb:hover {
   flex-wrap: nowrap; /* Prevent wrapping on large screens */
   flex: 1;
   min-height: calc(100vh - 120px); /* Account for navbar (60px) + footer (60px) */
-  max-width: 1920px; /* Maximum width for ultra-wide screens */
+  max-width: 100%; /* Use full available width */
   margin: 0 auto; /* Center the app */
-  padding: 0 1rem; /* Side padding for better appearance */
+  padding: 0 0.5rem; /* Reduced side padding for better space utilization */
   overflow-x: hidden; /* Prevent horizontal scrolling */
 }
 
@@ -505,7 +505,7 @@ body.dark-mode ::-webkit-scrollbar-thumb:hover {
   transition: background 0.3s;
   box-shadow: 0 2px 8px rgba(0,0,0,0.1);
   border-radius: 8px; /* Add border radius for modern look */
-  margin: 0.5rem; /* Add margin between panels */ 
+  margin: 0.25rem; /* Reduced margin for better space utilization */ 
 }
 
 /* Editor Panel */
@@ -1109,9 +1109,6 @@ body.dark-mode .tools-toggle:hover {
   }
 }
 
-/* Old toolbar styles update */
-
-
 /* Buttons & Inputs */
 .input-field {
   flex: 1 1 150px;
@@ -1241,7 +1238,6 @@ body.dark-mode .tools-toggle:hover {
   background: #f7f9fa;
   border-bottom: 1px solid #ddd;
   transition: background 0.3s, color 0.3s;
-}
 }
 #preview-header h2 {
   margin: 0;
@@ -1856,8 +1852,8 @@ body.dark-mode a:hover {
   #app { 
     flex-direction: row; 
     min-height: calc(100vh - 160px);
-    padding: 0 0.75rem; /* Increased padding for better content separation */
-    gap: 0.75rem; /* Add gap between panels */
+    padding: 0 0.5rem; /* Reduced padding for better space utilization */
+    gap: 0.5rem; /* Reduced gap for more content space */
   }
   
   .panel { 
@@ -1933,14 +1929,13 @@ body.dark-mode a:hover {
   #app { 
     flex-direction: row; 
     min-height: calc(100vh - 160px);
-    padding: 0 1rem;
-    gap: 1.5rem; /* Increased gap for better separation */
-    max-width: 1600px; /* Increased max width for better space utilization */
-    margin: 0 auto; /* Center the content */
+    padding: 0 0.5rem; /* Reduced padding for better space utilization */
+    gap: 0.5rem; /* Reduced gap for more content space */
+    max-width: 100%; /* Use full width available */
+    margin: 0; /* Remove auto centering for full width */
   }
   
   .panel { 
-    flex: 1 1 50%; 
     margin: 0; /* Remove margin, use gap */
     border-radius: 12px;
     box-shadow: 0 4px 16px rgba(0,0,0,0.1);
@@ -1948,15 +1943,15 @@ body.dark-mode a:hover {
   
   /* Editor panel should be larger for better typing comfort */
   #editor-panel {
-    flex: 1 1 60%; /* Better editor width for comfortable typing */
-    max-width: 65%; /* Allow more space for complex documents */
+    flex: 1 1 65%; /* Increased editor width for better productivity */
+    max-width: 70%; /* Allow more space for complex documents */
   }
   
   /* Preview panel optimized for reading */
   #preview-panel {
-    flex: 1 1 40%; /* Proportional preview width */
-    max-width: 40%; /* Prevent from getting too narrow */
-    min-width: 350px; /* Ensure minimum readable width */
+    flex: 1 1 35%; /* Reduced preview width for more editor space */
+    max-width: 35%; /* Prevent from getting too wide */
+    min-width: 300px; /* Ensure minimum readable width */
   }
   
   .formatting-toolbar {
@@ -1976,28 +1971,28 @@ body.dark-mode a:hover {
 /* Ultra-wide screens: optimized layout with better space utilization */
 @media (min-width: 1400px) {
   .navbar-container {
-    max-width: 1920px;
-    padding: 1rem 3rem;
+    max-width: 100%; /* Use full width */
+    padding: 1rem 2rem; /* Reduced padding for more content space */
     gap: 2rem;
   }
   
   #app {
-    max-width: 1600px; /* Optimal reading width */
-    padding: 0 2rem;
-    gap: 1.5rem; /* Larger gap for ultra-wide */
-    margin: 0 auto; /* Center the content */
+    max-width: 100%; /* Use full screen width */
+    padding: 0 1rem; /* Reduced padding for more content space */
+    gap: 0.75rem; /* Optimized gap for ultra-wide */
+    margin: 0; /* Remove centering for full width utilization */
   }
   
   /* Dynamic panel sizing for ultra-wide screens */
   #editor-panel {
-    flex: 1 1 60%; /* Larger editor on ultra-wide */
-    max-width: 65%; /* Comfortable typing area */
+    flex: 1 1 65%; /* Larger editor on ultra-wide */
+    max-width: 70%; /* Comfortable typing area */
     min-width: 600px; /* Minimum comfortable width */
   }
   
   #preview-panel {
-    flex: 1 1 40%; /* Proportional preview */
-    max-width: 35%; /* Prevent preview from being too wide */
+    flex: 1 1 35%; /* Proportional preview */
+    max-width: 30%; /* Optimized preview width for ultra-wide */
     min-width: 400px; /* Minimum readable width */
   }
   
