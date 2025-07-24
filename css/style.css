@@ -50,11 +50,16 @@ body.dark-mode ::-webkit-scrollbar-thumb:hover {
 /* ===================== */
 .navbar {
   background: linear-gradient(135deg, #1976d2, #1565c0);
-  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 12px rgba(0,0,0,0.15);
   position: sticky;
   top: 0;
   z-index: 1000;
-  transition: all 0.3s ease;
+  transition: all 0.3s ease, box-shadow 0.3s ease;
+  backdrop-filter: blur(10px);
+}
+
+.navbar:hover {
+  box-shadow: 0 4px 20px rgba(0,0,0,0.2);
 }
 
 .navbar-container {
@@ -66,7 +71,7 @@ body.dark-mode ::-webkit-scrollbar-thumb:hover {
   justify-content: space-between;
   padding: 0.5rem 1.5rem; /* Reduced padding for smaller navbar */
   gap: 1rem; /* Reduced gap */
-  min-height: 48px; /* Reduced height from 60px */
+  min-height: 50px; /* Slightly increased for better touch targets */
 }
 
 .navbar-brand {
@@ -113,32 +118,55 @@ body.dark-mode ::-webkit-scrollbar-thumb:hover {
 }
 
 .navbar-btn {
-  background: rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.15);
   color: white !important;
-  border: 1px solid rgba(255, 255, 255, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.25);
   backdrop-filter: blur(10px);
-  transition: all 0.3s ease;
-  padding: 0.4rem 0.6rem; /* Reduced padding */
-  font-size: 0.8rem; /* Smaller font size */
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  padding: 0.45rem 0.75rem; /* Improved padding */
+  font-size: 0.85rem; /* Slightly larger font */
+  border-radius: 6px;
+  font-weight: 500;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
 }
 
 .navbar-btn:hover {
-  background: rgba(255, 255, 255, 0.3);
+  background: rgba(255, 255, 255, 0.25);
   transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+  box-shadow: 0 4px 15px rgba(0,0,0,0.25);
+  border-color: rgba(255, 255, 255, 0.4);
+}
+
+.navbar-btn:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
 }
 
 .navbar-btn:disabled {
-  opacity: 0.6;
+  opacity: 0.5;
   cursor: not-allowed;
   transform: none;
+  background: rgba(255, 255, 255, 0.1);
 }
 
 .navbar-input {
-  padding: 0.4rem 0.6rem; /* Reduced padding */
+  padding: 0.45rem 0.75rem; /* Improved padding */
   border: 1px solid rgba(255, 255, 255, 0.3);
-  border-radius: 4px;
-  background: rgba(255, 255, 255, 0.9);
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  transition: all 0.3s ease;
+  font-size: 0.85rem;
+}
+
+.navbar-input:focus {
+  outline: none;
+  border-color: rgba(255, 255, 255, 0.6);
+  background: rgba(255, 255, 255, 1);
+  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.2);
+}
   color: #333;
   font-size: 0.8rem; /* Smaller font size */
   transition: all 0.3s ease;
@@ -178,22 +206,23 @@ body.dark-mode ::-webkit-scrollbar-thumb:hover {
   top: 100%;
   right: 0;
   background: white;
-  border: 1px solid #ddd;
-  border-radius: 6px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  border: 1px solid rgba(0,0,0,0.1);
+  border-radius: 8px;
+  box-shadow: 0 8px 25px rgba(0,0,0,0.15);
   z-index: 1000;
-  min-width: 140px;
+  min-width: 160px;
   opacity: 0;
   visibility: hidden;
-  transform: translateY(-10px);
-  transition: all 0.3s ease;
+  transform: translateY(-10px) scale(0.95);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  backdrop-filter: blur(10px);
 }
 
 .dropdown:hover .dropdown-menu,
 .dropdown.active .dropdown-menu {
   opacity: 1;
   visibility: visible;
-  transform: translateY(0);
+  transform: translateY(0) scale(1);
 }
 
 .dropdown-item {
@@ -205,7 +234,20 @@ body.dark-mode ::-webkit-scrollbar-thumb:hover {
   color: #333;
   text-align: left;
   cursor: pointer;
-  transition: background-color 0.2s ease;
+  transition: all 0.2s ease;
+  font-size: 0.85rem;
+  border-bottom: 1px solid rgba(0,0,0,0.05);
+}
+
+.dropdown-item:last-child {
+  border-bottom: none;
+}
+
+.dropdown-item:hover {
+  background: rgba(25, 118, 210, 0.1);
+  color: #1976d2;
+  transform: translateX(4px);
+}
   font-size: 0.875rem;
   border-bottom: 1px solid #f0f0f0;
 }
@@ -271,7 +313,7 @@ body.dark-mode ::-webkit-scrollbar-thumb:hover {
 .footer {
   background: linear-gradient(135deg, #2c3e50, #34495e);
   color: white;
-  padding: 1.25rem 0;
+  padding: 0.5rem 0; /* Reduced from 1.25rem to 0.5rem */
   margin-top: auto;
   position: sticky;
   bottom: 0;
@@ -279,7 +321,7 @@ body.dark-mode ::-webkit-scrollbar-thumb:hover {
   right: 0;
   width: 100%;
   z-index: 999; /* Lower than modals but high enough */
-  box-shadow: 0 -3px 15px rgba(0,0,0,0.15);
+  box-shadow: 0 -2px 8px rgba(0,0,0,0.1); /* Reduced shadow */
   flex-shrink: 0; /* Prevent shrinking */
   backdrop-filter: blur(10px);
 }
@@ -290,13 +332,13 @@ body.dark-mode ::-webkit-scrollbar-thumb:hover {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 2rem;
-  gap: 1.5rem;
+  padding: 0 1.5rem; /* Reduced from 0 2rem */
+  gap: 1rem; /* Reduced from 1.5rem */
 }
 
 .footer-left p {
-  font-size: 0.9rem;
-  line-height: 1.5;
+  font-size: 0.8rem; /* Reduced from 0.9rem */
+  line-height: 1.4; /* Reduced from 1.5 */
   font-weight: 500;
 }
 
@@ -317,23 +359,23 @@ body.dark-mode ::-webkit-scrollbar-thumb:hover {
 
 .footer-right {
   display: flex;
-  gap: 0.75rem;
+  gap: 0.5rem; /* Reduced from 0.75rem */
 }
 
 .footer-btn {
   background: rgba(255, 255, 255, 0.12);
   color: white;
   border: 1px solid rgba(255, 255, 255, 0.25);
-  padding: 0.6rem 1rem;
+  padding: 0.4rem 0.7rem; /* Reduced from 0.6rem 1rem */
   border-radius: 6px;
   cursor: pointer;
   transition: all 0.3s ease;
-  font-size: 0.875rem;
+  font-size: 0.75rem; /* Reduced from 0.875rem */
   font-weight: 500;
   backdrop-filter: blur(10px);
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 0.3rem; /* Reduced from 0.5rem */
 }
 
 .footer-btn:hover {
@@ -494,6 +536,28 @@ body.dark-mode ::-webkit-scrollbar-thumb:hover {
   .footer-left p {
     font-size: 0.8rem;
   }
+  
+  /* Mobile Panel Layout - Stack Vertically */
+  #app {
+    flex-direction: column;
+    min-height: calc(100vh - 140px); /* Account for mobile footer */
+  }
+  
+  .panel {
+    flex: 1 1 auto !important; /* Override flex settings */
+    margin: 0.25rem 0.125rem;
+    min-height: 300px;
+  }
+  
+  #editor-panel,
+  #preview-panel {
+    flex: 1 1 auto !important;
+  }
+  
+  /* Hide resizer on mobile */
+  .panel-resizer {
+    display: none;
+  }
 }
 
 /* ===================== */
@@ -503,11 +567,12 @@ body.dark-mode ::-webkit-scrollbar-thumb:hover {
   display: flex; 
   flex-wrap: nowrap; /* Prevent wrapping on large screens */
   flex: 1;
-  min-height: calc(100vh - 120px); /* Account for navbar (60px) + footer (60px) */
+  min-height: calc(100vh - 100px); /* Reduced from 120px to account for smaller footer */
   max-width: 100%; /* Use full available width */
   margin: 0 auto; /* Center the app */
   padding: 0 0.5rem; /* Reduced side padding for better space utilization */
   overflow-x: hidden; /* Prevent horizontal scrolling */
+  position: relative; /* For resizer positioning */
 }
 
 .panel { 
@@ -517,13 +582,62 @@ body.dark-mode ::-webkit-scrollbar-thumb:hover {
   padding: 1.5rem; /* Increased padding for better spacing */
   overflow: hidden; 
   background: #fff; 
-  transition: background 0.3s;
+  transition: background 0.3s, flex 0.3s ease; /* Added flex transition for smooth resizing */
   box-shadow: 0 2px 8px rgba(0,0,0,0.1);
   border-radius: 8px; /* Add border radius for modern look */
   margin: 0.25rem; /* Reduced margin for better space utilization */ 
 }
 
 /* Editor Panel */
+#editor-panel {
+  flex: 0 0 55%; /* Default 55% width */
+  margin-right: 0.125rem; /* Half margin on right */
+}
+
+/* Preview Panel */  
+#preview-panel {
+  flex: 0 0 45%; /* Default 45% width */
+  margin-left: 0.125rem; /* Half margin on left */
+}
+
+/* Panel Resizer */
+.panel-resizer {
+  width: 10px;
+  background: transparent;
+  cursor: col-resize;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: background 0.2s ease;
+}
+
+.panel-resizer:hover {
+  background: rgba(25, 118, 210, 0.1);
+}
+
+.panel-resizer::before {
+  content: "⋮";
+  font-size: 18px;
+  color: #999;
+  font-weight: bold;
+  transform: rotate(90deg);
+  transition: color 0.2s ease;
+}
+
+.panel-resizer:hover::before {
+  color: #1976d2;
+}
+
+/* Active resizing state */
+.panel-resizer.resizing {
+  background: rgba(25, 118, 210, 0.2);
+}
+
+.panel-resizer.resizing::before {
+  color: #1976d2;
+}
 #editor-panel { 
   padding: 1.5rem; /* Match panel padding */
   display: flex;
@@ -985,14 +1099,74 @@ body.dark-mode .tools-section {
 .modal-content {
   background-color: #fefefe;
   position: relative;
-  padding: 2rem;
+  padding: 1.5rem; /* Reduced from 2rem */
   border: none;
-  border-radius: 16px;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-  animation: modalSlideIn 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-  max-width: 90vw;
-  max-height: 90vh;
+  border-radius: 12px; /* Reduced from 16px for more compact look */
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.25); /* Reduced shadow */
+  animation: modalSlideIn 0.3s cubic-bezier(0.4, 0, 0.2, 1); /* Faster animation */
+  max-width: 85vw; /* Reduced from 90vw */
+  max-height: 85vh; /* Reduced from 90vh */
   overflow-y: auto;
+  margin: 5vh auto; /* Better centering */
+}
+
+/* Improved close button */
+.close {
+  color: #aaa;
+  float: right;
+  font-size: 24px; /* Reduced from default */
+  font-weight: bold;
+  line-height: 1;
+  cursor: pointer;
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: all 0.2s ease;
+  background: rgba(0,0,0,0.05);
+}
+
+.close:hover,
+.close:focus {
+  color: #000;
+  background: rgba(0,0,0,0.1);
+  text-decoration: none;
+  transform: scale(1.1);
+}
+
+/* Modal header improvements */
+.modal-header {
+  padding-bottom: 1rem;
+  border-bottom: 1px solid #eee;
+  margin-bottom: 1rem;
+}
+
+.modal-header h2,
+.modal-header h3 {
+  margin: 0;
+  font-size: 1.3rem; /* Reduced size */
+  color: #333;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* Modal body improvements */
+.modal-body {
+  padding: 0.5rem 0;
+}
+
+.modal-body p {
+  margin: 0.5rem 0;
+  line-height: 1.5;
+  color: #666;
+  font-size: 0.95rem; /* Slightly smaller */
+}
   /* Center the modal properly */
   margin: auto;
   transform: none;

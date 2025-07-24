@@ -4,6 +4,13 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
+  <!-- Security Headers -->
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://unpkg.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self'; font-src 'self' data:;">
+  <meta http-equiv="X-Content-Type-Options" content="nosniff">
+  <meta http-equiv="X-Frame-Options" content="DENY">
+  <meta http-equiv="X-XSS-Protection" content="1; mode=block">
+  <meta name="referrer" content="strict-origin-when-cross-origin">
+  
   <!-- SEO Meta Tags -->
   <meta name="description" content="AI-powered Markdown to Word converter with intelligent templates, real-time preview, and professional export formats. Convert markdown to DOCX, HTML, PDF instantly with smart document processing.">
   <meta name="keywords" content="AI markdown converter, intelligent document processor, markdown to word, smart document templates, automated formatting, real-time collaboration, markdown editor, docx export, pdf converter, document automation, content management, technical writing, documentation tool, markdown parser, online document generator">
@@ -237,6 +244,7 @@
   <script src="js/search-replace.js" defer></script>
   <script src="js/print-export.js" defer></script>
   <script src="js/navbar.js" defer></script>
+  <script src="js/panel-resizer.js" defer></script>
   <!-- Core Script -->
   <script src="js/script.js" defer></script>
 </head>
@@ -355,10 +363,25 @@
         <button class="format-btn" id="quote-btn" title="Quote">" Quote</button>
         <button class="format-btn" id="table-btn" title="Table">⚏ Table</button>
         <button class="format-btn" id="hr-btn" title="Horizontal Rule">─</button>
+        
+        <!-- New toolbar features -->
+        <button class="format-btn" id="word-count-btn" title="Word Count">📊 Count</button>
+        <div class="format-dropdown" id="insert-dropdown">
+          <button class="format-btn dropdown-toggle" id="insert-btn" title="Insert Elements">➕ Insert ▼</button>
+          <div class="format-dropdown-menu" id="insert-menu">
+            <button class="format-dropdown-item" id="insert-date-btn" title="Insert Current Date">📅 Date</button>
+            <button class="format-dropdown-item" id="insert-time-btn" title="Insert Current Time">🕐 Time</button>
+            <button class="format-dropdown-item" id="insert-checkbox-btn" title="Insert Checkbox">☐ Checkbox</button>
+            <button class="format-dropdown-item" id="insert-emoji-btn" title="Insert Emoji">😀 Emoji</button>
+          </div>
+        </div>
       </div>
       
       <textarea id="markdown-input" class="editor" placeholder="Type or paste your Markdown..."></textarea>
     </section>
+
+    <!-- Panel Resizer -->
+    <div id="panel-resizer" class="panel-resizer" title="Drag to resize panels"></div>
 
     <section id="preview-panel" class="panel">
       <header id="preview-header" class="darkable">

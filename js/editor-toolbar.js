@@ -435,6 +435,130 @@ class EditorToolbar {
     const lineEnd = text.indexOf('\n', cursor);
     return text.substring(lineStart, lineEnd === -1 ? text.length : lineEnd);
   }
+
+  /**
+   * Show word count modal
+   */
+  showWordCount() {
+    const text = this.textarea.value;
+    const words = text.trim() ? text.trim().split(/\s+/).length : 0;
+    const characters = text.length;
+    const charactersNoSpaces = text.replace(/\s/g, '').length;
+    const lines = text.split('\n').length;
+    const paragraphs = text.split(/\n\s*\n/).filter(p => p.trim()).length;
+    
+    const modal = document.createElement('div');
+    modal.className = 'modal';
+    modal.style.display = 'block';
+    modal.innerHTML = `
+      <div class="modal-content" style="max-width: 400px;">
+        <span class="close">&times;</span>
+        <h2>📊 Document Statistics</h2>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin: 1rem 0;">
+          <div class="stat-item">
+            <strong>Words:</strong> ${words}
+          </div>
+          <div class="stat-item">
+            <strong>Characters:</strong> ${characters}
+          </div>
+          <div class="stat-item">
+            <strong>Characters (no spaces):</strong> ${charactersNoSpaces}
+          </div>
+          <div class="stat-item">
+            <strong>Lines:</strong> ${lines}
+          </div>
+          <div class="stat-item">
+            <strong>Paragraphs:</strong> ${paragraphs}
+          </div>
+          <div class="stat-item">
+            <strong>Reading time:</strong> ${Math.ceil(words / 200)} min
+          </div>
+        </div>
+      </div>
+    `;
+    
+    document.body.appendChild(modal);
+    
+    const closeBtn = modal.querySelector('.close');
+    const closeModal = () => {
+      modal.remove();
+    };
+    
+    closeBtn.addEventListener('click', closeModal);
+    modal.addEventListener('click', (e) => {
+      if (e.target === modal) closeModal();
+    });
+  }
+
+  /**
+   * Insert current date
+   */
+  insertCurrentDate() {
+    const date = new Date().toLocaleDateString();
+    this.insertText(date);
+  }
+
+  /**
+   * Insert current time
+   */
+  insertCurrentTime() {
+    const time = new Date().toLocaleTimeString();
+    this.insertText(time);
+  }
+
+  /**
+   * Insert checkbox
+   */
+  insertCheckbox() {
+    this.insertText('- [ ] ');
+  }
+
+  /**
+   * Insert emoji selector
+   */
+  insertEmoji() {
+    const emojis = ['😀', '😃', '😄', '😁', '😆', '😅', '🤣', '😂', '🙂', '🙃', '😉', '😊', '😇', '🥰', '😍', '🤩', '😘', '😗', '☺️', '😚', '😙', '🥲', '😋', '😛', '😜', '🤪', '😝', '🤑', '🤗', '🤭', '🤫', '🤔', '🤐', '🤨', '😐', '😑', '😶', '😶‍🌫️', '😏', '😒', '🙄', '😬', '😮‍💨', '🤥', '😌', '😔', '😪', '🤤', '😴', '😷', '🤒', '🤕', '🤢', '🤮', '🤧', '🥵', '🥶', '🥴', '😵', '😵‍💫', '🤯', '🤠', '🥳', '🥸', '😎', '🤓', '🧐', '😕', '😟', '🙁', '☹️', '😮', '😯', '😲', '😳', '🥺', '😦', '😧', '😨', '😰', '😥', '😢', '😭', '😱', '😖', '😣', '😞', '😓', '😩', '😫', '🥱', '😤', '😡', '😠', '🤬', '😈', '👿', '💀', '☠️', '💩', '🤡', '👹', '👺', '👻', '👽', '👾', '🤖', '😺', '😸', '😹', '😻', '😼', '😽', '🙀', '😿', '😾'];
+    
+    const emojiText = emojis.join(' ');
+    const modal = document.createElement('div');
+    modal.className = 'modal';
+    modal.style.display = 'block';
+    modal.innerHTML = `
+      <div class="modal-content" style="max-width: 500px;">
+        <span class="close">&times;</span>
+        <h2>😀 Select Emoji</h2>
+        <div style="max-height: 300px; overflow-y: auto; padding: 1rem 0;">
+          <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(40px, 1fr)); gap: 0.5rem;">
+            ${emojis.map(emoji => `<button class="emoji-btn" style="border: none; background: none; font-size: 1.5rem; cursor: pointer; padding: 0.25rem; border-radius: 4px; transition: background 0.2s;" data-emoji="${emoji}">${emoji}</button>`).join('')}
+          </div>
+        </div>
+      </div>
+    `;
+    
+    document.body.appendChild(modal);
+    
+    const closeBtn = modal.querySelector('.close');
+    const closeModal = () => modal.remove();
+    
+    closeBtn.addEventListener('click', closeModal);
+    modal.addEventListener('click', (e) => {
+      if (e.target === modal) closeModal();
+    });
+    
+    // Add hover effects and click handlers for emojis
+    modal.querySelectorAll('.emoji-btn').forEach(btn => {
+      btn.addEventListener('mouseenter', (e) => {
+        e.target.style.background = 'rgba(25, 118, 210, 0.1)';
+      });
+      btn.addEventListener('mouseleave', (e) => {
+        e.target.style.background = 'none';
+      });
+      btn.addEventListener('click', (e) => {
+        this.insertText(e.target.dataset.emoji + ' ');
+        closeModal();
+      });
+    });
+  }
 }
 
 window.EditorToolbar = EditorToolbar;
