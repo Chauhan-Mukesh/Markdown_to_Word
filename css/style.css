@@ -568,11 +568,8 @@ body.dark-mode ::-webkit-scrollbar-thumb:hover {
   }
   
   .footer {
-    position: fixed; /* Fixed at bottom on mobile */
-    bottom: 0;
-    left: 0;
-    right: 0;
-    margin-top: 0;
+    position: static; /* Non-sticky on mobile */
+    margin-top: auto;
   }
   
   .footer-left p {
@@ -582,7 +579,7 @@ body.dark-mode ::-webkit-scrollbar-thumb:hover {
   /* Mobile Panel Layout - Stack Vertically */
   #app {
     flex-direction: column;
-    min-height: calc(100vh - 140px); /* Account for mobile footer */
+    min-height: calc(100vh - 60px); /* Reduced height compensation for non-sticky footer */
   }
   
   .panel {
@@ -2430,9 +2427,15 @@ body.dark-mode a:hover {
     gap: 1rem; /* Balanced gap for tablet */
   }
   
+  /* Footer positioning for tablet - non-sticky */
+  .footer {
+    position: static;
+    margin-top: auto;
+  }
+  
   #app { 
     flex-direction: row; 
-    min-height: calc(100vh - 160px);
+    min-height: calc(100vh - 80px); /* Reduced height compensation for non-sticky footer */
     padding: 5px 0.5rem; /* Maintain responsive spacing for tablet */
     gap: 0.5rem; /* Reduced gap for more content space */
   }
