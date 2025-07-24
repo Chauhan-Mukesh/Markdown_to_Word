@@ -215,34 +215,83 @@ Markdown_to_Word/
 
 ## 🤝 Contributing
 
-We welcome contributions from the community!
+We welcome contributions from the community! Every contribution helps make this project better.
 
 ### 🎯 **Ways to Contribute**
-- 🐛 **Report Bugs** - Found an issue? Create a detailed bug report
-- 💡 **Suggest Features** - Have an idea? Open a feature request
-- 🔧 **Submit Code** - Fix bugs or implement new features
-- 📖 **Improve Documentation** - Help others understand the project
+- 🐛 **Report Bugs** - Found an issue? Create a detailed bug report with steps to reproduce
+- 💡 **Suggest Features** - Have an idea? Open a feature request with clear use cases
+- 🔧 **Submit Code** - Fix bugs or implement new features with clean, well-documented code
+- 📖 **Improve Documentation** - Help others understand the project better
+- 🎨 **Design Improvements** - Enhance UI/UX with modern design patterns
+- 🧪 **Testing** - Help test across different browsers and devices
 
 ### 📝 **Development Process**
 1. **Fork** the repository on GitHub
 2. **Clone** your fork to your local machine
+   ```bash
+   git clone https://github.com/YOUR_USERNAME/Markdown_to_Word.git
+   cd Markdown_to_Word
+   ```
 3. **Create** a feature branch (`git checkout -b feature/amazing-feature`)
 4. **Make** your changes with clear, descriptive commits
 5. **Test** thoroughly across different browsers and devices
 6. **Submit** a pull request with detailed description
+
+### 🧪 **Testing Guidelines**
+- Test on multiple browsers (Chrome, Firefox, Safari, Edge)
+- Verify responsive behavior on different screen sizes
+- Check keyboard shortcuts and accessibility features
+- Ensure export functionality works correctly
+- Test with various markdown syntax examples
+
+---
+
+## 🔧 Troubleshooting
+
+### ❓ **Common Issues**
+
+#### **Export not working**
+- Ensure your browser allows file downloads
+- Check if popup blockers are interfering
+- Try using a different browser or incognito mode
+
+#### **Preview not updating**
+- Check browser console for JavaScript errors
+- Ensure content blockers aren't interfering with CDN resources
+- Try refreshing the page or clearing browser cache
+
+#### **Mobile layout issues**
+- Ensure JavaScript is enabled
+- Check if your browser supports CSS Grid and Flexbox
+- Update your mobile browser to the latest version
+
+#### **Slow performance**
+- Clear browser cache and cookies
+- Close other tabs to free up memory
+- Try using a local server for development
+
+### 🆘 **Need Help?**
+If you encounter issues not covered here:
+1. Check existing [GitHub Issues](https://github.com/Chauhan-Mukesh/Markdown_to_Word/issues)
+2. Search [GitHub Discussions](https://github.com/Chauhan-Mukesh/Markdown_to_Word/discussions)
+3. Create a new issue with detailed information:
+   - Browser and version
+   - Operating system
+   - Steps to reproduce
+   - Expected vs actual behavior
+   - Console error messages (if any)
 
 ---
 
 ## 📊 Recent Improvements
 
 ### 🔧 **Version 2.2 Updates (Latest)**
-- ✅ **Enhanced tablet experience** - Touch-optimized buttons, improved spacing, and better visual hierarchy
-- ✅ **Dynamic panel sizing** - Editor/preview panels now auto-adjust for optimal screen utilization
-- ✅ **Improved large screen layout** - 60/40 editor-to-preview ratio for better productivity on wide displays
-- ✅ **Cleaned duplicate CSS** - Removed redundant styles and optimized file size for better performance
-- ✅ **Enhanced license documentation** - More comprehensive license information and third-party library details
-- ✅ **Updated responsive breakpoints** - Better support for modern display sizes and touch devices
-- ✅ **Improved visual consistency** - Enhanced border radius, shadows, and transitions across all components
+- ✅ **Optimized desktop panel layout** - Enhanced 60/40 editor-to-preview ratio for better productivity on large screens (1025px+)
+- ✅ **Improved mobile experience** - Better height management, optimized scroll behavior, and enhanced touch targets
+- ✅ **Enhanced ultra-wide support** - Increased max container width (1600px) for better space utilization on large displays
+- ✅ **Code cleanup** - Removed duplicate CSS comments and optimized stylesheet for better performance
+- ✅ **Better responsive breakpoints** - Fine-tuned breakpoints for desktop (1025px+), tablet (769-1024px), and mobile (≤768px)
+- ✅ **Improved spacing** - Better gaps between panels and enhanced padding for modern visual appeal
 
 ### 🔧 **Version 3.0 Previous Updates**
 - ✅ **Fixed mobile responsive layout** - Panels now stack vertically on mobile
@@ -268,13 +317,20 @@ This project is licensed under the **GNU General Public License v3.0** (GPL-3.0)
 
 ---
 
-## 🆘 Support & Issues
+## 🆘 Support & Community
 
 ### 🤝 **Getting Help**
 - 📖 **Documentation** - Comprehensive guides in this README
-- ❓ **Help Modal** - Press F1 in the app for quick reference
-- 🐛 **Issue Tracker** - [GitHub Issues](https://github.com/Chauhan-Mukesh/Markdown_to_Word/issues)
-- 💬 **Discussions** - [GitHub Discussions](https://github.com/Chauhan-Mukesh/Markdown_to_Word/discussions)
+- ❓ **Help Modal** - Press F1 in the app for quick reference and keyboard shortcuts
+- 🔧 **Troubleshooting** - Check the troubleshooting section above for common issues
+- 🐛 **Issue Tracker** - [GitHub Issues](https://github.com/Chauhan-Mukesh/Markdown_to_Word/issues) for bug reports and feature requests
+- 💬 **Discussions** - [GitHub Discussions](https://github.com/Chauhan-Mukesh/Markdown_to_Word/discussions) for general questions and community support
+
+### 📈 **Project Stats**
+- 🌟 **Stars**: Help us grow by starring the repository
+- 🍴 **Forks**: Create your own version or contribute back
+- 📊 **Issues**: Track bugs and feature requests
+- 🔄 **Pull Requests**: Community contributions and improvements
 
 ---
 
