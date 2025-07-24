@@ -1110,8 +1110,7 @@ body.dark-mode .tools-toggle:hover {
 }
 
 /* Old toolbar styles update */
-/* Old toolbar styles removed - using .formatting-toolbar now */
-/* Old editor styles removed - using improved .editor styles now */
+
 
 /* Buttons & Inputs */
 .input-field {
@@ -1627,34 +1626,38 @@ body.dark-mode a:hover {
   #app { 
     flex-direction: column !important; /* Force vertical stacking */
     height: auto;
-    min-height: calc(100vh - 160px); /* Account for navbar and footer */
-    padding: 0;
+    min-height: calc(100vh - 120px); /* Optimized for mobile viewport */
+    padding: 0 0.5rem;
     margin: 0;
     max-width: 100%;
     overflow-x: hidden; /* Prevent horizontal scrolling */
+    gap: 0.75rem; /* Better spacing between panels */
   }
   
   .panel { 
     flex: none !important; /* Override flex grow */
     width: 100% !important; /* Full width */
     height: auto;
-    min-height: 300px; /* Reasonable minimum height */
-    margin: 0.25rem 0; /* Only vertical margin */
+    min-height: 280px; /* Optimized minimum height */
+    margin: 0; /* Use gap instead */
     padding: 1rem;
-    border-radius: 8px;
+    border-radius: 10px; /* Slightly larger radius for modern look */
     box-sizing: border-box;
+    overflow: hidden; /* Better content containment */
   }
   
   #editor-panel {
     order: 1;
-    min-height: 350px; /* Adequate space for editing */
+    min-height: 400px; /* Better height for comfortable editing */
     padding: 1rem;
-    gap: 0.5rem;
+    gap: 0.75rem; /* Better spacing between toolbar and editor */
   }
   
   #preview-panel {
     order: 2;
-    min-height: 300px; /* Adequate space for preview */
+    min-height: 350px; /* Better height for preview content */
+    max-height: 60vh; /* Prevent excessive height on tall screens */
+    overflow-y: auto; /* Enable scrolling for long content */
   }
   
   .formatting-toolbar {
@@ -1688,11 +1691,14 @@ body.dark-mode a:hover {
   
   .editor {
     font-size: 0.9rem;
-    min-height: 250px;
+    min-height: 300px; /* Better minimum height for mobile editing */
     height: auto;
+    max-height: 50vh; /* Prevent excessive height, enable scrolling */
     padding: 1rem;
-    line-height: 1.5;
-    border-radius: 6px;
+    line-height: 1.6; /* Better readability */
+    border-radius: 8px;
+    resize: none; /* Disable manual resize on mobile */
+    overflow-y: auto; /* Enable vertical scrolling for long content */
   }
   
   .export-dropdown {
@@ -1928,8 +1934,8 @@ body.dark-mode a:hover {
     flex-direction: row; 
     min-height: calc(100vh - 160px);
     padding: 0 1rem;
-    gap: 1rem; /* Add gap between panels */
-    max-width: 1400px; /* Constrain width for better readability */
+    gap: 1.5rem; /* Increased gap for better separation */
+    max-width: 1600px; /* Increased max width for better space utilization */
     margin: 0 auto; /* Center the content */
   }
   
@@ -1940,16 +1946,17 @@ body.dark-mode a:hover {
     box-shadow: 0 4px 16px rgba(0,0,0,0.1);
   }
   
-  /* Editor panel should be slightly larger for typing comfort */
+  /* Editor panel should be larger for better typing comfort */
   #editor-panel {
-    flex: 1 1 55%; /* Slightly larger editor */
-    max-width: 60%; /* Prevent from getting too wide */
+    flex: 1 1 60%; /* Better editor width for comfortable typing */
+    max-width: 65%; /* Allow more space for complex documents */
   }
   
-  /* Preview panel can be smaller */
+  /* Preview panel optimized for reading */
   #preview-panel {
-    flex: 1 1 45%; /* Smaller preview */
+    flex: 1 1 40%; /* Proportional preview width */
     max-width: 40%; /* Prevent from getting too narrow */
+    min-width: 350px; /* Ensure minimum readable width */
   }
   
   .formatting-toolbar {
