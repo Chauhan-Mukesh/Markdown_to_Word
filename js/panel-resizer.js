@@ -22,6 +22,9 @@ class PanelResizer {
     this.maxPanelRatio = 0.8; // Maximum ratio (80%) for one panel
     this.minPanelRatio = 0.2; // Minimum ratio (20%) for one panel
     
+    // Debounce timer for saving
+    this.saveTimer = null;
+    
     this.init();
   }
   
@@ -63,6 +66,10 @@ class PanelResizer {
     document.body.style.cursor = 'col-resize';
     document.body.style.userSelect = 'none';
     
+    // Add smooth transition class to panels during resize
+    this.editorPanel.classList.add('resizing');
+    this.previewPanel.classList.add('resizing');
+    
     // Add overlay to prevent iframe interactions during resize
     this.addResizeOverlay();
     
@@ -75,33 +82,36 @@ class PanelResizer {
     const clientX = e.clientX || (e.touches && e.touches[0].clientX);
     if (!clientX) return;
     
-    const appRect = this.app.getBoundingClientRect();
-    const resizerWidth = this.resizer.offsetWidth;
-    
-    // Calculate new widths
-    const totalWidth = appRect.width - resizerWidth;
-    const mouseX = clientX - appRect.left;
-    
-    let editorWidth = mouseX;
-    let previewWidth = totalWidth - editorWidth;
-    
-    // Apply constraints
-    const minWidth = Math.max(this.minPanelWidth, totalWidth * this.minPanelRatio);
-    const maxWidth = totalWidth * this.maxPanelRatio;
-    
-    editorWidth = Math.max(minWidth, Math.min(maxWidth, editorWidth));
-    previewWidth = totalWidth - editorWidth;
-    
-    // Convert to percentages
-    const editorPercent = (editorWidth / totalWidth) * 100;
-    const previewPercent = (previewWidth / totalWidth) * 100;
-    
-    // Apply new sizes
-    this.editorPanel.style.flex = `0 0 ${editorPercent}%`;
-    this.previewPanel.style.flex = `0 0 ${previewPercent}%`;
-    
-    // Save sizes
-    this.saveSizes(editorPercent, previewPercent);
+    // Use requestAnimationFrame for smoother resizing
+    requestAnimationFrame(() => {
+      const appRect = this.app.getBoundingClientRect();
+      const resizerWidth = this.resizer.offsetWidth;
+      
+      // Calculate new widths
+      const totalWidth = appRect.width - resizerWidth;
+      const mouseX = clientX - appRect.left;
+      
+      let editorWidth = mouseX;
+      let previewWidth = totalWidth - editorWidth;
+      
+      // Apply constraints with smoother transitions
+      const minWidth = Math.max(this.minPanelWidth, totalWidth * this.minPanelRatio);
+      const maxWidth = totalWidth * this.maxPanelRatio;
+      
+      editorWidth = Math.max(minWidth, Math.min(maxWidth, editorWidth));
+      previewWidth = totalWidth - editorWidth;
+      
+      // Convert to percentages with higher precision
+      const editorPercent = Math.round((editorWidth / totalWidth) * 10000) / 100;
+      const previewPercent = Math.round((previewWidth / totalWidth) * 10000) / 100;
+      
+      // Apply new sizes with smooth transitions
+      this.editorPanel.style.flex = `0 0 ${editorPercent}%`;
+      this.previewPanel.style.flex = `0 0 ${previewPercent}%`;
+      
+      // Save sizes with debouncing
+      this.debouncedSave(editorPercent, previewPercent);
+    });
     
     e.preventDefault();
   }
@@ -113,6 +123,12 @@ class PanelResizer {
     this.resizer.classList.remove('resizing');
     document.body.style.cursor = '';
     document.body.style.userSelect = '';
+    
+    // Remove transition classes after a short delay for smooth finishing
+    setTimeout(() => {
+      this.editorPanel.classList.remove('resizing');
+      this.previewPanel.classList.remove('resizing');
+    }, 150);
     
     this.removeResizeOverlay();
   }
@@ -197,6 +213,18 @@ class PanelResizer {
     } catch (e) {
       console.warn('Could not save panel sizes to localStorage:', e);
     }
+  }
+  
+  debouncedSave(editorPercent, previewPercent) {
+    // Clear existing timer
+    if (this.saveTimer) {
+      clearTimeout(this.saveTimer);
+    }
+    
+    // Set new timer to save after 100ms of no resize activity
+    this.saveTimer = setTimeout(() => {
+      this.saveSizes(editorPercent, previewPercent);
+    }, 100);
   }
   
   getSavedSizes() {
