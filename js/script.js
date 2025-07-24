@@ -157,6 +157,13 @@ function initializeFormattingToolbar() {
   document.getElementById('table-btn').onclick = () => editorToolbar.insertTable();
   document.getElementById('hr-btn').onclick = () => editorToolbar.insertHorizontalRule();
   
+  // New toolbar features
+  document.getElementById('word-count-btn').onclick = () => editorToolbar.showWordCount();
+  document.getElementById('insert-date-btn').onclick = () => editorToolbar.insertCurrentDate();
+  document.getElementById('insert-time-btn').onclick = () => editorToolbar.insertCurrentTime();
+  document.getElementById('insert-checkbox-btn').onclick = () => editorToolbar.insertCheckbox();
+  document.getElementById('insert-emoji-btn').onclick = () => editorToolbar.insertEmoji();
+  
   // Initialize dropdown functionality
   initializeDropdowns();
 }
