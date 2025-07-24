@@ -4,6 +4,13 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
+  <!-- Security Headers -->
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://unpkg.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self'; font-src 'self' data:;">
+  <meta http-equiv="X-Content-Type-Options" content="nosniff">
+  <meta http-equiv="X-Frame-Options" content="DENY">
+  <meta http-equiv="X-XSS-Protection" content="1; mode=block">
+  <meta name="referrer" content="strict-origin-when-cross-origin">
+  
   <!-- SEO Meta Tags -->
   <meta name="description" content="AI-powered Markdown to Word converter with intelligent templates, real-time preview, and professional export formats. Convert markdown to DOCX, HTML, PDF instantly with smart document processing.">
   <meta name="keywords" content="AI markdown converter, intelligent document processor, markdown to word, smart document templates, automated formatting, real-time collaboration, markdown editor, docx export, pdf converter, document automation, content management, technical writing, documentation tool, markdown parser, online document generator">
