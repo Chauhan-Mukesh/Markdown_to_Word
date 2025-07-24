@@ -352,8 +352,8 @@ body.dark-mode ::-webkit-scrollbar-thumb:hover {
   }
   
   .navbar-container {
-    padding: 0.4rem 1rem; /* Reduced from 0.5rem */
-    min-height: 48px; /* Reduced from 56px */
+    padding: 0.3rem 0.8rem; /* Further reduced for mobile */
+    min-height: 44px; /* Smaller on mobile */
   }
   
   .logo {
