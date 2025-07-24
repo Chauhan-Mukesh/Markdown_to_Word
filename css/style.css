@@ -69,9 +69,9 @@ body.dark-mode ::-webkit-scrollbar-thumb:hover {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0.25rem 1rem; /* Further reduced padding for more compact navbar */
-  gap: 0.75rem; /* Reduced gap for better space utilization */
-  min-height: 44px; /* Reduced height for more compact design */
+  padding: 0.2rem 1rem; /* Further reduced padding for even more compact navbar */
+  gap: 0.6rem; /* Reduced gap for better space utilization */
+  min-height: 38px; /* Further reduced height for more compact design */
 }
 
 .navbar-brand {
@@ -430,8 +430,8 @@ body.dark-mode ::-webkit-scrollbar-thumb:hover {
   }
   
   .navbar-container {
-    padding: 0.25rem 0.6rem; /* Further reduced for mobile */
-    min-height: 40px; /* More compact on mobile */
+    padding: 0.2rem 0.6rem; /* Further reduced for mobile and consistency */
+    min-height: 36px; /* More compact on mobile */
   }
   
   .logo {
@@ -606,7 +606,7 @@ body.dark-mode ::-webkit-scrollbar-thumb:hover {
   min-height: calc(100vh - 100px); /* Reduced from 120px to account for smaller footer */
   max-width: 100%; /* Use full available width */
   margin: 0 auto; /* Center the app */
-  padding: 0 0.5rem; /* Reduced side padding for better space utilization */
+  padding: 5px 0.5rem; /* Added responsive top/bottom margin as requested */
   overflow-x: hidden; /* Prevent horizontal scrolling */
   position: relative; /* For resizer positioning */
 }
@@ -619,9 +619,9 @@ body.dark-mode ::-webkit-scrollbar-thumb:hover {
   overflow: hidden; 
   background: linear-gradient(135deg, #ffffff, #fafbfc); 
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); /* Enhanced transition */
-  box-shadow: 0 4px 12px rgba(0,0,0,0.08), 0 2px 4px rgba(0,0,0,0.04);
+  box-shadow: 0 6px 16px rgba(0,0,0,0.12), 0 4px 8px rgba(0,0,0,0.08); /* Enhanced shadow as requested */
   border-radius: 12px; /* Increased border radius for modern look */
-  margin: 0.25rem; /* Reduced margin for better space utilization */
+  margin: 5px 0.25rem; /* Added responsive top/bottom margin as requested */
   border: 1px solid rgba(25, 118, 210, 0.08);
 }
 
@@ -634,7 +634,7 @@ body.dark-mode ::-webkit-scrollbar-thumb:hover {
 }
 
 #editor-panel:hover {
-  box-shadow: 0 6px 20px rgba(0,0,0,0.12), 0 3px 6px rgba(0,0,0,0.06);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.15), 0 4px 8px rgba(0,0,0,0.08); /* Enhanced shadow */
   border-color: rgba(25, 118, 210, 0.2);
   transform: translateY(-1px);
 }
@@ -648,7 +648,7 @@ body.dark-mode ::-webkit-scrollbar-thumb:hover {
 }
 
 #preview-panel:hover {
-  box-shadow: 0 6px 20px rgba(0,0,0,0.12), 0 3px 6px rgba(0,0,0,0.06);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.15), 0 4px 8px rgba(0,0,0,0.08); /* Enhanced shadow */
   border-color: rgba(25, 118, 210, 0.15);
   transform: translateY(-1px);
 }
@@ -744,6 +744,7 @@ body.dark-mode ::-webkit-scrollbar-thumb:hover {
   height: calc(100vh - 200px); /* Dynamic height based on viewport */
   transition: border-color 0.3s, background 0.3s;
   order: 2; /* Ensure it appears after the toolbar */
+  margin-bottom: 8px; /* Added responsive bottom margin as requested */
 }
 
 .editor:focus { border-color: #1976d2; }
@@ -1909,7 +1910,7 @@ body.dark-mode .preview {
 body.dark-mode .panel {
   background: linear-gradient(135deg, #2d2d2d, #262626);
   border-color: rgba(100, 181, 246, 0.15);
-  box-shadow: 0 4px 12px rgba(0,0,0,0.25), 0 2px 4px rgba(0,0,0,0.15);
+  box-shadow: 0 6px 16px rgba(0,0,0,0.35), 0 4px 8px rgba(0,0,0,0.25); /* Enhanced dark mode shadow */
 }
 
 body.dark-mode #editor-panel {
@@ -1918,7 +1919,7 @@ body.dark-mode #editor-panel {
 }
 
 body.dark-mode #editor-panel:hover {
-  box-shadow: 0 6px 20px rgba(0,0,0,0.35), 0 3px 6px rgba(0,0,0,0.2);
+  box-shadow: 0 10px 28px rgba(0,0,0,0.45), 0 6px 12px rgba(0,0,0,0.25); /* Enhanced dark mode shadow */
   border-color: rgba(100, 181, 246, 0.3);
 }
 
@@ -1928,7 +1929,7 @@ body.dark-mode #preview-panel {
 }
 
 body.dark-mode #preview-panel:hover {
-  box-shadow: 0 6px 20px rgba(0,0,0,0.35), 0 3px 6px rgba(0,0,0,0.2);
+  box-shadow: 0 10px 28px rgba(0,0,0,0.45), 0 6px 12px rgba(0,0,0,0.25); /* Enhanced dark mode shadow */
   border-color: rgba(100, 181, 246, 0.25);
 }
 
@@ -2086,7 +2087,7 @@ body.dark-mode a:hover {
     flex-direction: column !important; /* Force vertical stacking */
     height: auto;
     min-height: calc(100vh - 120px); /* Optimized for mobile viewport */
-    padding: 0 0.5rem;
+    padding: 5px 0.5rem; /* Maintain responsive top/bottom spacing on mobile */
     margin: 0;
     max-width: 100%;
     overflow-x: hidden; /* Prevent horizontal scrolling */
@@ -2158,6 +2159,7 @@ body.dark-mode a:hover {
     border-radius: 8px;
     resize: none; /* Disable manual resize on mobile */
     overflow-y: auto; /* Enable vertical scrolling for long content */
+    margin-bottom: 8px; /* Maintain bottom margin on mobile */
   }
   
   .export-dropdown {
@@ -2308,14 +2310,14 @@ body.dark-mode a:hover {
 /* Tablet view improvements - optimized for touch and better spacing */
 @media (min-width: 769px) and (max-width: 1024px) {
   .navbar-container {
-    padding: 0.4rem 1.2rem; /* Optimized for tablet */
+    padding: 0.3rem 1.2rem; /* Optimized for tablet, keeping consistency */
     gap: 1rem; /* Balanced gap for tablet */
   }
   
   #app { 
     flex-direction: row; 
     min-height: calc(100vh - 160px);
-    padding: 0 0.5rem; /* Reduced padding for better space utilization */
+    padding: 5px 0.5rem; /* Maintain responsive spacing for tablet */
     gap: 0.5rem; /* Reduced gap for more content space */
   }
   
@@ -2396,14 +2398,14 @@ body.dark-mode a:hover {
 /* Desktop and larger: dynamic panel layout */
 @media (min-width: 1025px) {
   .navbar-container {
-    padding: 0.35rem 1.5rem; /* Optimized desktop padding */
+    padding: 0.25rem 1.5rem; /* Optimized desktop padding, keeping compact */
     gap: 1rem; /* Balanced gap for desktop */
   }
   
   #app { 
     flex-direction: row; 
     min-height: calc(100vh - 160px);
-    padding: 0 0.5rem; /* Reduced padding for better space utilization */
+    padding: 5px 0.5rem; /* Maintain responsive spacing for desktop */
     gap: 0.5rem; /* Reduced gap for more content space */
     max-width: 100%; /* Use full width available */
     margin: 0; /* Remove auto centering for full width */
@@ -2452,7 +2454,7 @@ body.dark-mode a:hover {
   
   #app {
     max-width: 100%; /* Use full screen width */
-    padding: 0 1rem; /* Reduced padding for more content space */
+    padding: 5px 1rem; /* Maintain responsive spacing with more side padding */
     gap: 0.75rem; /* Optimized gap for ultra-wide */
     margin: 0; /* Remove centering for full width utilization */
   }
