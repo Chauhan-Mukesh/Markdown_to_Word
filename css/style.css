@@ -41,11 +41,20 @@ body {
 }
 
 .logo {
-  font-size: 1.5rem;
-  font-weight: bold;
+  font-size: 1.4rem;
+  font-weight: 700;
   color: white;
   text-decoration: none;
-  text-shadow: 0 1px 2px rgba(0,0,0,0.2);
+  text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+  background: linear-gradient(45deg, #ffffff, #e3f2fd);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  letter-spacing: -0.5px;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
 }
 
 .navbar-menu {
@@ -221,13 +230,14 @@ body {
   color: white;
   padding: 1rem 0;
   margin-top: auto;
-  position: relative;
+  position: sticky;
   bottom: 0;
   left: 0;
   right: 0;
   width: 100%;
-  z-index: 1000;
+  z-index: 999; /* Lower than modals but high enough */
   box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+  flex-shrink: 0; /* Prevent shrinking */
 }
 
 .footer-container {
@@ -419,8 +429,8 @@ body {
   }
   
   .footer {
-    position: relative;
-    margin-top: 2rem;
+    position: relative; /* Not sticky on mobile */
+    margin-top: 1rem;
   }
   
   .footer-left p {
@@ -435,10 +445,11 @@ body {
   display: flex; 
   flex-wrap: wrap; 
   flex: 1;
-  min-height: calc(100vh - 160px); /* Better spacing for navbar and footer */
+  min-height: calc(100vh - 120px); /* Account for navbar (60px) + footer (60px) */
   max-width: 1600px; /* Maximum width for ultra-wide screens */
   margin: 0 auto; /* Center the app */
   padding: 0 1rem; /* Side padding for better appearance */
+  overflow-x: hidden; /* Prevent horizontal scrolling */
 }
 
 .panel { 
@@ -1571,32 +1582,36 @@ body.dark-mode a:hover {
   }
   
   #app { 
-    flex-direction: column; 
+    flex-direction: column !important; /* Force vertical stacking */
     height: auto;
-    min-height: calc(100vh - 120px);
+    min-height: calc(100vh - 160px); /* Account for navbar and footer */
     padding: 0;
     margin: 0;
+    max-width: 100%;
+    overflow-x: hidden; /* Prevent horizontal scrolling */
   }
   
   .panel { 
-    flex: 1 1 100%; 
+    flex: none !important; /* Override flex grow */
+    width: 100% !important; /* Full width */
     height: auto;
-    min-height: 45vh;
-    margin: 0.25rem;
+    min-height: 300px; /* Reasonable minimum height */
+    margin: 0.25rem 0; /* Only vertical margin */
     padding: 1rem;
     border-radius: 8px;
+    box-sizing: border-box;
   }
   
   #editor-panel {
     order: 1;
-    min-height: 55vh;
+    min-height: 350px; /* Adequate space for editing */
     padding: 1rem;
     gap: 0.5rem;
   }
   
   #preview-panel {
     order: 2;
-    min-height: 45vh;
+    min-height: 300px; /* Adequate space for preview */
   }
   
   .formatting-toolbar {

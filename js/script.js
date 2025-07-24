@@ -60,6 +60,7 @@ window.addEventListener('DOMContentLoaded', () => {
   initializeAutosave();
   restoreAutosavedContent();
   initializeNewFeatures();
+  initializeSessionManagement();
 });
 
 /**
@@ -128,23 +129,71 @@ function initializeAutosave() {
  */
 function restoreAutosavedContent() {
   const autosaved = fileManager.restoreAutosaved();
-  if (autosaved && autosaved.trim()) {
-    // Use custom confirmation modal to avoid browser dialog suppression
-    showCustomConfirm(
-      '💾 Restore Content',
-      'Auto-saved content found. Would you like to restore it?',
-      (confirmed) => {
-        if (confirmed) {
-          input.value = autosaved;
-          input.dispatchEvent(new Event('input'));
-          showNotification('Auto-saved content restored! 💾', 'success', 3000);
-        } else {
-          fileManager.clearAutosaved();
-          showNotification('Auto-saved content discarded 🗑️', 'info', 2000);
+  // Only show confirmation if there's substantial content (more than just whitespace or minimal text)
+  if (autosaved && autosaved.trim() && autosaved.trim().length > 10) {
+    // Check if current editor also has content to avoid unnecessary prompts
+    const currentContent = input.value.trim();
+    if (currentContent && currentContent.length > 10) {
+      // Both have content - ask user
+      showCustomConfirm(
+        '💾 Restore Content',
+        'Auto-saved content found. Would you like to restore it? This will replace your current content.',
+        (confirmed) => {
+          if (confirmed) {
+            input.value = autosaved;
+            input.dispatchEvent(new Event('input'));
+            showNotification('Auto-saved content restored! 💾', 'success', 3000);
+          } else {
+            showNotification('Keeping current content 📝', 'info', 2000);
+          }
         }
-      }
-    );
+      );
+    } else {
+      // Current editor is empty/minimal, restore without asking
+      input.value = autosaved;
+      input.dispatchEvent(new Event('input'));
+      showNotification('Auto-saved content restored! 💾', 'success', 3000);
+    }
   }
+}
+
+/**
+ * Initialize session management to clear data when browser closes
+ */
+function initializeSessionManagement() {
+  // Clear localStorage when the page unloads
+  window.addEventListener('beforeunload', () => {
+    // Clear auto-saved content on page unload
+    fileManager.clearAutosaved();
+    
+    // Clear any temporary data
+    localStorage.removeItem('temp_images');
+    localStorage.removeItem('temp_document_state');
+  });
+  
+  // Handle browser/tab close
+  window.addEventListener('pagehide', () => {
+    fileManager.clearAutosaved();
+  });
+  
+  // Also handle visibility change (for mobile browsers)
+  document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState === 'hidden') {
+      // Don't clear immediately, just set a timestamp
+      localStorage.setItem('last_hidden', Date.now());
+    } else if (document.visibilityState === 'visible') {
+      const lastHidden = localStorage.getItem('last_hidden');
+      if (lastHidden) {
+        const timeDiff = Date.now() - parseInt(lastHidden);
+        // If more than 30 minutes passed, clear autosaved data
+        if (timeDiff > 30 * 60 * 1000) {
+          fileManager.clearAutosaved();
+          showNotification('Session expired - auto-saved data cleared 🧹', 'info', 3000);
+        }
+        localStorage.removeItem('last_hidden');
+      }
+    }
+  });
 }
 
 /**
