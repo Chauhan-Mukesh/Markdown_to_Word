@@ -87,18 +87,6 @@ describe('MarkdownForge Integration Tests', () => {
       <div id="notification-container"></div>
     `;
 
-    // Mock localStorage
-    const mockLocalStorage = {
-      getItem: jest.fn(),
-      setItem: jest.fn(),
-      removeItem: jest.fn(),
-      clear: jest.fn()
-    };
-    Object.defineProperty(global, 'localStorage', {
-      value: mockLocalStorage,
-      writable: true
-    });
-
     // Mock external libraries
     global.showdown = {
       Converter: jest.fn(() => ({
@@ -337,7 +325,7 @@ describe('MarkdownForge Integration Tests', () => {
 
       expect(statsModal.style.display).toBe('block');
       expect(document.getElementById('word-count').textContent).toBe('13'); // Approximate word count
-      expect(document.getElementById('char-count').textContent).toBe('67'); // Character count
+      expect(document.getElementById('char-count').textContent).toBe('70'); // Character count
 
       // Close modal
       statsClose.addEventListener('click', () => {

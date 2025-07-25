@@ -68,6 +68,12 @@ Transform your Markdown documents into professional Word files instantly with Ma
 - **No Data Collection** - Your documents never leave your device
 - **Offline Capable** - Works without internet after initial load
 
+### ⚡ **Performance & Reliability**
+- **Smart Notifications** - Non-intrusive toast notifications with memory-efficient management
+- **Optimized DOM Operations** - Smooth animations and responsive UI
+- **Memory Management** - Proper cleanup to prevent memory leaks
+- **Comprehensive Testing** - Unit, integration, and E2E tests for reliability
+
 ## 🚀 Quick Start
 
 ### 1. **Instant Access**
@@ -161,10 +167,36 @@ function convertMarkdown(text) {
 git clone https://github.com/Chauhan-Mukesh/Markdown_to_Word.git
 cd Markdown_to_Word
 
+# Install dependencies
+npm install
+
 # Start development server
+npm run serve
+# OR
 python -m http.server 8000
 # OR
 npx serve . -p 8000
+```
+
+### Testing & Development Commands
+```bash
+# Run tests
+npm test
+
+# Run linting
+npm run lint
+
+# Run linting with auto-fix
+npm run lint:fix
+
+# Run end-to-end tests
+npm run test:e2e
+
+# Run all validation
+npm run validate
+
+# Start development server with live reload
+npm run serve:dev
 ```
 
 ### Project Structure
@@ -177,8 +209,20 @@ MarkdownForge/
 │   ├── script.js              # Core application logic
 │   ├── editor-toolbar.js      # Formatting toolbar
 │   ├── markdown-converter.js  # Markdown processing
-│   └── file-manager.js        # File operations & auto-save
+│   ├── file-manager.js        # File operations & auto-save
+│   ├── notification-system.js # Toast notifications system
+│   ├── navbar.js              # Navigation and UI controls
+│   ├── image-manager.js       # Image handling and optimization
+│   ├── search-replace.js      # Find and replace functionality
+│   ├── print-export.js        # Export and printing features
+│   └── error-handler.js       # Error handling and reporting
+├── tests/
+│   ├── unit/                  # Unit tests
+│   ├── integration/           # Integration tests
+│   ├── e2e/                   # End-to-end tests
+│   └── setup.js               # Test configuration
 ├── index.html                 # Main application
+├── package.json               # Node.js dependencies and scripts
 ├── README.md                  # Documentation
 └── LICENSE                    # GPL-3.0 license
 ```

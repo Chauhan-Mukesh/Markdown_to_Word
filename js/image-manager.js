@@ -41,7 +41,7 @@ class ImageManager {
         try {
           const base64Data = e.target.result;
           const imageId = this.generateImageId();
-          const fileName = this.sanitizeFilename(file.name.replace(/\.[^/.]+$/, ""));
+          const fileName = this.sanitizeFilename(file.name.replace(/\.[^/.]+$/, ''));
           
           // Store image data separately
           this.images.set(imageId, {
