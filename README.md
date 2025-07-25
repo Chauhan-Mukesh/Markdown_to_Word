@@ -20,6 +20,8 @@ Transform your Markdown documents into professional Word files instantly with Ma
 
 [![Live Demo](https://img.shields.io/badge/🌐_Live_Demo-Try_Now-blue?style=for-the-badge)](https://chauhan-mukesh.github.io/Markdown_to_Word/)
 [![License](https://img.shields.io/badge/License-GPL--3.0-green?style=for-the-badge)](LICENSE)
+[![Version](https://img.shields.io/badge/Version-v2.1.0-blue?style=for-the-badge)](https://github.com/Chauhan-Mukesh/Markdown_to_Word/releases)
+[![Build Status](https://img.shields.io/badge/Build-Passing-brightgreen?style=for-the-badge)](https://chauhan-mukesh.github.io/Markdown_to_Word/)
 [![GitHub Stars](https://img.shields.io/github/stars/Chauhan-Mukesh/Markdown_to_Word?style=for-the-badge)](https://github.com/Chauhan-Mukesh/Markdown_to_Word/stargazers)
 
 ## 🚀 Quick Start Guide
