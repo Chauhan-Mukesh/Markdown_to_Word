@@ -123,12 +123,16 @@ class NotificationSystem {
     notification.setAttribute('role', 'alert');
     notification.setAttribute('aria-live', 'polite');
 
-    // Add to container and track
-    this.container.appendChild(notification);
+    // Add to container and track using document fragment for performance
+    const fragment = document.createDocumentFragment();
+    fragment.appendChild(notification);
+    this.container.appendChild(fragment);
+    
     this.activeNotifications.push({
       id: notificationId,
       element: notification,
-      config: config
+      config: config,
+      cleanup: null // Will be set by addHoverPause if needed
     });
 
     // Manage queue
@@ -176,10 +180,16 @@ class NotificationSystem {
   }
 
   /**
-   * Remove notification with animation
+   * Remove notification with animation and proper cleanup
    */
   remove(notification) {
     if (notification && notification.parentElement) {
+      // Clean up event listeners to prevent memory leaks
+      const notificationData = this.activeNotifications.find(n => n.element === notification);
+      if (notificationData && notificationData.cleanup) {
+        notificationData.cleanup();
+      }
+      
       notification.classList.remove('notification-show');
       notification.classList.add('notification-hide');
       setTimeout(() => {
@@ -212,17 +222,24 @@ class NotificationSystem {
   }
 
   /**
-   * Manage notification queue
+   * Manage notification queue with performance optimization
    */
   manageQueue() {
     if (this.activeNotifications.length > this.maxNotifications) {
-      const oldestNotification = this.activeNotifications.shift();
-      this.remove(oldestNotification.element);
+      // Use requestAnimationFrame for smoother DOM operations
+      requestAnimationFrame(() => {
+        while (this.activeNotifications.length > this.maxNotifications) {
+          const oldestNotification = this.activeNotifications.shift();
+          if (oldestNotification) {
+            this.remove(oldestNotification.element);
+          }
+        }
+      });
     }
   }
 
   /**
-   * Add hover pause functionality
+   * Add hover pause functionality with proper cleanup
    */
   addHoverPause(notification, notificationId, config) {
     let timeoutId;
@@ -238,17 +255,30 @@ class NotificationSystem {
       }
     };
 
-    notification.addEventListener('mouseenter', () => {
+    const handleMouseEnter = () => {
       if (timeoutId) {
         clearTimeout(timeoutId);
         remainingTime -= (Date.now() - startTime);
       }
-    });
+    };
 
-    notification.addEventListener('mouseleave', () => {
+    const handleMouseLeave = () => {
       startTime = Date.now();
       resetTimeout();
-    });
+    };
+
+    notification.addEventListener('mouseenter', handleMouseEnter);
+    notification.addEventListener('mouseleave', handleMouseLeave);
+
+    // Store cleanup function for memory management
+    const notificationData = this.activeNotifications.find(n => n.id === notificationId);
+    if (notificationData) {
+      notificationData.cleanup = () => {
+        if (timeoutId) clearTimeout(timeoutId);
+        notification.removeEventListener('mouseenter', handleMouseEnter);
+        notification.removeEventListener('mouseleave', handleMouseLeave);
+      };
+    }
 
     // Start initial timeout
     resetTimeout();
@@ -296,17 +326,23 @@ class NotificationSystem {
   }
 
   /**
-   * Clear all notifications
+   * Clear all notifications with proper cleanup
    */
   clearAll() {
+    // Clean up all event listeners and timers
     this.activeNotifications.forEach(notification => {
+      if (notification.cleanup) {
+        notification.cleanup();
+      }
       if (notification.config.onClose) {
         notification.config.onClose();
       }
     });
+    
     this.activeNotifications = [];
     
     if (this.container) {
+      // Use efficient innerHTML clearing
       this.container.innerHTML = '';
     }
   }
@@ -322,7 +358,6 @@ class NotificationSystem {
     }
     return window.notificationSystem.show(options);
   }
-}
 }
 
 // Create global notification system

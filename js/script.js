@@ -443,7 +443,7 @@ loadBtn.addEventListener('click', () => {
     input.value = content;
     input.dispatchEvent(new Event('input'));
     // Update title from filename
-    const nameWithoutExt = filename.replace(/\.[^/.]+$/, "");
+    const nameWithoutExt = filename.replace(/\.[^/.]+$/, '');
     titleInput.value = nameWithoutExt;
   });
 });
@@ -1367,7 +1367,7 @@ async function processImageFileFallback(file) {
     const reader = new FileReader();
     reader.onload = (e) => {
       const base64Data = e.target.result;
-      const fileName = file.name.replace(/\.[^/.]+$/, "").replace(/[^a-zA-Z0-9._-]/g, '_').substring(0, 50);
+      const fileName = file.name.replace(/\.[^/.]+$/, '').replace(/[^a-zA-Z0-9._-]/g, '_').substring(0, 50);
       resolve(`![${fileName}](${base64Data}){.center width=80%}`);
     };
     reader.onerror = () => reject(new Error(`Failed to read ${file.name}`));
