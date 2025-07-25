@@ -67,41 +67,112 @@ class NotificationSystem {
   }
 
   /**
-   * Show notification
-   * @param {string} message - The message to display
+   * Show notification with enhanced options
+   * @param {string|Object} messageOrOptions - The message to display or options object
    * @param {string} type - Type of notification: 'success', 'error', 'warning', 'info'
    * @param {number} duration - Duration in milliseconds (0 for persistent)
    */
-  show(message, type = 'info', duration = 4000) {
+  show(messageOrOptions, type = 'info', duration = 4000) {
+    let options;
+    
+    // Handle both old and new API
+    if (typeof messageOrOptions === 'string') {
+      options = {
+        message: messageOrOptions,
+        type: type,
+        timeout: duration
+      };
+    } else {
+      options = messageOrOptions;
+    }
+
+    // Apply defaults
+    const config = {
+      type: 'info',
+      timeout: 4000,
+      persistent: false,
+      closable: true,
+      actions: [],
+      ...options
+    };
+
     const notification = document.createElement('div');
-    notification.className = `notification notification-${type}`;
+    const notificationId = this.generateId();
+    notification.className = `notification notification-${config.type}`;
+    notification.setAttribute('data-notification-id', notificationId);
     
     // Create notification content
-    const icon = this.getIcon(type);
+    const icon = this.getIcon(config.type);
+    const actionsHtml = this.createActionsHtml(config.actions);
+    
     notification.innerHTML = `
       <div class="notification-content">
-        <span class="notification-icon">${icon}</span>
-        <span class="notification-message">${message}</span>
-        <button class="notification-close" onclick="this.parentElement.parentElement.remove()">&times;</button>
+        <div class="notification-header">
+          <span class="notification-icon">${icon}</span>
+          ${config.title ? `<span class="notification-title">${config.title}</span>` : ''}
+          ${config.closable ? '<button class="notification-close" onclick="window.notificationSystem.removeById(\'' + notificationId + '\')" aria-label="Close notification">&times;</button>' : ''}
+        </div>
+        <div class="notification-body">
+          <span class="notification-message">${config.message}</span>
+          ${actionsHtml}
+        </div>
       </div>
     `;
 
-    // Add to container
+    // Add accessibility attributes
+    notification.setAttribute('role', 'alert');
+    notification.setAttribute('aria-live', 'polite');
+
+    // Add to container and track
     this.container.appendChild(notification);
+    this.activeNotifications.push({
+      id: notificationId,
+      element: notification,
+      config: config
+    });
+
+    // Manage queue
+    this.manageQueue();
 
     // Animate in
     setTimeout(() => {
       notification.classList.add('notification-show');
     }, 10);
 
-    // Auto remove if duration is set
-    if (duration > 0) {
+    // Auto remove if not persistent
+    if (!config.persistent && config.timeout > 0) {
       setTimeout(() => {
-        this.remove(notification);
-      }, duration);
+        this.removeById(notificationId);
+      }, config.timeout);
     }
 
-    return notification;
+    // Add event listeners
+    if (config.onClick) {
+      notification.addEventListener('click', config.onClick);
+    }
+
+    // Pause on hover if enabled
+    if (config.pauseOnHover !== false) {
+      this.addHoverPause(notification, notificationId, config);
+    }
+
+    return notificationId;
+  }
+
+  /**
+   * Remove notification by ID
+   */
+  removeById(notificationId) {
+    const notificationData = this.activeNotifications.find(n => n.id === notificationId);
+    if (notificationData) {
+      this.remove(notificationData.element);
+      this.activeNotifications = this.activeNotifications.filter(n => n.id !== notificationId);
+      
+      // Call onClose callback if provided
+      if (notificationData.config.onClose) {
+        notificationData.config.onClose();
+      }
+    }
   }
 
   /**
@@ -117,6 +188,70 @@ class NotificationSystem {
         }
       }, 300);
     }
+  }
+
+  /**
+   * Generate unique notification ID
+   */
+  generateId() {
+    return `notification_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+  }
+
+  /**
+   * Create HTML for action buttons
+   */
+  createActionsHtml(actions) {
+    if (!actions || actions.length === 0) return '';
+    
+    let html = '<div class="notification-actions">';
+    actions.forEach(action => {
+      html += `<button class="notification-action-btn" onclick="(${action.action.toString()})()">${action.text}</button>`;
+    });
+    html += '</div>';
+    return html;
+  }
+
+  /**
+   * Manage notification queue
+   */
+  manageQueue() {
+    if (this.activeNotifications.length > this.maxNotifications) {
+      const oldestNotification = this.activeNotifications.shift();
+      this.remove(oldestNotification.element);
+    }
+  }
+
+  /**
+   * Add hover pause functionality
+   */
+  addHoverPause(notification, notificationId, config) {
+    let timeoutId;
+    let remainingTime = config.timeout;
+    let startTime = Date.now();
+
+    const resetTimeout = () => {
+      if (timeoutId) clearTimeout(timeoutId);
+      if (!config.persistent && remainingTime > 0) {
+        timeoutId = setTimeout(() => {
+          this.removeById(notificationId);
+        }, remainingTime);
+      }
+    };
+
+    notification.addEventListener('mouseenter', () => {
+      if (timeoutId) {
+        clearTimeout(timeoutId);
+        remainingTime -= (Date.now() - startTime);
+      }
+    });
+
+    notification.addEventListener('mouseleave', () => {
+      startTime = Date.now();
+      resetTimeout();
+    });
+
+    // Start initial timeout
+    resetTimeout();
   }
 
   /**
@@ -164,10 +299,30 @@ class NotificationSystem {
    * Clear all notifications
    */
   clearAll() {
+    this.activeNotifications.forEach(notification => {
+      if (notification.config.onClose) {
+        notification.config.onClose();
+      }
+    });
+    this.activeNotifications = [];
+    
     if (this.container) {
       this.container.innerHTML = '';
     }
   }
+
+  /**
+   * Static method to show notification (enhanced API)
+   * @param {Object} options - Notification configuration
+   * @returns {string} Notification ID
+   */
+  static show(options) {
+    if (!window.notificationSystem) {
+      window.notificationSystem = new NotificationSystem();
+    }
+    return window.notificationSystem.show(options);
+  }
+}
 }
 
 // Create global notification system
