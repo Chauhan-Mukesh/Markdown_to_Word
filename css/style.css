@@ -1202,7 +1202,7 @@ body.dark-mode .tools-toggle:hover {
   transform: translateY(-10px);
   transition: all 0.3s ease;
   max-height: 0;
-  overflow: hidden;
+  overflow-y: auto;
 }
 
 .format-dropdown:hover .format-dropdown-menu,
