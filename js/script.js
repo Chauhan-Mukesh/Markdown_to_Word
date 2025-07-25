@@ -156,6 +156,18 @@ function initializeFormattingToolbar() {
   document.getElementById('table-btn').onclick = () => editorToolbar.insertTable();
   document.getElementById('hr-btn').onclick = () => editorToolbar.insertHorizontalRule();
   
+  // Border dropdown functionality
+  document.getElementById('solid-border-btn').onclick = () => editorToolbar.insertSolidBorder();
+  document.getElementById('dashed-border-btn').onclick = () => editorToolbar.insertDashedBorder();
+  document.getElementById('dotted-border-btn').onclick = () => editorToolbar.insertDottedBorder();
+  document.getElementById('double-border-btn').onclick = () => editorToolbar.insertDoubleBorder();
+  document.getElementById('groove-border-btn').onclick = () => editorToolbar.insertGrooveBorder();
+  document.getElementById('ridge-border-btn').onclick = () => editorToolbar.insertRidgeBorder();
+  document.getElementById('inset-border-btn').onclick = () => editorToolbar.insertInsetBorder();
+  document.getElementById('outset-border-btn').onclick = () => editorToolbar.insertOutsetBorder();
+  document.getElementById('thick-border-btn').onclick = () => editorToolbar.insertThickBorder();
+  document.getElementById('thin-border-btn').onclick = () => editorToolbar.insertThinBorder();
+  
   // New toolbar features
   document.getElementById('word-count-btn').onclick = () => editorToolbar.showWordCount();
   document.getElementById('insert-date-btn').onclick = () => editorToolbar.insertCurrentDate();
