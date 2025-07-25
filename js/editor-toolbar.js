@@ -559,6 +559,97 @@ class EditorToolbar {
       });
     });
   }
+
+  /**
+   * Insert bordered text/content with specified border style
+   */
+  insertBorder(borderType) {
+    const borderStyles = {
+      'solid': 'border: 2px solid #333;',
+      'dashed': 'border: 2px dashed #333;',
+      'dotted': 'border: 2px dotted #333;',
+      'double': 'border: 3px double #333;',
+      'groove': 'border: 3px groove #ccc;',
+      'ridge': 'border: 3px ridge #ccc;',
+      'inset': 'border: 3px inset #ccc;',
+      'outset': 'border: 3px outset #ccc;',
+      'thick': 'border: 4px solid #333;',
+      'thin': 'border: 1px solid #333;'
+    };
+
+    const style = borderStyles[borderType] || borderStyles['solid'];
+    const borderHtml = `<div style="${style} padding: 1rem; margin: 1rem 0; border-radius: 4px;">
+Insert your content here
+</div>`;
+    
+    this.insertText('\n' + borderHtml + '\n', '', '');
+  }
+
+  /**
+   * Insert table with specified border style
+   */
+  insertBorderedTable(borderType) {
+    const borderStyles = {
+      'solid': 'border: 1px solid #333; border-collapse: collapse;',
+      'dashed': 'border: 1px dashed #333; border-collapse: collapse;',
+      'dotted': 'border: 1px dotted #333; border-collapse: collapse;',
+      'double': 'border: 3px double #333; border-collapse: collapse;',
+      'groove': 'border: 2px groove #ccc; border-collapse: collapse;',
+      'ridge': 'border: 2px ridge #ccc; border-collapse: collapse;',
+      'inset': 'border: 2px inset #ccc; border-collapse: collapse;',
+      'outset': 'border: 2px outset #ccc; border-collapse: collapse;',
+      'thick': 'border: 3px solid #333; border-collapse: collapse;',
+      'thin': 'border: 1px solid #333; border-collapse: collapse;'
+    };
+
+    const tableStyle = borderStyles[borderType] || borderStyles['solid'];
+    const cellStyle = borderStyles[borderType]?.replace('border-collapse: collapse;', '') || 'border: 1px solid #333;';
+    
+    const borderedTable = `
+<table style="${tableStyle}">
+  <thead>
+    <tr>
+      <th style="${cellStyle} padding: 8px;">Header 1</th>
+      <th style="${cellStyle} padding: 8px;">Header 2</th>
+      <th style="${cellStyle} padding: 8px;">Header 3</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="${cellStyle} padding: 8px;">Cell 1</td>
+      <td style="${cellStyle} padding: 8px;">Cell 2</td>
+      <td style="${cellStyle} padding: 8px;">Cell 3</td>
+    </tr>
+    <tr>
+      <td style="${cellStyle} padding: 8px;">Cell 4</td>
+      <td style="${cellStyle} padding: 8px;">Cell 5</td>
+      <td style="${cellStyle} padding: 8px;">Cell 6</td>
+    </tr>
+  </tbody>
+</table>
+`;
+    
+    this.insertText('\n' + borderedTable + '\n', '', '');
+    
+    // Auto-trigger preview if available
+    setTimeout(() => {
+      if (window.renderPreview && typeof window.renderPreview === 'function') {
+        window.renderPreview();
+      }
+    }, 100);
+  }
+
+  // Individual border methods for each style
+  insertSolidBorder() { this.insertBorder('solid'); }
+  insertDashedBorder() { this.insertBorder('dashed'); }
+  insertDottedBorder() { this.insertBorder('dotted'); }
+  insertDoubleBorder() { this.insertBorder('double'); }
+  insertGrooveBorder() { this.insertBorder('groove'); }
+  insertRidgeBorder() { this.insertBorder('ridge'); }
+  insertInsetBorder() { this.insertBorder('inset'); }
+  insertOutsetBorder() { this.insertBorder('outset'); }
+  insertThickBorder() { this.insertBorder('thick'); }
+  insertThinBorder() { this.insertBorder('thin'); }
 }
 
 window.EditorToolbar = EditorToolbar;
