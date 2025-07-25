@@ -4,21 +4,22 @@
  */
 
 describe('MarkdownForge Integration Tests', () => {
-  let mockLocalStorage;
-
   beforeEach(() => {
     // Setup mock localStorage first
-    const localStorageMock = {
+    const mockLocalStorage = {
       getItem: jest.fn(),
       setItem: jest.fn(),
       removeItem: jest.fn(),
       clear: jest.fn()
     };
-    mockLocalStorage = localStorageMock;
+    
     Object.defineProperty(global, 'localStorage', {
       value: mockLocalStorage,
       writable: true
     });
+    
+    // Store reference for use in tests
+    global.mockLocalStorage = mockLocalStorage;
 
     // Setup full DOM structure
     document.body.innerHTML = `
@@ -251,7 +252,7 @@ describe('MarkdownForge Integration Tests', () => {
 
       mockLocalStorage.setItem('markdownforge-autosave', JSON.stringify(autoSaveData));
 
-      expect(mockLocalStorage.setItem).toHaveBeenCalledWith(
+      expect(global.mockLocalStorage.setItem).toHaveBeenCalledWith(
         'markdownforge-autosave',
         JSON.stringify(autoSaveData)
       );
@@ -380,11 +381,11 @@ describe('MarkdownForge Integration Tests', () => {
         lastModified: Date.now() - 5000
       };
 
-      mockLocalStorage.getItem.mockReturnValue(JSON.stringify(savedData));
+      global.mockLocalStorage.getItem.mockReturnValue(JSON.stringify(savedData));
 
       // Simulate document restoration
       const restoreDocument = () => {
-        const saved = mockLocalStorage.getItem('markdownforge-autosave');
+        const saved = global.mockLocalStorage.getItem('markdownforge-autosave');
         if (saved) {
           try {
             const data = JSON.parse(saved);
@@ -399,15 +400,15 @@ describe('MarkdownForge Integration Tests', () => {
 
       const restored = restoreDocument();
 
-      expect(mockLocalStorage.getItem).toHaveBeenCalledWith('markdownforge-autosave');
+      expect(global.mockLocalStorage.getItem).toHaveBeenCalledWith('markdownforge-autosave');
       expect(restored).toEqual(savedData);
     });
 
     test('should handle corrupted localStorage data gracefully', () => {
-      mockLocalStorage.getItem.mockReturnValue('invalid-json{corrupted');
+      global.mockLocalStorage.getItem.mockReturnValue('invalid-json{corrupted');
 
       const restoreDocument = () => {
-        const saved = mockLocalStorage.getItem('markdownforge-autosave');
+        const saved = global.mockLocalStorage.getItem('markdownforge-autosave');
         if (saved) {
           try {
             return JSON.parse(saved);
