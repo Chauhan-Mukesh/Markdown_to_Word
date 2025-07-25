@@ -22,6 +22,14 @@ class PrintExport {
           line-height: 1.5;
         }
         
+        /* Hide navbar and footer completely during print */
+        #navbar,
+        .navbar,
+        #footer,
+        .footer {
+          display: none !important;
+        }
+        
         #app {
           display: block !important;
         }
@@ -40,6 +48,29 @@ class PrintExport {
         
         #preview-header {
           display: none !important;
+        }
+        
+        /* Add document header for print */
+        .print-document-header {
+          display: block !important;
+          text-align: center;
+          border-bottom: 2px solid #333;
+          padding-bottom: 1em;
+          margin-bottom: 2em;
+          page-break-after: avoid;
+        }
+        
+        .print-document-title {
+          font-size: 18pt;
+          font-weight: bold;
+          margin: 0 0 0.5em 0;
+          color: black !important;
+        }
+        
+        .print-document-meta {
+          font-size: 12pt;
+          color: #666 !important;
+          font-style: italic;
         }
         
         .preview {
@@ -126,32 +157,78 @@ class PrintExport {
    * Print the current document
    */
   printDocument(title = 'Document') {
+    // Get document metadata
+    const docTitle = document.getElementById('doc-title')?.value || title;
+    const docAuthor = document.getElementById('doc-author')?.value || '';
+    const docDate = document.getElementById('doc-date')?.value || '';
+    
     // Update document title for print
     const originalTitle = document.title;
-    document.title = title;
+    document.title = docTitle;
 
     // Ensure preview is rendered
     if (window.renderPreview) {
       window.renderPreview();
     }
 
+    // Add document header to preview for print
+    this.addPrintHeader(docTitle, docAuthor, docDate);
+
     // Print
     window.print();
 
-    // Restore original title
+    // Restore original title and remove print header
     document.title = originalTitle;
+    this.removePrintHeader();
+  }
+
+  /**
+   * Add document header for print
+   */
+  addPrintHeader(title, author, date) {
+    // Remove any existing print header
+    this.removePrintHeader();
+    
+    const previewPane = document.getElementById('preview-pane');
+    if (!previewPane) return;
+    
+    const headerHTML = `
+      <div class="print-document-header" id="print-header">
+        <div class="print-document-title">${title}</div>
+        <div class="print-document-meta">
+          ${author ? `By ${author}` : ''} 
+          ${author && date ? ' | ' : ''}
+          ${date ? new Date(date).toLocaleDateString() : ''}
+        </div>
+      </div>
+    `;
+    
+    previewPane.insertAdjacentHTML('afterbegin', headerHTML);
+  }
+
+  /**
+   * Remove document header after print
+   */
+  removePrintHeader() {
+    const printHeader = document.getElementById('print-header');
+    if (printHeader) {
+      printHeader.remove();
+    }
   }
 
   /**
    * Export as PDF (using browser's print to PDF)
    */
   exportToPDF(title = 'Document') {
+    // Get document title from input field
+    const docTitle = document.getElementById('doc-title')?.value || title;
+    
     if (window.notificationSystem) {
       window.notificationSystem.info('To export as PDF:\n1. Use the Print button\n2. Choose "Save as PDF" as the destination\n3. Click Save', 6000);
     } else {
       alert('To export as PDF:\n1. Use the Print button\n2. Choose "Save as PDF" as the destination\n3. Click Save');
     }
-    this.printDocument(title);
+    this.printDocument(docTitle);
   }
 
   /**
