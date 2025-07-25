@@ -15,6 +15,17 @@ body {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Enhanced theme transitions */
+body.theme-transitioning * {
+  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease !important;
+}
+
+/* Smooth transitions for common elements during theme change */
+.navbar, .panel, .preview, .editor, .modal-content, .btn, .dropdown-menu {
+  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
 /* Enhanced scrollbar styling */
@@ -2918,6 +2929,69 @@ body.dark-mode .notification-warning {
 
 body.dark-mode .notification-info {
   border-left-color: #64b5f6;
+}
+
+/* Print styles for notifications - Hide during print/PDF export */
+@media print {
+  /* Hide all notification and UI elements */
+  .notification-container,
+  .notification {
+    display: none !important;
+    visibility: hidden !important;
+  }
+  
+  /* Hide auto-save notifications and any floating elements */
+  .auto-save-notification,
+  .theme-notification,
+  .floating-notification {
+    display: none !important;
+    visibility: hidden !important;
+  }
+  
+  /* Hide navigation, toolbar, and footer elements */
+  .navbar,
+  .formatting-toolbar,
+  .footer,
+  #navbar,
+  #footer {
+    display: none !important;
+    visibility: hidden !important;
+  }
+  
+  /* Hide editor panel and show only preview for print */
+  #editor-panel,
+  .panel-resizer {
+    display: none !important;
+  }
+  
+  /* Ensure preview takes full width for print */
+  #preview-panel {
+    width: 100% !important;
+    max-width: none !important;
+    box-shadow: none !important;
+    border: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+  
+  #preview-pane {
+    padding: 0 !important;
+    margin: 0 !important;
+    box-shadow: none !important;
+    border: none !important;
+  }
+  
+  /* Hide preview header */
+  #preview-header {
+    display: none !important;
+  }
+  
+  /* Ensure proper print layout */
+  #app {
+    display: block !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
 }
 
 /* Enhanced Help Modal Styles */

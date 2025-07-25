@@ -145,6 +145,69 @@ class PrintExport {
         .no-break {
           page-break-inside: avoid;
         }
+        
+        /* Enhanced header positioning */
+        .print-document-header {
+          position: relative !important;
+          margin: 0 auto 2em auto !important;
+          max-width: 100% !important;
+          text-align: center !important;
+          border-bottom: 2px solid #333 !important;
+          padding: 0.5em 0 1em 0 !important;
+          page-break-after: avoid !important;
+          page-break-inside: avoid !important;
+        }
+        
+        .print-document-title {
+          font-size: 20pt !important;
+          font-weight: bold !important;
+          margin: 0 0 0.5em 0 !important;
+          color: black !important;
+          line-height: 1.2 !important;
+        }
+        
+        .print-document-meta {
+          font-size: 11pt !important;
+          color: #555 !important;
+          font-style: italic !important;
+          line-height: 1.3 !important;
+        }
+        
+        /* Page numbering for PDF */
+        @page {
+          margin: 1in;
+          counter-increment: page;
+          
+          @bottom-center {
+            content: "Page " counter(page) " of " counter(pages);
+            font-size: 10pt;
+            color: #666;
+            font-family: 'Times New Roman', serif;
+          }
+          
+          @top-right {
+            content: "${new Date().toLocaleDateString()}";
+            font-size: 9pt;
+            color: #666;
+            font-family: 'Times New Roman', serif;
+          }
+        }
+        
+        /* Alternative page numbering for browsers that don't support @page */
+        body {
+          counter-reset: page;
+        }
+        
+        .preview::after {
+          content: "";
+          position: fixed;
+          bottom: 0.5in;
+          left: 50%;
+          transform: translateX(-50%);
+          font-size: 10pt;
+          color: #666;
+          font-family: 'Times New Roman', serif;
+        }
       }
     `;
 
@@ -162,6 +225,9 @@ class PrintExport {
     const docAuthor = document.getElementById('doc-author')?.value || '';
     const docDate = document.getElementById('doc-date')?.value || '';
     
+    // Clear any active notifications before printing
+    this.clearNotificationsForPrint();
+    
     // Update document title for print
     const originalTitle = document.title;
     document.title = docTitle;
@@ -173,6 +239,8 @@ class PrintExport {
 
     // Add document header to preview for print
     this.addPrintHeader(docTitle, docAuthor, docDate);
+
+    // Print
 
     // Print
     window.print();
@@ -192,13 +260,22 @@ class PrintExport {
     const previewPane = document.getElementById('preview-pane');
     if (!previewPane) return;
     
+    // Format the date properly
+    const formattedDate = date ? new Date(date).toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric'
+    }) : '';
+    
+    // Create enhanced header with better formatting
     const headerHTML = `
       <div class="print-document-header" id="print-header">
-        <div class="print-document-title">${title}</div>
+        <div class="print-document-title">${title || 'Untitled Document'}</div>
         <div class="print-document-meta">
-          ${author ? `By ${author}` : ''} 
-          ${author && date ? ' | ' : ''}
-          ${date ? new Date(date).toLocaleDateString() : ''}
+          ${author ? `Author: ${author}` : ''} 
+          ${author && formattedDate ? ' • ' : ''}
+          ${formattedDate ? `Date: ${formattedDate}` : ''}
+          ${!author && !formattedDate ? `Generated on ${new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}` : ''}
         </div>
       </div>
     `;
@@ -462,6 +539,25 @@ class PrintExport {
     link.click();
     document.body.removeChild(link);
     URL.revokeObjectURL(url);
+  }
+
+  /**
+   * Clear notifications before printing to ensure clean print output
+   */
+  clearNotificationsForPrint() {
+    // Clear notifications from notification system if available
+    if (window.notificationSystem) {
+      window.notificationSystem.clearAll();
+    }
+    
+    // Also manually remove any notification elements that might exist
+    const notificationContainers = document.querySelectorAll('.notification-container, .notification, .auto-save-notification, .theme-notification');
+    notificationContainers.forEach(container => {
+      if (container && container.parentNode) {
+        container.style.display = 'none';
+        container.style.visibility = 'hidden';
+      }
+    });
   }
 }
 
