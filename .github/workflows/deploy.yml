@@ -58,6 +58,9 @@ jobs:
       uses: actions/upload-pages-artifact@v3
       with:
         path: '.'
+        
+    - name: Verify favicon exists
+      run: ls -la favicon.ico
     
     - name: Deploy to GitHub Pages
       id: deployment
