@@ -56,14 +56,31 @@
     "env": {
       "browser": true,
       "es2021": true,
-      "jest": true
+      "jest": true,
+      "node": true
     },
     "extends": "eslint:recommended",
+    "globals": {
+      "showdown": "readonly",
+      "SimpleMarkdownConverter": "readonly",
+      "FileManager": "readonly",
+      "EditorToolbar": "readonly",
+      "DocumentTemplates": "readonly",
+      "SearchReplace": "readonly",
+      "PrintExport": "readonly",
+      "showNotification": "readonly",
+      "NotificationSystem": "readonly",
+      "HtmlToWordConverter": "readonly",
+      "ShowdownFallback": "readonly",
+      "module": "writable"
+    },
     "rules": {
       "no-unused-vars": "warn",
       "no-console": "off",
       "semi": ["error", "always"],
-      "quotes": ["error", "single", { "avoidEscape": true }]
+      "quotes": ["error", "single", { "avoidEscape": true }],
+      "no-useless-escape": "warn",
+      "no-prototype-builtins": "warn"
     }
   }
 }
